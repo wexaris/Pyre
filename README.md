@@ -1,2 +1,2 @@
-# pyre
-Pyre Engine
+# Pyre
+The Pyre engine

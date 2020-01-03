@@ -1,0 +1,6 @@
+# Directories
+build/
+.vs/
+
+# Files
+*.json
