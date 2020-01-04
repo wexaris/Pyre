@@ -1,10 +1,9 @@
 #pragma once
-#include "Core.hpp"
+#include "Pyre/Core.hpp"
 
 namespace Pyre {
 
     class PYRE_API Application {
-    
     public:
         Application();
         virtual ~Application();

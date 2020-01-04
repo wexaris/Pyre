@@ -1,7 +1,6 @@
 #pragma once
 #include "Pyre/Core.hpp"
 #include <spdlog/spdlog.h>
-#include <memory>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/fmt/ostr.h>
 

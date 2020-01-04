@@ -1,5 +1,5 @@
+#include "pyrepch.hpp"
 #include "Pyre/Application.hpp"
-
 #include "Pyre/Log.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
 

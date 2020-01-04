@@ -4,3 +4,4 @@ build/
 
 # Files
 *.json
+*.hint
