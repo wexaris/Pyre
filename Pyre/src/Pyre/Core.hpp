@@ -9,5 +9,7 @@
 #elif defined(PYRE_PLATFORM_LINUX)
     #define PYRE_API
 #else
-    #error Unsupported platform
+    #error Unsupported platform!
 #endif
+
+#define BIT(x) (1 << x)

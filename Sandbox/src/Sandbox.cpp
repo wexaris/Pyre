@@ -1,14 +1,13 @@
 #include <Pyre.hpp>
 
 class Sandbox : public Pyre::Application {
-
 public:
     Sandbox() = default;
     ~Sandbox() = default;
 
     void Run() override {
         while(true) {
-            PYRE_CLIENT_INFO("Hello!");
+            PYRE_INFO("Hello!");
         }
     }
 
