@@ -1,5 +1,6 @@
 #pragma once
 #include "Pyre/Core.hpp"
+#include "Pyre/Windows/Window.hpp"
 
 namespace Pyre {
 
@@ -7,7 +8,12 @@ namespace Pyre {
     public:
         Application();
         virtual ~Application();
-        virtual void Run() = 0;
+
+        virtual void Run();
+
+    private:
+        std::unique_ptr<Window> m_Window;
+        bool m_Running = true;
     };
 
     // To be defined by the client
