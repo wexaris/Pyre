@@ -3,6 +3,7 @@
 #include "Pyre/Events/MouseEvents.hpp"
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
+#include <glad/glad.h>
 
 namespace Pyre {
 
@@ -24,6 +25,7 @@ namespace Pyre {
 
         PYRE_CORE_INFO("Creating window '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
+        // Initialize GLFW
         if (!s_GLFWInitialized) {
             int good = glfwInit();
             PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
@@ -36,6 +38,10 @@ namespace Pyre {
         glfwMakeContextCurrent(m_Window);
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
+
+        // Initialize Glad
+        int good = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        PYRE_CORE_ASSERT(good, "Failed to initialize Glad!")
 
         // Add GLFW callbacks
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {

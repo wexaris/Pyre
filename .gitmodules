@@ -4,3 +4,6 @@
 [submodule "Pyre/external/glfw"]
 	path = Pyre/external/glfw
 	url = https://github.com/glfw/glfw
+[submodule "Pyre/external/glad"]
+	path = Pyre/external/glad
+	url = https://github.com/Dav1dde/glad
