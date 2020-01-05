@@ -39,6 +39,12 @@ namespace Pyre {
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
 
+        // Get window position
+        int x, y;
+        glfwGetWindowPos(m_Window, &x, &y);
+        m_Data.PosX = x;
+        m_Data.PosY = y;
+
         // Initialize Glad
         int good = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         PYRE_CORE_ASSERT(good, "Failed to initialize Glad!")
@@ -70,6 +76,12 @@ namespace Pyre {
             }
         });
 
+        glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            KeyTypeEvent event(keycode);
+            data.EventCallback(event);
+        });
+
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
@@ -93,21 +105,18 @@ namespace Pyre {
 
         glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
             MouseMoveEvent event((float)xPos, (float)yPos);
             data.EventCallback(event);
         });
 
         glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
             MouseScrollEvent event((float)xOffset, (float)yOffset);
             data.EventCallback(event);
         });
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
             WindowCloseEvent event;
             data.EventCallback(event);
         });
@@ -116,7 +125,6 @@ namespace Pyre {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
             data.PosX = x;
             data.PosY = y;
-
             WindowMoveEvent event(x, y);
             data.EventCallback(event);
         });
@@ -124,8 +132,7 @@ namespace Pyre {
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
             data.Width = width;
-            data.Width = height;
-
+            data.Height = height;
             WindowResizeEvent event(width, height);
             data.EventCallback(event);
         });

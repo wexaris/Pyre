@@ -9,6 +9,8 @@ set(SOURCE_FILES
     src/Pyre/Windows/WindowsWindow.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
+    src/Pyre/Layers/ImGuiLayer.cpp
+    src/Pyre/Layers/ImGuiRenderer.cpp
 )
 
 set(PCH_FILES src/pyrepch.hpp)
@@ -16,8 +18,9 @@ set(PCH_FILES src/pyrepch.hpp)
 include_directories(
     ${glfw_INCLUDE_DIRS}
     ${GLAD_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/Pyre/external/imgui
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${PCH_FILES})
-target_link_libraries(${PROJECT_NAME} glfw glad)
+target_link_libraries(${PROJECT_NAME} PRIVATE spdlog glfw glad imgui)

@@ -46,4 +46,16 @@ namespace Pyre {
         }
     };
 
+    class PYRE_API KeyTypeEvent : public KeyEvent {
+    public:
+        KeyTypeEvent(int keycode) :
+            KeyEvent(keycode)
+        {}
+
+        EVENT_ADD_TYPE(KeyType)
+            std::string AsString() const override {
+            return FMT("KeyType: {}", m_KeyCode);
+        }
+    };
+
 }

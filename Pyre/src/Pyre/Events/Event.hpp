@@ -6,7 +6,7 @@ namespace Pyre {
 
     enum class EventType {
         None = 0,
-        KeyPress, KeyRelease,
+        KeyPress, KeyRelease, KeyType,
         MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll,
         WindowClose, WindowMove, WindowResize, WindowFocus, WindowLoseFocus, WindowMaximize, WindowMinimize, WindowRestore,
         AppTick, AppUpdate, AppRender
@@ -51,6 +51,9 @@ namespace Pyre {
 
         template<typename T, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
         bool Dispatch(EventFun<T> fun) {
+            if (m_Event.Handled) {
+                return false;
+            }
             if (m_Event.GetEventType() == T::GetStaticType()) {
                 m_Event.Handled = fun(*(T*)&m_Event);
                 return true;
@@ -65,5 +68,7 @@ namespace Pyre {
     inline std::ostream& operator<<(std::ostream& os, const Event& e) {
         return os << e.AsString();
     }
+
+#define BIND_EVENT_CB(fun) (std::bind(&fun, this, std::placeholders::_1))
 
 }

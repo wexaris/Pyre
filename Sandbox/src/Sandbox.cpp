@@ -5,7 +5,7 @@ public:
     TestLayer() : Layer("Test") {}
 
     void OnUpdate() override {
-        PYRE_INFO("TestLayer::Update");
+        //PYRE_INFO("TestLayer::Update");
     }
 
     void OnEvent(Pyre::Event& event) {
@@ -17,6 +17,7 @@ class Sandbox : public Pyre::Application {
 public:
     Sandbox() {
         PushLayer(new TestLayer());
+        PushOverlay(new Pyre::ImGuiLayer());
     }
 };
 

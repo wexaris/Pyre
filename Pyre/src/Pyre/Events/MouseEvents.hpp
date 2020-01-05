@@ -5,15 +5,15 @@ namespace Pyre {
 
     class PYRE_API MouseButtonEvent : public Event {
     public:
-        inline int GetKeyCode() const { return m_KeyCode; }
+        inline int GetMouseButton() const { return m_MouseButton; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouseButton)
 
     protected:
-        int m_KeyCode;
+        int m_MouseButton;
 
-        MouseButtonEvent(int keycode) :
-            m_KeyCode(keycode)
+        MouseButtonEvent(int button) :
+            m_MouseButton(button)
         {}
     };
 
@@ -25,7 +25,7 @@ namespace Pyre {
 
         EVENT_ADD_TYPE(MouseButtonPress)
         std::string AsString() const override {
-            return FMT("MouseButtonPress: {}", m_KeyCode);
+            return FMT("MouseButtonPress: {}", m_MouseButton);
         }
     };
 
@@ -37,7 +37,7 @@ namespace Pyre {
 
         EVENT_ADD_TYPE(MouseButtonRelease)
         std::string AsString() const override {
-            return FMT("MouseButtonRelease: {}", m_KeyCode);
+            return FMT("MouseButtonRelease: {}", m_MouseButton);
         }
     };
 

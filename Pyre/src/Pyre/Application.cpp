@@ -2,9 +2,9 @@
 #include "Pyre/Application.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
 
-namespace Pyre {
+#include <glad/glad.h>
 
-#define BIND_EVENT_CB(fun) (std::bind(&fun, this, std::placeholders::_1))
+namespace Pyre {
 
     Application* Application::s_Instance = nullptr;
 
@@ -22,11 +22,14 @@ namespace Pyre {
 
     void Application::Run() {
         while (m_Running) {
-            m_Window->OnUpdate();
+            glClearColor(0, 0, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate();
             }
+
+            m_Window->OnUpdate();
         }
     }
 
@@ -42,9 +45,14 @@ namespace Pyre {
 
     void Application::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_CB(Application::OnWindowClose));
-        dispatcher.Dispatch<WindowMoveEvent>(BIND_EVENT_CB(Application::OnWindowMove));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_CB(Application::OnWindowResize));
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_CB(Application::_OnWindowClose));
+        dispatcher.Dispatch<WindowMoveEvent>(BIND_EVENT_CB(Application::_OnWindowMove));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_CB(Application::_OnWindowResize));
+        dispatcher.Dispatch<WindowFocusEvent>(BIND_EVENT_CB(Application::_OnWindowFocus));
+        dispatcher.Dispatch<WindowLoseFocusEvent>(BIND_EVENT_CB(Application::_OnWindowLoseFocus));
+        dispatcher.Dispatch<WindowMaximizeEvent>(BIND_EVENT_CB(Application::_OnWindowMaximize));
+        dispatcher.Dispatch<WindowMinimizeEvent>(BIND_EVENT_CB(Application::_OnWindowMinimize));
+        dispatcher.Dispatch<WindowRestoreEvent>(BIND_EVENT_CB(Application::_OnWindowRestore));
 
         for (auto iter = m_LayerStack.rbegin(); iter != m_LayerStack.rend(); iter++) {
             (*iter)->OnEvent(e);
@@ -54,23 +62,45 @@ namespace Pyre {
         }
     }
 
-    bool Application::OnWindowClose(Event& e) {
-        m_Running = false;
-        return true;
+    bool Application::_OnWindowClose(WindowCloseEvent& e) {
+        Shutdown();
+        OnWindowClose(e);
+        return false;
     }
 
-    bool Application::OnWindowMove(Event& e) { return true; }
+    bool Application::_OnWindowMove(WindowMoveEvent& e) {
+        OnWindowMove(e);
+        return false;
+    }
 
-    bool Application::OnWindowResize(Event& e) { return true; }
+    bool Application::_OnWindowResize(WindowResizeEvent& e) {
+        OnWindowResize(e);
+        return false;
+    }
 
-    bool Application::OnWindowFocus(Event& e) { return true; }
+    bool Application::_OnWindowFocus(WindowFocusEvent& e) {
+        OnWindowFocus(e);
+        return false;
+    }
 
-    bool Application::OnWindowLoseFocus(Event& e) { return true; }
+    bool Application::_OnWindowLoseFocus(WindowLoseFocusEvent& e) {
+        OnWindowLoseFocus(e);
+        return false;
+    }
 
-    bool Application::OnWindowMaximize(Event& e) { return true; }
+    bool Application::_OnWindowMaximize(WindowMaximizeEvent& e) {
+        OnWindowMaximize(e);
+        return false;
+    }
 
-    bool Application::OnWindowMinimize(Event& e) { return true; }
+    bool Application::_OnWindowMinimize(WindowMinimizeEvent& e) {
+        OnWindowMinimize(e);
+        return false;
+    }
 
-    bool Application::OnWindowRestore(Event& e) { return true; }
+    bool Application::_OnWindowRestore(WindowRestoreEvent& e) {
+        OnWindowRestore(e);
+        return false;
+    }
 
 }

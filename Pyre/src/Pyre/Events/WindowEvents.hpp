@@ -17,8 +17,8 @@ namespace Pyre {
             m_PosX(posX), m_PosY(posY)
         {}
 
-        inline int getPosX() const { return m_PosX; }
-        inline int getPosY() const { return m_PosY; }
+        inline int GetPosX() const { return m_PosX; }
+        inline int GetPosY() const { return m_PosY; }
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowMove)
@@ -33,22 +33,22 @@ namespace Pyre {
 
     class PYRE_API WindowResizeEvent : public Event {
     public:
-        WindowResizeEvent(int sizeX, int sizeY) :
-            m_SizeX(sizeX), m_SizeY(sizeY)
+        WindowResizeEvent(int width, int height) :
+            m_Width(width), m_Height(height)
         {}
 
-        inline int getSizeX() const { return m_SizeX; }
-        inline int getSizeY() const { return m_SizeY; }
+        inline int GetWidth() const { return m_Width; }
+        inline int GetHeigth() const { return m_Height; }
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowResize)
         std::string AsString() const override {
-            return FMT("WindowResize: {}, {}", m_SizeX, m_SizeY);
+            return FMT("WindowResize: {}, {}", m_Width, m_Height);
         }
 
     protected:
-        int m_SizeX;
-        int m_SizeY;
+        int m_Width;
+        int m_Height;
     };
 
     class PYRE_API WindowFocusEvent : public Event {
