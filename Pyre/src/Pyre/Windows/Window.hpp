@@ -1,5 +1,4 @@
 #pragma once
-#include "pyrepch.hpp"
 #include "Pyre/Core.hpp"
 #include "Pyre/Events/Event.hpp"
 
@@ -8,12 +7,13 @@ namespace Pyre {
     struct WindowProperties {
     public:
         std::string Title;
+        unsigned int PosX, PosY;
         unsigned int Width, Height;
 
         WindowProperties(const std::string& title = "Pyre Engine",
-                         unsigned int width = 1280,
-                         unsigned int height = 720)
-            : Title(title), Width(width), Height(height)
+                         unsigned int x = 0, unsigned int y = 0,
+                         unsigned int w = 1280, unsigned int h = 720)
+            : Title(title), PosX(x), PosY(y), Width(w), Height(h)
         {}
     };
 

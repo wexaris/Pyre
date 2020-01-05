@@ -1,5 +1,6 @@
 #pragma once
 #include "Pyre/Core.hpp"
+#include <functional>
 
 namespace Pyre {
 
@@ -7,7 +8,7 @@ namespace Pyre {
         None = 0,
         KeyPress, KeyRelease,
         MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll,
-        WindowClose, WindowResize, WindowFocus, WindowLoseFocus, WindowMove,
+        WindowClose, WindowMove, WindowResize, WindowFocus, WindowLoseFocus, WindowMaximize, WindowMinimize, WindowRestore,
         AppTick, AppUpdate, AppRender
     };
 
@@ -21,26 +22,23 @@ namespace Pyre {
     };
 
     class PYRE_API Event {
-
-        friend class EventDispatcher;
     public:
+        bool Handled = false;
+
         virtual EventType GetEventType() const = 0;
         virtual const char* GetName() const    = 0;
         virtual int GetCategoryFlags() const   = 0;
         virtual std::string AsString() const   { return GetName(); }
 
         inline bool IsCategory(EventCategory category) { return GetCategoryFlags() & category; }
-
-    private:
-        bool m_handled = false;
     };
 
 #define EVENT_ADD_TYPE(type) \
-    inline static EventType GetStaticType()         { return EventType::type; } \
-    virtual EventType GetEventType() const override { return GetStaticType(); } \
-    virtual const char* GetName() const override    { return #type; }
+    inline static EventType GetStaticType() { return EventType::type; } \
+    EventType GetEventType() const override { return GetStaticType(); } \
+    const char* GetName() const override    { return #type; }
 #define EVENT_ADD_CATEGORY(category) \
-    virtual int GetCategoryFlags() const override   { return category; }
+    int GetCategoryFlags() const override   { return category; }
 
     class EventDispatcher {
 
@@ -54,7 +52,7 @@ namespace Pyre {
         template<typename T, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
         bool Dispatch(EventFun<T> fun) {
             if (m_Event.GetEventType() == T::GetStaticType()) {
-                m_Event.m_handled = fun(*(T*)&m_Event);
+                m_Event.Handled = fun(*(T*)&m_Event);
                 return true;
             }
             return false;

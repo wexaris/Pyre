@@ -1,9 +1,16 @@
 #include "pyrepch.hpp"
 #include "Pyre/Windows/WindowsWindow.hpp"
+#include "Pyre/Events/MouseEvents.hpp"
+#include "Pyre/Events/KeyEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
 
 namespace Pyre {
 
     static bool s_GLFWInitialized = false;
+
+    static void GLFWError(int error, const char* msg) {
+        PYRE_CORE_ERROR("GLFW Error ({}): {}", error, msg);
+    }
 
     Window* Window::Create(const WindowProperties& properties) {
         return new WindowsWindow(properties);
@@ -20,14 +27,165 @@ namespace Pyre {
         if (!s_GLFWInitialized) {
             int good = glfwInit();
             PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
-
+            glfwSetErrorCallback(GLFWError);
             s_GLFWInitialized = true;
         }
 
+        // Create GLFW window
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
+
+        // Add GLFW callbacks
+        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            switch (action)
+            {
+            case GLFW_PRESS: {
+                KeyPressEvent event(key, 0);
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_RELEASE: {
+                KeyReleaseEvent event(key);
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_REPEAT: {
+                KeyPressEvent event(key, 1); // TODO: get repeat count
+                data.EventCallback(event);
+                break;
+            }
+            default:
+                PYRE_CORE_FATAL("Unrecognised key action from GLFW!");
+                break;
+            }
+        });
+
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            switch (action)
+            {
+            case GLFW_PRESS: {
+                MouseButtonPressEvent event(button);
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_RELEASE: {
+                MouseButtonReleaseEvent event(button);
+                data.EventCallback(event);
+                break;
+            }
+            default:
+                PYRE_CORE_FATAL("Unrecognised mouse button action from GLFW!");
+                break;
+            }
+        });
+
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            MouseMoveEvent event((float)xPos, (float)yPos);
+            data.EventCallback(event);
+        });
+
+        glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            MouseScrollEvent event((float)xOffset, (float)yOffset);
+            data.EventCallback(event);
+        });
+
+        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            WindowCloseEvent event;
+            data.EventCallback(event);
+        });
+
+        glfwSetWindowPosCallback(m_Window, [](GLFWwindow* window, int x, int y) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            data.PosX = x;
+            data.PosY = y;
+
+            WindowMoveEvent event(x, y);
+            data.EventCallback(event);
+        });
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            data.Width = width;
+            data.Width = height;
+
+            WindowResizeEvent event(width, height);
+            data.EventCallback(event);
+        });
+
+        glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            switch (focused)
+            {
+            case GLFW_TRUE: {
+                WindowFocusEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_FALSE: {
+                WindowLoseFocusEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            default:
+                PYRE_CORE_FATAL("Unrecognised window focus state from GLFW!");
+                break;
+            }
+        });
+
+        glfwSetWindowMaximizeCallback(m_Window, [](GLFWwindow* window, int maximized) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            switch (maximized)
+            {
+            case GLFW_TRUE: {
+                WindowMaximizeEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_FALSE: {
+                WindowRestoreEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            default:
+                PYRE_CORE_FATAL("Unrecognised window maximize state from GLFW!");
+                break;
+            }
+        });
+
+        glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window, int minimized) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+            switch (minimized)
+            {
+            case GLFW_TRUE: {
+                WindowMinimizeEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_FALSE: {
+                WindowRestoreEvent event;
+                data.EventCallback(event);
+                break;
+            }
+            default:
+                PYRE_CORE_FATAL("Unrecognised window minimize state from GLFW!");
+                break;
+            }
+        });
     }
 
     WindowsWindow::~WindowsWindow() {

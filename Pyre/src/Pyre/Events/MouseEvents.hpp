@@ -24,7 +24,7 @@ namespace Pyre {
         {}
 
         EVENT_ADD_TYPE(MouseButtonPress)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("MouseButtonPress: {}", m_KeyCode);
         }
     };
@@ -36,7 +36,7 @@ namespace Pyre {
         {}
 
         EVENT_ADD_TYPE(MouseButtonRelease)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("MouseButtonRelease: {}", m_KeyCode);
         }
     };
@@ -52,7 +52,7 @@ namespace Pyre {
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouse)
         EVENT_ADD_TYPE(MouseMove)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("MouseMove: {}, {}", m_MouseX, m_MouseY);
         }
 
@@ -72,7 +72,7 @@ namespace Pyre {
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouse)
         EVENT_ADD_TYPE(MouseScroll)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("MouseScroll: {}, {}", m_XOffset, m_YOffset);
         }
 

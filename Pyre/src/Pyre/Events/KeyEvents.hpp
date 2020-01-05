@@ -26,7 +26,7 @@ namespace Pyre {
         inline int GetRepeatCount() const { return m_RepeatCount; }
         
         EVENT_ADD_TYPE(KeyPress)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("KeyPress: {} ({} repeats)", m_KeyCode, m_RepeatCount);
         }
 
@@ -41,7 +41,7 @@ namespace Pyre {
         {}
 
         EVENT_ADD_TYPE(KeyRelease)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("KeyRelease: {}", m_KeyCode);
         }
     };

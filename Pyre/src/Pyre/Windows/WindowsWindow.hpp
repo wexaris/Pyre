@@ -4,7 +4,7 @@
 
 namespace Pyre {
 
-    class WindowsWindow : public Window {
+    class PYRE_API WindowsWindow : public Window {
     public:
         WindowsWindow(const WindowProperties& properties);
         ~WindowsWindow();
@@ -23,6 +23,7 @@ namespace Pyre {
 
         struct WindowData {
             std::string Title;
+            unsigned int PosX, PosY;
             unsigned int Width, Height;
             bool VSync;
             EventCallbackFun EventCallback;

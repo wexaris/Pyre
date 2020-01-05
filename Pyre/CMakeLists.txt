@@ -7,6 +7,8 @@ set(SOURCE_FILES
     src/Pyre/Application.cpp
     src/Pyre/Log.cpp
     src/Pyre/Windows/WindowsWindow.cpp
+    src/Pyre/Layers/Layer.cpp
+    src/Pyre/Layers/LayerStack.cpp
 )
 
 set(PCH_FILES src/pyrepch.hpp)

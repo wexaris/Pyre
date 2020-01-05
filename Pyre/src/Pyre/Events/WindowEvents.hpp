@@ -11,6 +11,26 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowClose)
     };
 
+    class PYRE_API WindowMoveEvent : public Event {
+    public:
+        WindowMoveEvent(int posX, int posY) :
+            m_PosX(posX), m_PosY(posY)
+        {}
+
+        inline int getPosX() const { return m_PosX; }
+        inline int getPosY() const { return m_PosY; }
+
+        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_TYPE(WindowMove)
+        std::string AsString() const override {
+            return FMT("WindowMove: {}, {}", m_PosX, m_PosY);
+        }
+
+    protected:
+        int m_PosX;
+        int m_PosY;
+    };
+
     class PYRE_API WindowResizeEvent : public Event {
     public:
         WindowResizeEvent(int sizeX, int sizeY) :
@@ -22,7 +42,7 @@ namespace Pyre {
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowResize)
-        virtual std::string AsString() const override {
+        std::string AsString() const override {
             return FMT("WindowResize: {}, {}", m_SizeX, m_SizeY);
         }
 
@@ -47,24 +67,28 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowLoseFocus)
     };
 
-    class PYRE_API WindowMoveEvent : public Event {
+    class PYRE_API WindowMaximizeEvent : public Event {
     public:
-        WindowMoveEvent(int posX, int posY) :
-            m_PosX(posX), m_PosY(posY)
-        {}
-
-        inline int getPosX() const { return m_PosX; }
-        inline int getPosY() const { return m_PosY; }
+        WindowMaximizeEvent() = default;
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
-        EVENT_ADD_TYPE(WindowMove)
-        virtual std::string AsString() const override {
-            return FMT("WindowMove: {}, {}", m_PosX, m_PosY);
-        }
+        EVENT_ADD_TYPE(WindowMaximize)
+    };
 
-    protected:
-        int m_PosX;
-        int m_PosY;
+    class PYRE_API WindowMinimizeEvent : public Event {
+    public:
+        WindowMinimizeEvent() = default;
+
+        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_TYPE(WindowMinimize)
+    };
+
+    class PYRE_API WindowRestoreEvent : public Event {
+    public:
+        WindowRestoreEvent() = default;
+
+        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_TYPE(WindowRestore)
     };
 
 }
