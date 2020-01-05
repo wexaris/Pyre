@@ -6,9 +6,13 @@ namespace Pyre {
 
 #define BIND_EVENT_CB(fun) (std::bind(&fun, this, std::placeholders::_1))
 
-    Application::Application() :
-        m_Window(Window::Create())
-    {
+    Application* Application::s_Instance = nullptr;
+
+    Application::Application() {
+        PYRE_CORE_ASSERT(!s_Instance, "Application already exists!");
+        s_Instance = this;
+
+        m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_CB(Application::OnEvent));
     }
 
@@ -28,10 +32,12 @@ namespace Pyre {
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* overlay) {
         m_LayerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 
     void Application::OnEvent(Event& e) {
