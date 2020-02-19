@@ -18,16 +18,9 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror -Wextra -pedantic -O0 -g")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O2 -s -DNDEBUG")
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 /ZI /RTC /sdl /Od")
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} /Zi /GL /O2")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 /ZI /RTC /sdl /Od")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} /Zi /GL /O2")
 endif()
 
-# Projects
-include_directories(
-    pyre/src
-    ${CMAKE_SOURCE_DIR}/Pyre/external/spdlog/include
-)
-
-add_subdirectory(Pyre/external)
 add_subdirectory(pyre)
 add_subdirectory(sandbox)

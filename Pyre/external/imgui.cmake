@@ -9,3 +9,4 @@ set(IMGUI_SRC_FILES
 )
 
 add_library(imgui STATIC ${IMGUI_SRC_FILES})
+target_include_directories(imgui PUBLIC imgui)
