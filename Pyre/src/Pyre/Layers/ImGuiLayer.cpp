@@ -2,9 +2,10 @@
 #include "Pyre/Application.hpp"
 #include "Pyre/Layers/ImGuiLayer.hpp"
 #include "Pyre/Layers/ImGuiRenderer.hpp"
+#include "Pyre/Input/KeyCodes.hpp"
 
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include <GLFW/glfw3.h> // for glfwGetTime()
+#include <glad/glad.h>  // for glViewport();
 
 namespace Pyre {
 
@@ -24,28 +25,28 @@ namespace Pyre {
         io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-        io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-        io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-        io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-        io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-        io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-        io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-        io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-        io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-        io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-        io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-        io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-        io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-        io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-        io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-        io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-        io.KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
-        io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-        io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-        io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-        io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-        io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-        io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+        io.KeyMap[ImGuiKey_Tab] = input::KEY_TAB;
+        io.KeyMap[ImGuiKey_LeftArrow] = input::KEY_LEFT;
+        io.KeyMap[ImGuiKey_RightArrow] = input::KEY_RIGHT;
+        io.KeyMap[ImGuiKey_UpArrow] = input::KEY_UP;
+        io.KeyMap[ImGuiKey_DownArrow] = input::KEY_DOWN;
+        io.KeyMap[ImGuiKey_PageUp] = input::KEY_PAGE_UP;
+        io.KeyMap[ImGuiKey_PageDown] = input::KEY_PAGE_DOWN;
+        io.KeyMap[ImGuiKey_Home] = input::KEY_HOME;
+        io.KeyMap[ImGuiKey_End] = input::KEY_END;
+        io.KeyMap[ImGuiKey_Insert] = input::KEY_INSERT;
+        io.KeyMap[ImGuiKey_Delete] = input::KEY_DELETE;
+        io.KeyMap[ImGuiKey_Backspace] = input::KEY_BACKSPACE;
+        io.KeyMap[ImGuiKey_Space] = input::KEY_SPACE;
+        io.KeyMap[ImGuiKey_Enter] = input::KEY_ENTER;
+        io.KeyMap[ImGuiKey_Escape] = input::KEY_ESCAPE;
+        io.KeyMap[ImGuiKey_KeyPadEnter] = input::KEY_KP_ENTER;
+        io.KeyMap[ImGuiKey_A] = input::KEY_A;
+        io.KeyMap[ImGuiKey_C] = input::KEY_C;
+        io.KeyMap[ImGuiKey_V] = input::KEY_V;
+        io.KeyMap[ImGuiKey_X] = input::KEY_X;
+        io.KeyMap[ImGuiKey_Y] = input::KEY_Y;
+        io.KeyMap[ImGuiKey_Z] = input::KEY_Z;
 
         ImGui_ImplOpenGL3_Init("#version 410");
     }
@@ -60,7 +61,7 @@ namespace Pyre {
         io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
         float time = (float)glfwGetTime();
-        io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1.f / 60.f);
+        io.DeltaTime = m_Time > 0.f ? (time - m_Time) : (1.f / 60.f);
         m_Time = time;
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -89,10 +90,10 @@ namespace Pyre {
         ImGuiIO& io = ImGui::GetIO();
         io.KeysDown[event.GetKeyCode()] = true;
 
-        io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-        io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-        io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-        io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+        io.KeyCtrl = io.KeysDown[input::KEY_LEFT_CONTROL] || io.KeysDown[input::KEY_RIGHT_CONTROL];
+        io.KeyShift = io.KeysDown[input::KEY_LEFT_SHIFT] || io.KeysDown[input::KEY_RIGHT_SHIFT];
+        io.KeyAlt = io.KeysDown[input::KEY_LEFT_ALT] || io.KeysDown[input::KEY_RIGHT_ALT];
+        io.KeySuper = io.KeysDown[input::KEY_LEFT_SUPER] || io.KeysDown[input::KEY_RIGHT_SUPER];
         return false;
     }
 
@@ -100,10 +101,10 @@ namespace Pyre {
         ImGuiIO& io = ImGui::GetIO();
         io.KeysDown[event.GetKeyCode()] = false;
 
-        io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-        io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-        io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-        io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+        io.KeyCtrl = io.KeysDown[input::KEY_LEFT_CONTROL] || io.KeysDown[input::KEY_RIGHT_CONTROL];
+        io.KeyShift = io.KeysDown[input::KEY_LEFT_SHIFT] || io.KeysDown[input::KEY_RIGHT_SHIFT];
+        io.KeyAlt = io.KeysDown[input::KEY_LEFT_ALT] || io.KeysDown[input::KEY_RIGHT_ALT];
+        io.KeySuper = io.KeysDown[input::KEY_LEFT_SUPER] || io.KeysDown[input::KEY_RIGHT_SUPER];
         return false;
     }
 
@@ -143,10 +144,8 @@ namespace Pyre {
     bool ImGuiLayer::OnWindowResize(WindowResizeEvent& e) {
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeigth());
-        io.DisplaySize = ImVec2(20, 50);
         io.DisplayFramebufferScale = ImVec2(1.f, 1.f);
-        // FIXME: Should be abstracted
-        //glViewport(0, 0, e.GetWidth(), e.GetHeigth());
+        glViewport(0, 0, e.GetWidth(), e.GetHeigth());
         return false;
     }
 

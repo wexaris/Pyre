@@ -5,11 +5,11 @@ public:
     TestLayer() : Layer("Test") {}
 
     void OnUpdate() override {
-        //PYRE_INFO("TestLayer::Update");
+
     }
 
     void OnEvent(Pyre::Event& event) {
-        PYRE_TRACE(event);
+        //PYRE_TRACE(event);
     }
 };
 

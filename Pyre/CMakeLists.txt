@@ -11,6 +11,7 @@ set(SOURCE_FILES
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
     src/Pyre/Layers/ImGuiRenderer.cpp
+    src/Pyre/Input/WindowsInput.cpp
 )
 
 set(PCH_FILES src/pyrepch.hpp)
