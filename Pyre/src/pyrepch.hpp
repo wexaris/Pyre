@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Pyre/Base.hpp"
 #include "Pyre/Log.hpp"
 
 #ifdef PYRE_PLATFORM_WINDOWS

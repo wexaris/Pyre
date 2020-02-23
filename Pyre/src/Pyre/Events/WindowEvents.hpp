@@ -3,7 +3,7 @@
 
 namespace Pyre {
 
-    class PYRE_API WindowCloseEvent : public Event {
+    class WindowCloseEvent : public Event {
     public:
         WindowCloseEvent() = default;
 
@@ -11,7 +11,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowClose)
     };
 
-    class PYRE_API WindowMoveEvent : public Event {
+    class WindowMoveEvent : public Event {
     public:
         WindowMoveEvent(int posX, int posY) :
             m_PosX(posX), m_PosY(posY)
@@ -31,7 +31,7 @@ namespace Pyre {
         int m_PosY;
     };
 
-    class PYRE_API WindowResizeEvent : public Event {
+    class WindowResizeEvent : public Event {
     public:
         WindowResizeEvent(int width, int height) :
             m_Width(width), m_Height(height)
@@ -51,7 +51,7 @@ namespace Pyre {
         int m_Height;
     };
 
-    class PYRE_API WindowFocusEvent : public Event {
+    class WindowFocusEvent : public Event {
     public:
         WindowFocusEvent() = default;
 
@@ -59,7 +59,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowFocus)
     };
 
-    class PYRE_API WindowLoseFocusEvent : public Event {
+    class WindowLoseFocusEvent : public Event {
     public:
         WindowLoseFocusEvent() = default;
 
@@ -67,7 +67,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowLoseFocus)
     };
 
-    class PYRE_API WindowMaximizeEvent : public Event {
+    class WindowMaximizeEvent : public Event {
     public:
         WindowMaximizeEvent() = default;
 
@@ -75,7 +75,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowMaximize)
     };
 
-    class PYRE_API WindowMinimizeEvent : public Event {
+    class WindowMinimizeEvent : public Event {
     public:
         WindowMinimizeEvent() = default;
 
@@ -83,7 +83,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(WindowMinimize)
     };
 
-    class PYRE_API WindowRestoreEvent : public Event {
+    class WindowRestoreEvent : public Event {
     public:
         WindowRestoreEvent() = default;
 

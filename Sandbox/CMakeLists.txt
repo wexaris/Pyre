@@ -5,9 +5,7 @@ set(SOURCE_FILES
     src/Sandbox.cpp
 )
 
-include_directories(
-    ${pyre_INCLUDE_DIRS}
-)
+add_executable(sandbox ${SOURCE_FILES})
+add_dependencies(sandbox pyre)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE pyre)
+target_link_libraries(sandbox PRIVATE pyre)

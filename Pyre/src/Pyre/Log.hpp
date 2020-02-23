@@ -1,12 +1,11 @@
 #pragma once
-#include "Pyre/Core.hpp"
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/fmt/ostr.h>
 
 namespace Pyre {
 
-    class PYRE_API Log {
+    class Log { 
     public:
         static void Init();
 

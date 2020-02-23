@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Pyre/Application.hpp"
+#include "Pyre/Base.hpp"
 #include "Pyre/Log.hpp"
+#include "Pyre/Application.hpp"
 
 #include "Pyre/Layers/Layer.hpp"
 #include "Pyre/Layers/ImGuiLayer.hpp"

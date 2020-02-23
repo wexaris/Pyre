@@ -1,5 +1,4 @@
 #pragma once
-#include "Pyre/Core.hpp"
 #include <functional>
 
 namespace Pyre {
@@ -21,7 +20,7 @@ namespace Pyre {
         EventCategoryApplication = BIT(5)
     };
 
-    class PYRE_API Event {
+    class Event {
     public:
         bool Handled = false;
 

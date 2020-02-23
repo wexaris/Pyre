@@ -1,5 +1,4 @@
 #pragma once
-#include "Pyre/Core.hpp"
 #include "Pyre/Layers/Layer.hpp"
 
 namespace Pyre {
@@ -21,7 +20,7 @@ namespace Pyre {
 
     private:
         std::vector<Layer*> m_Layers;
-        std::vector<Layer*>::iterator m_InsertPos;
+        unsigned int m_InsertIndex = 0;
     };
 
 }

@@ -3,7 +3,7 @@
 
 namespace Pyre {
 
-    class PYRE_API AppTickEvent : public Event {
+    class AppTickEvent : public Event {
     public:
         AppTickEvent() = default;
 
@@ -11,7 +11,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(AppTick)
     };
 
-    class PYRE_API AppUpdateEvent : public Event {
+    class AppUpdateEvent : public Event {
     public:
         AppUpdateEvent() = default;
 
@@ -19,7 +19,7 @@ namespace Pyre {
         EVENT_ADD_TYPE(AppUpdate)
     };
 
-    class PYRE_API AppRenderEvent : public Event {
+    class AppRenderEvent : public Event {
     public:
         AppRenderEvent() = default;
 

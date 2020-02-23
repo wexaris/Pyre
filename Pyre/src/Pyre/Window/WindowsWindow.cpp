@@ -1,8 +1,10 @@
 #include "pyrepch.hpp"
-#include "Pyre/Windows/WindowsWindow.hpp"
+#include "Pyre/Window/WindowsWindow.hpp"
+#include "Pyre/Renderer/OpenGLContext.hpp"
 #include "Pyre/Events/MouseEvents.hpp"
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
+
 #include <glad/glad.h>
 
 namespace Pyre {
@@ -33,21 +35,18 @@ namespace Pyre {
             s_GLFWInitialized = true;
         }
 
-        // Create GLFW window
+        // Create window
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_Window);
+        m_Context = new OpenGLContext(m_Window);
+        
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
-
+        
         // Get window position
         int x, y;
         glfwGetWindowPos(m_Window, &x, &y);
         m_Data.PosX = x;
         m_Data.PosY = y;
-
-        // Initialize Glad
-        int good = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        PYRE_CORE_ASSERT(good, "Failed to initialize Glad!")
 
         // Add GLFW callbacks
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -207,7 +206,7 @@ namespace Pyre {
 
     void WindowsWindow::OnUpdate() {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers();
     }
 
     void WindowsWindow::SetVSync(bool enabled) {

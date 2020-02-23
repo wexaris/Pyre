@@ -1,10 +1,9 @@
 #pragma once
-#include "Pyre/Core.hpp"
 #include "Pyre/Events/Event.hpp"
 
 namespace Pyre {
 
-    class PYRE_API Layer {
+    class Layer {
     public:
         Layer(const std::string& name = "Layer");
         virtual ~Layer();
@@ -12,7 +11,8 @@ namespace Pyre {
         virtual void OnAttach() {}
         virtual void OnDetach() {}
         virtual void OnUpdate() {}
-        virtual void OnEvent(Event& event) {}
+        virtual void OnImGuiRender() {}
+        virtual void OnEvent(Event&) {}
 
         inline const std::string& GetName() const { return m_Name; }
         inline void Enable(bool enable) { m_Enabled = enable; }

@@ -1,5 +1,4 @@
 #pragma once
-#include "Pyre/Core.hpp"
 #include "Pyre/Events/Event.hpp"
 
 namespace Pyre {
@@ -16,7 +15,7 @@ namespace Pyre {
     };
 
     // Abstract representation of a desktop window
-    class PYRE_API Window {
+    class Window {
     public:
         using EventCallbackFun = std::function<void(Event&)>;
 

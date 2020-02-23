@@ -1,7 +1,7 @@
 #pragma once
-#include "Pyre/Core.hpp"
-#include "Pyre/Windows/Window.hpp"
+#include "Pyre/Window/Window.hpp"
 #include "Pyre/Layers/LayerStack.hpp"
+#include "Pyre/Layers/ImGuiLayer.hpp"
 
 namespace Pyre {
 
@@ -14,7 +14,7 @@ namespace Pyre {
     class WindowMinimizeEvent;
     class WindowRestoreEvent;
 
-    class PYRE_API Application {
+    class Application {
     public:
         Application();
         virtual ~Application();
@@ -24,14 +24,14 @@ namespace Pyre {
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
 
-        virtual void OnWindowClose(WindowCloseEvent& e) {}
-        virtual void OnWindowMove(WindowMoveEvent& e) {}
-        virtual void OnWindowResize(WindowResizeEvent& e) {}
-        virtual void OnWindowFocus(WindowFocusEvent& e) {}
-        virtual void OnWindowLoseFocus(WindowLoseFocusEvent& e) {}
-        virtual void OnWindowMaximize(WindowMaximizeEvent& e) {}
-        virtual void OnWindowMinimize(WindowMinimizeEvent& e) {}
-        virtual void OnWindowRestore(WindowRestoreEvent& e) {}
+        virtual void OnWindowClose(WindowCloseEvent&) {}
+        virtual void OnWindowMove(WindowMoveEvent&) {}
+        virtual void OnWindowResize(WindowResizeEvent&) {}
+        virtual void OnWindowFocus(WindowFocusEvent&) {}
+        virtual void OnWindowLoseFocus(WindowLoseFocusEvent&) {}
+        virtual void OnWindowMaximize(WindowMaximizeEvent&) {}
+        virtual void OnWindowMinimize(WindowMinimizeEvent&) {}
+        virtual void OnWindowRestore(WindowRestoreEvent&) {}
 
         static inline Application& Get() { return *s_Instance; }
         inline Window& GetWindow()       { return *m_Window; }
@@ -42,6 +42,7 @@ namespace Pyre {
         static Application* s_Instance;
 
         std::unique_ptr<Window> m_Window;
+        ImGuiLayer* m_ImGuiLayer;
         LayerStack m_LayerStack;
         bool m_Running = true;
 

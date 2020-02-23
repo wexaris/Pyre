@@ -1,5 +1,6 @@
 #pragma once
-#include "Pyre/Windows/Window.hpp"
+#include "Pyre/Window/Window.hpp"
+#include "Pyre/Renderer/GraphicsContext.hpp"
 #include <GLFW/glfw3.h>
 
 namespace Pyre {
@@ -22,6 +23,7 @@ namespace Pyre {
 
     private:
         GLFWwindow* m_Window;
+        GraphicsContext* m_Context;
 
         struct WindowData {
             std::string Title;

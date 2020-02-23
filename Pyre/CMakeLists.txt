@@ -4,31 +4,48 @@ project(pyre)
 # Build external dependencies
 add_subdirectory(external)
 
-# PYRE_BUILD_LIB     set API macro to export
-# GLFW_INCLUDE_NONE  pervent GLFW form including its own OpenGL headers
-add_definitions(-DPYRE_BUILD_LIB -DGLFW_INCLUDE_NONE)
-
-set(SOURCE_FILES
+set(PYRE_SRC
     src/Pyre/Application.cpp
     src/Pyre/Log.cpp
-    src/Pyre/Windows/WindowsWindow.cpp
+    src/Pyre/Window/WindowsWindow.cpp
+    src/Pyre/Renderer/OpenGLContext.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
-    src/Pyre/Layers/ImGuiRenderer.cpp
     src/Pyre/Input/WindowsInput.cpp
 )
 
-set(PCH_FILES src/pyrepch.hpp)
+set(PYRE_PCH src/pyrepch.hpp)
 
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${PCH_FILES})
+add_library(pyre STATIC ${PYRE_SRC})
+target_precompile_headers(pyre PRIVATE ${PYRE_PCH})
 
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC spdlog glm
-    PRIVATE glfw glad imgui
+target_link_libraries(pyre
+    PRIVATE glfw glad imgui_opengl_glfw
+    PUBLIC spdlog imgui glm_static 
 )
-target_include_directories(${PROJECT_NAME}
-    PUBLIC src ${spdlog_INCLUDE_DIRS} ${glm_INCLUDE_DIRS}
-    PRIVATE ${glfw_INCLUDE_DIRS} ${GLAD_INCLUDE_DIRS} ${imgui_INCLUDE_DIRS} 
+target_compile_definitions(pyre
+    PRIVATE
+        -DGLFW_INCLUDE_NONE  # GLFW won't include its own OpenGL
+    PUBLIC
+        $<$<PLATFORM_ID:Windows>:PYRE_PLATFORM_WINDOWS>
+        $<$<PLATFORM_ID:Linux>:PYRE_PLATFORM_LINUX>
+)  
+target_include_directories(pyre PUBLIC src)
+
+target_compile_options(pyre PUBLIC
+    $<$<CONFIG:DEBUG>:   #DEBUG
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+            -Wall -Werror -Wextra -pedantic -O0 -g>
+        $<$<CXX_COMPILER_ID:MSVC>:
+            /W3 /ZI /RTC1 /sdl /Od>>
+    $<$<CONFIG:RELEASE>: #RELEASE
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+            -O2 -s -DNDEBUG>
+        $<$<CXX_COMPILER_ID:MSVC>:
+            /Zi /GL /O2>>
+)
+target_link_options(pyre PUBLIC
+    $<$<CONFIG:RELEASE>:$<$<CXX_COMPILER_ID:MSVC>:
+        /LTCG>>
 )

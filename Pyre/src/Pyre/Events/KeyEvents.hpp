@@ -3,7 +3,7 @@
 
 namespace Pyre {
 
-    class PYRE_API KeyEvent : public Event {
+    class KeyEvent : public Event {
     public:
         inline int GetKeyCode() const { return m_KeyCode; }
 
@@ -17,7 +17,7 @@ namespace Pyre {
         {}
     };
 
-    class PYRE_API KeyPressEvent : public KeyEvent {
+    class KeyPressEvent : public KeyEvent {
     public:
         KeyPressEvent(int keycode, int repeatCount) :
             KeyEvent(keycode), m_RepeatCount(repeatCount)
@@ -34,7 +34,7 @@ namespace Pyre {
         int m_RepeatCount;
     };
 
-    class PYRE_API KeyReleaseEvent : public KeyEvent {
+    class KeyReleaseEvent : public KeyEvent {
     public:
         KeyReleaseEvent(int keycode) :
             KeyEvent(keycode)
@@ -46,7 +46,7 @@ namespace Pyre {
         }
     };
 
-    class PYRE_API KeyTypeEvent : public KeyEvent {
+    class KeyTypeEvent : public KeyEvent {
     public:
         KeyTypeEvent(int keycode) :
             KeyEvent(keycode)

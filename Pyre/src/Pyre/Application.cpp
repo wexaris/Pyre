@@ -14,6 +14,9 @@ namespace Pyre {
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_CB(Application::OnEvent));
+
+        m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
     }
 
     Application::~Application() {
@@ -22,12 +25,19 @@ namespace Pyre {
 
     void Application::Run() {
         while (m_Running) {
-            glClearColor(0, 0, 1, 1);
+            glClearColor(0.17f, 0.17f, 0.17f, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate();
             }
+
+            // ImGui render calls
+            m_ImGuiLayer->Begin();
+            for (Layer* layer : m_LayerStack) {
+                layer->OnImGuiRender();
+            }
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
@@ -35,12 +45,10 @@ namespace Pyre {
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
-        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* overlay) {
         m_LayerStack.PushOverlay(overlay);
-        overlay->OnAttach();
     }
 
     void Application::OnEvent(Event& e) {

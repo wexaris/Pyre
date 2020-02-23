@@ -3,7 +3,7 @@
 
 namespace Pyre {
 
-    class PYRE_API MouseButtonEvent : public Event {
+    class MouseButtonEvent : public Event {
     public:
         inline int GetMouseButton() const { return m_MouseButton; }
 
@@ -17,7 +17,7 @@ namespace Pyre {
         {}
     };
 
-    class PYRE_API MouseButtonPressEvent : public MouseButtonEvent {
+    class MouseButtonPressEvent : public MouseButtonEvent {
     public:
         MouseButtonPressEvent(int keycode) :
             MouseButtonEvent(keycode)
@@ -29,7 +29,7 @@ namespace Pyre {
         }
     };
 
-    class PYRE_API MouseButtonReleaseEvent : public MouseButtonEvent {
+    class MouseButtonReleaseEvent : public MouseButtonEvent {
     public:
         MouseButtonReleaseEvent(int keycode) :
             MouseButtonEvent(keycode)
@@ -41,7 +41,7 @@ namespace Pyre {
         }
     };
 
-    class PYRE_API MouseMoveEvent : public Event {
+    class MouseMoveEvent : public Event {
     public:
         MouseMoveEvent(float x, float y) :
             m_MouseX(x), m_MouseY(y)
@@ -61,7 +61,7 @@ namespace Pyre {
         float m_MouseY;
     };
 
-    class PYRE_API MouseScrollEvent : public Event {
+    class MouseScrollEvent : public Event {
     public:
         MouseScrollEvent(float xOffset, float yOffset) :
             m_XOffset(xOffset), m_YOffset(yOffset)
