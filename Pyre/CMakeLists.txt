@@ -9,6 +9,7 @@ set(PYRE_SRC
     src/Pyre/Log.cpp
     src/Pyre/Window/WindowsWindow.cpp
     src/Pyre/Renderer/OpenGLContext.cpp
+    src/Pyre/Renderer/OpenGLShader.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
