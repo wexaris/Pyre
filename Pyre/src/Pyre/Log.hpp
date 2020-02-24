@@ -25,10 +25,10 @@ namespace Pyre {
 #define PYRE_CORE_INFO(...)  ::Pyre::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define PYRE_CORE_WARN(...)  ::Pyre::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define PYRE_CORE_ERROR(...) ::Pyre::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define PYRE_CORE_FATAL(...) ::Pyre::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define PYRE_CORE_CRITICAL(...) ::Pyre::Log::GetCoreLogger()->critical(__VA_ARGS__);
 
 #define PYRE_TRACE(...) ::Pyre::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define PYRE_INFO(...)  ::Pyre::Log::GetClientLogger()->info(__VA_ARGS__)
 #define PYRE_WARN(...)  ::Pyre::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define PYRE_ERROR(...) ::Pyre::Log::GetClientLogger()->error(__VA_ARGS__)
-#define PYRE_FATAL(...) ::Pyre::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define PYRE_CRITICAL(...) ::Pyre::Log::GetClientLogger()->critical(__VA_ARGS__);

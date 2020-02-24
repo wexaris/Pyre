@@ -70,7 +70,7 @@ namespace Pyre {
                 break;
             }
             default:
-                PYRE_CORE_FATAL("Unrecognised key action from GLFW!");
+                PYRE_CORE_CRITICAL("Unrecognised key action from GLFW!");
                 break;
             }
         });
@@ -97,7 +97,7 @@ namespace Pyre {
                 break;
             }
             default:
-                PYRE_CORE_FATAL("Unrecognised mouse button action from GLFW!");
+                PYRE_CORE_CRITICAL("Unrecognised mouse button action from GLFW!");
                 break;
             }
         });
@@ -152,7 +152,7 @@ namespace Pyre {
                 break;
             }
             default:
-                PYRE_CORE_FATAL("Unrecognised window focus state from GLFW!");
+                PYRE_CORE_CRITICAL("Unrecognised window focus state from GLFW!");
                 break;
             }
         });
@@ -173,7 +173,7 @@ namespace Pyre {
                 break;
             }
             default:
-                PYRE_CORE_FATAL("Unrecognised window maximize state from GLFW!");
+                PYRE_CORE_CRITICAL("Unrecognised window maximize state from GLFW!");
                 break;
             }
         });
@@ -194,7 +194,7 @@ namespace Pyre {
                 break;
             }
             default:
-                PYRE_CORE_FATAL("Unrecognised window minimize state from GLFW!");
+                PYRE_CORE_CRITICAL("Unrecognised window minimize state from GLFW!");
                 break;
             }
         });
