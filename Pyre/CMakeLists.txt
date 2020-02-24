@@ -8,8 +8,11 @@ set(PYRE_SRC
     src/Pyre/Application.cpp
     src/Pyre/Log.cpp
     src/Pyre/Window/WindowsWindow.cpp
+    src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/OpenGLContext.cpp
     src/Pyre/Renderer/OpenGLShader.cpp
+    src/Pyre/Renderer/Buffer.cpp
+    src/Pyre/Renderer/OpenGLBuffer.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
