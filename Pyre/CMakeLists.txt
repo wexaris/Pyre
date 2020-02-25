@@ -13,6 +13,8 @@ set(PYRE_SRC
     src/Pyre/Renderer/OpenGLShader.cpp
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/OpenGLBuffer.cpp
+    src/Pyre/Renderer/VertexArray.cpp
+    src/Pyre/Renderer/OpenGLVertexArray.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
