@@ -8,7 +8,7 @@ namespace Pyre {
     class OpenGLVertexBuffer : public VertexBuffer {
     public:
         OpenGLVertexBuffer(float* vertices, uint32_t size);
-        ~OpenGLVertexBuffer();
+        virtual ~OpenGLVertexBuffer();
 
         void Bind() const override;
         void Unbind() const override;
@@ -27,7 +27,7 @@ namespace Pyre {
     class OpenGLIndexBuffer : public IndexBuffer {
     public:
         OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
-        ~OpenGLIndexBuffer();
+        virtual ~OpenGLIndexBuffer();
 
         void Bind() const override;
         void Unbind() const override;

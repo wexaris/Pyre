@@ -12,7 +12,7 @@ namespace Pyre {
         void Unbind() const override;
 
     private:
-        uint32_t m_ProgramID;
+        uint32_t m_RendererID;
     };
 
 }

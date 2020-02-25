@@ -75,29 +75,29 @@ namespace Pyre {
         // Vertex and fragment shaders are successfully compiled.
         // Now time to link them together into a program.
         // Get a program object.
-        m_ProgramID = glCreateProgram();
+        m_RendererID = glCreateProgram();
 
         // Attach our shaders to our program
-        glAttachShader(m_ProgramID, vertexShader);
-        glAttachShader(m_ProgramID, fragmentShader);
+        glAttachShader(m_RendererID, vertexShader);
+        glAttachShader(m_RendererID, fragmentShader);
 
         // Link our program
-        glLinkProgram(m_ProgramID);
+        glLinkProgram(m_RendererID);
 
         // Note the different functions here: glGetProgram* instead of glGetShader*.
         GLint isLinked = 0;
-        glGetProgramiv(m_ProgramID, GL_LINK_STATUS, (int*)&isLinked);
+        glGetProgramiv(m_RendererID, GL_LINK_STATUS, (int*)&isLinked);
         if (isLinked == GL_FALSE)
         {
             GLint maxLength = 0;
-            glGetProgramiv(m_ProgramID, GL_INFO_LOG_LENGTH, &maxLength);
+            glGetProgramiv(m_RendererID, GL_INFO_LOG_LENGTH, &maxLength);
 
             // The maxLength includes the NULL character
             std::vector<GLchar> infoLog(maxLength);
-            glGetProgramInfoLog(m_ProgramID, maxLength, &maxLength, &infoLog[0]);
+            glGetProgramInfoLog(m_RendererID, maxLength, &maxLength, &infoLog[0]);
 
             // We don't need the program anymore.
-            glDeleteProgram(m_ProgramID);
+            glDeleteProgram(m_RendererID);
             // Don't leak shaders either.
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
@@ -110,16 +110,16 @@ namespace Pyre {
         }
 
         // Always detach shaders after a successful link.
-        glDetachShader(m_ProgramID, vertexShader);
-        glDetachShader(m_ProgramID, fragmentShader);
+        glDetachShader(m_RendererID, vertexShader);
+        glDetachShader(m_RendererID, fragmentShader);
     }
 
     OpenGLShader::~OpenGLShader() {
-        glDeleteProgram(m_ProgramID);
+        glDeleteProgram(m_RendererID);
     }
 
     void OpenGLShader::Bind() const {
-        glUseProgram(m_ProgramID);
+        glUseProgram(m_RendererID);
     }
 
     void OpenGLShader::Unbind() const {
