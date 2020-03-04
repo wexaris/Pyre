@@ -10,5 +10,5 @@ set(CMAKE_CXX_STANDARD 17)
 # pervent override warnings
 string(REPLACE "/Zi" "/ZI" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 
-add_subdirectory(pyre)
-add_subdirectory(sandbox)
+add_subdirectory(Pyre)
+add_subdirectory(Sandbox)

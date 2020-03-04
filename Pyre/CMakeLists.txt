@@ -9,6 +9,9 @@ set(PYRE_SRC
     src/Pyre/Log.cpp
     src/Pyre/Window/WindowsWindow.cpp
     src/Pyre/Renderer/Renderer.cpp
+    src/Pyre/Renderer/RenderCommand.cpp
+    src/Pyre/Renderer/RenderAPI.cpp
+    src/Pyre/Renderer/OpenGLRenderAPI.cpp
     src/Pyre/Renderer/OpenGLContext.cpp
     src/Pyre/Renderer/OpenGLShader.cpp
     src/Pyre/Renderer/Buffer.cpp

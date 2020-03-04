@@ -1,21 +1,19 @@
 #pragma once
+#include "Pyre/Renderer/RenderCommand.hpp"
 
 namespace Pyre {
-
-    enum class RendererAPI {
-        None   = 0,
-        OpenGL = 1
-    };
 
     class Renderer {
     public:
         Renderer() = default;
 
-        static inline RendererAPI GetAPI() { return s_RendererAPI; }
-        static inline RendererAPI SetAPI(RendererAPI api) { s_RendererAPI = api; }
+        static void BeginScene();
+        static void EndScene();
 
-    private:
-        static RendererAPI s_RendererAPI;
+        static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+
+        static inline RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
+        static inline void SetAPI(RenderAPI::API api) { RenderAPI::SetAPI(api); }
     };
 
 }

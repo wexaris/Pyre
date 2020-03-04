@@ -9,7 +9,7 @@ namespace Pyre {
     VertexArray* VertexArray::Create() {
         switch (Renderer::GetAPI())
         {
-        case RendererAPI::OpenGL: return new OpenGLVertexArray();
+        case RenderAPI::API::OpenGL: return new OpenGLVertexArray();
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");
