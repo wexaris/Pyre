@@ -41,7 +41,7 @@ namespace Pyre {
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
         PYRE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer missing layout!");
 
         glBindVertexArray(m_RendererID);
@@ -56,14 +56,14 @@ namespace Pyre {
                 ShaderDataTypeOpenGLType(e.Type),
                 e.Normalized ? GL_TRUE : GL_FALSE,
                 layout.GetStride(),
-                (const void*)e.Offset);
+                reinterpret_cast<const void*>(e.Offset));
             index++;
         }
 
         m_VertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();

@@ -22,12 +22,12 @@ public:
         };
 
         m_TriangleVA.reset(Pyre::VertexArray::Create());
-        std::shared_ptr<Pyre::VertexBuffer> triangle_vb;
+        Pyre::Ref<Pyre::VertexBuffer> triangle_vb;
         triangle_vb.reset(Pyre::VertexBuffer::Create(triangle_verts, sizeof(triangle_verts)));
         triangle_vb->SetLayout(triangle_layout);
         m_TriangleVA->AddVertexBuffer(triangle_vb);
 
-        std::shared_ptr<Pyre::IndexBuffer> triangle_ib;
+        Pyre::Ref<Pyre::IndexBuffer> triangle_ib;
         triangle_ib.reset(Pyre::IndexBuffer::Create(triangle_indices, sizeof(triangle_indices) / sizeof(uint32_t)));
         m_TriangleVA->SetIndexBuffer(triangle_ib);
 
@@ -77,12 +77,12 @@ public:
         };
 
         m_SquareVA.reset(Pyre::VertexArray::Create());
-        std::shared_ptr<Pyre::VertexBuffer> square_vb;
+        Pyre::Ref<Pyre::VertexBuffer> square_vb;
         square_vb.reset(Pyre::VertexBuffer::Create(square_verts, sizeof(square_verts)));
         square_vb->SetLayout(square_layout);
         m_SquareVA->AddVertexBuffer(square_vb);
 
-        std::shared_ptr<Pyre::IndexBuffer> square_ib;
+        Pyre::Ref<Pyre::IndexBuffer> square_ib;
         square_ib.reset(Pyre::IndexBuffer::Create(square_indices, sizeof(square_indices) / sizeof(uint32_t)));
         m_SquareVA->SetIndexBuffer(square_ib);
 
@@ -144,10 +144,10 @@ public:
         // Render
         Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
 
-        m_Camera->SetPosition(m_CameraPosition);
-        m_Camera->SetRotation(m_CameraRotation);
+        m_Camera.SetPosition(m_CameraPosition);
+        m_Camera.SetRotation(m_CameraRotation);
 
-        Pyre::Renderer::BeginScene(m_Camera);
+        Pyre::Renderer::BeginScene(&m_Camera);
 
         glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
@@ -183,12 +183,12 @@ public:
     }
 
 private:
-    std::shared_ptr<Pyre::VertexArray> m_TriangleVA;
-    std::shared_ptr<Pyre::VertexArray> m_SquareVA;
-    std::shared_ptr<Pyre::Shader> m_TriangleShader;
-    std::shared_ptr<Pyre::Shader> m_SquareShader;
+    Pyre::Ref<Pyre::VertexArray> m_TriangleVA;
+    Pyre::Ref<Pyre::VertexArray> m_SquareVA;
+    Pyre::Ref<Pyre::Shader> m_TriangleShader;
+    Pyre::Ref<Pyre::Shader> m_SquareShader;
 
-    Pyre::OrthographicCamera* m_Camera = new Pyre::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
+    Pyre::OrthographicCamera m_Camera = Pyre::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
     
     glm::vec3 m_CameraPosition = glm::vec3();
     float m_CameraMoveSpeed = 1.f;

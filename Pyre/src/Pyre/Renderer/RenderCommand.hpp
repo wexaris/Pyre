@@ -10,7 +10,7 @@ namespace Pyre {
         static inline void Clear(const glm::vec4& color) {
             s_RenderAPI->Clear(color);
         }
-        static inline void DrawElement(const std::shared_ptr<VertexArray>& vertexArray) {
+        static inline void DrawElement(const Ref<VertexArray>& vertexArray) {
             s_RenderAPI->DrawElement(vertexArray);
         }
 

@@ -10,7 +10,7 @@ namespace Pyre {
 
         void Clear(const glm::vec4& color) override;
 
-        void DrawElement(const std::shared_ptr<VertexArray>& vertexArray) override;
+        void DrawElement(const Ref<VertexArray>& vertexArray) override;
 
     };
 

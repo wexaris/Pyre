@@ -17,7 +17,7 @@ namespace Pyre {
 
         virtual void Clear(const glm::vec4& color) = 0;
 
-        virtual void DrawElement(const std::shared_ptr<VertexArray>& vertexArray) = 0;
+        virtual void DrawElement(const Ref<VertexArray>& vertexArray) = 0;
 
         static inline API GetAPI() { return s_API; }
         static inline void SetAPI(API api) { s_API = api; }
