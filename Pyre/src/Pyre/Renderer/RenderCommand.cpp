@@ -1,6 +1,7 @@
 #include "pyrepch.hpp"
 #include "Pyre/Renderer/RenderCommand.hpp"
-#include "Pyre/Renderer/OpenGLRenderAPI.hpp"
+
+#include "Platform/OpenGL/OpenGLRenderAPI.hpp"
 
 namespace Pyre {
 

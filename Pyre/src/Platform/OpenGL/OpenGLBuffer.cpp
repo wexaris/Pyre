@@ -1,5 +1,5 @@
 #pragma once
-#include "Pyre/Renderer/OpenGLBuffer.hpp"
+#include "Platform/OpenGL/OpenGLBuffer.hpp"
 
 #include <glad/glad.h>
 

@@ -1,6 +1,6 @@
 #include "pyrepch.hpp"
-#include "Pyre/Window/WindowsWindow.hpp"
-#include "Pyre/Renderer/OpenGLContext.hpp"
+#include "Platform/Windows/WindowsWindow.hpp"
+#include "Platform/OpenGL/OpenGLContext.hpp"
 #include "Pyre/Events/MouseEvents.hpp"
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"

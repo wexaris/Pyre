@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Renderer/OpenGLVertexArray.hpp"
+#include "Platform/OpenGL/OpenGLVertexArray.hpp"
 
 #include <glad/glad.h>
 

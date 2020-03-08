@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Renderer/OpenGLShader.hpp"
+#include "Platform/OpenGL/OpenGLShader.hpp"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -125,6 +125,11 @@ namespace Pyre {
 
     void OpenGLShader::Unbind() const {
         glUseProgram(0);
+    }
+
+    void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values) {
+        GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
+        glUniform4f(loc, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {

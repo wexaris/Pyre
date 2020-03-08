@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Renderer/OpenGLRenderAPI.hpp"
+#include "Platform/OpenGL/OpenGLRenderAPI.hpp"
 
 #include <glad/glad.h>
 

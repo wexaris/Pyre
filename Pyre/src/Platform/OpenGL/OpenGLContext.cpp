@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Renderer/OpenGLContext.hpp"
+#include "Platform/OpenGL/OpenGLContext.hpp"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

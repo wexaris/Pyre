@@ -1,5 +1,7 @@
 #include <Pyre.hpp>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class TestLayer : public Pyre::Layer {
 public:
     TestLayer() : Layer("Test") {
@@ -31,6 +33,7 @@ public:
             #version 330 core
 
             uniform mat4 uViewProj;
+            uniform mat4 uTransform;
 
             layout(location = 0) in vec3 aPos;
             layout(location = 1) in vec4 aColor;
@@ -40,7 +43,7 @@ public:
             void main() {
                 vPos = aPos;
                 vColor = aColor;
-                gl_Position = uViewProj * vec4(aPos, 1.0);
+                gl_Position = uViewProj * uTransform * vec4(aPos, 1.0);
             }
         )";
         std::string triangle_frag_src = R"(
@@ -85,13 +88,14 @@ public:
             #version 330 core
 
             uniform mat4 uViewProj;
+            uniform mat4 uTransform;
 
             layout(location = 0) in vec3 aPos;
             out vec3 vPos;
 
             void main() {
                 vPos = aPos;
-                gl_Position = uViewProj * vec4(aPos, 1.0);
+                gl_Position = uViewProj * uTransform * vec4(aPos, 1.0);
             }
         )";
         std::string square_frag_src = R"(
@@ -110,6 +114,7 @@ public:
     void OnUpdate(float ts) override {
         PYRE_TRACE("Delta time: {}s", ts);
 
+        // Camera move
         if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_LEFT)) {
             m_CameraPosition.x -= m_CameraMoveSpeed * ts;
         }
@@ -124,6 +129,7 @@ public:
             m_CameraPosition.y -= m_CameraMoveSpeed * ts;
         }
 
+        // Camera rotate
         if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_A)) {
             m_CameraRotation += m_CameraRotationSpeed * ts;
         }
@@ -131,6 +137,7 @@ public:
             m_CameraRotation -= m_CameraRotationSpeed * ts;
         }
 
+        // Render
         Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
 
         m_Camera->SetPosition(m_CameraPosition);
@@ -138,7 +145,7 @@ public:
 
         Pyre::Renderer::BeginScene(m_Camera);
 
-        Pyre::Renderer::Submit(m_SquareShader, m_SquareVA);
+        Pyre::Renderer::Submit(m_SquareShader, m_SquareVA, glm::translate(glm::mat4(1.f), m_SquarePosition));
         Pyre::Renderer::Submit(m_TriangleShader, m_TriangleVA);
 
         Pyre::Renderer::EndScene();
@@ -159,11 +166,14 @@ private:
     std::shared_ptr<Pyre::Shader> m_SquareShader;
 
     Pyre::OrthographicCamera* m_Camera = new Pyre::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
+    
     glm::vec3 m_CameraPosition = glm::vec3();
     float m_CameraMoveSpeed = 1.f;
 
     float m_CameraRotation = 0.f;
     float m_CameraRotationSpeed = 30.f;
+
+    glm::vec3 m_SquarePosition = glm::vec3();
 };
 
 class Sandbox : public Pyre::Application {

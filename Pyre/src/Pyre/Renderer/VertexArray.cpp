@@ -2,7 +2,7 @@
 #include "Pyre/Renderer/VertexArray.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
-#include "Pyre/Renderer/OpenGLVertexArray.hpp"
+#include "Platform/OpenGL/OpenGLVertexArray.hpp"
 
 namespace Pyre {
 

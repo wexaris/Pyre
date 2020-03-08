@@ -2,7 +2,7 @@
 #include "Pyre/Renderer/Buffer.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
-#include "Pyre/Renderer/OpenGLBuffer.hpp"
+#include "Platform/OpenGL/OpenGLBuffer.hpp"
 
 namespace Pyre {
 

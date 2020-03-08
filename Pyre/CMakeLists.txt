@@ -7,23 +7,23 @@ add_subdirectory(external)
 set(PYRE_SRC
     src/Pyre/Application.cpp
     src/Pyre/Log.cpp
-    src/Pyre/Window/WindowsWindow.cpp
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
-    src/Pyre/Renderer/OpenGLRenderAPI.cpp
-    src/Pyre/Renderer/OpenGLContext.cpp
     src/Pyre/Renderer/Shader.cpp
-    src/Pyre/Renderer/OpenGLShader.cpp
     src/Pyre/Renderer/Buffer.cpp
-    src/Pyre/Renderer/OpenGLBuffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
-    src/Pyre/Renderer/OpenGLVertexArray.cpp
     src/Pyre/Renderer/Camera.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp
-    src/Pyre/Input/WindowsInput.cpp
+    src/Platform/OpenGL/OpenGLRenderAPI.cpp
+    src/Platform/OpenGL/OpenGLContext.cpp
+    src/Platform/OpenGL/OpenGLShader.cpp
+    src/Platform/OpenGL/OpenGLBuffer.cpp
+    src/Platform/OpenGL/OpenGLVertexArray.cpp
+    src/Platform/Windows/WindowsWindow.cpp
+    src/Platform/Windows/WindowsInput.cpp
 )
 
 set(PYRE_PCH src/pyrepch.hpp)

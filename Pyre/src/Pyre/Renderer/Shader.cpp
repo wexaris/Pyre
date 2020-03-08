@@ -2,7 +2,7 @@
 #include "Pyre/Renderer/Shader.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
-#include "Pyre/Renderer/OpenGLShader.hpp"
+#include "Platform/OpenGL/OpenGLShader.hpp"
 
 namespace Pyre {
 

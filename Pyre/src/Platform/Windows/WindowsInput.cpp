@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Input/WindowsInput.hpp"
+#include "Platform/Windows/WindowsInput.hpp"
 #include "Pyre/Application.hpp"
 
 #include <GLFW/glfw3.h>
