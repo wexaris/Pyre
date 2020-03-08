@@ -68,6 +68,6 @@ namespace Pyre {
         return os << e.AsString();
     }
 
-#define BIND_EVENT_CB(fun) (std::bind(&fun, this, std::placeholders::_1))
+#define PYRE_BIND_EVENT_CB(fun) (std::bind(&fun, this, std::placeholders::_1))
 
 }

@@ -2,24 +2,17 @@
 #include "Pyre/Window/Window.hpp"
 #include "Pyre/Layers/LayerStack.hpp"
 #include "Pyre/Layers/ImGuiLayer.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
+#include "Pyre/Time.hpp"
 
 namespace Pyre {
-
-    class WindowCloseEvent;
-    class WindowMoveEvent;
-    class WindowResizeEvent;
-    class WindowFocusEvent;
-    class WindowLoseFocusEvent;
-    class WindowMaximizeEvent;
-    class WindowMinimizeEvent;
-    class WindowRestoreEvent;
 
     class Application {
     public:
         Application();
         virtual ~Application();
 
-        virtual void Run();
+        void Run();
 
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
@@ -44,6 +37,7 @@ namespace Pyre {
         std::unique_ptr<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;
         LayerStack m_LayerStack;
+        Time m_LastFrameTime;
         bool m_Running = true;
 
         void OnEvent(Event& e);

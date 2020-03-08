@@ -10,7 +10,7 @@ namespace Pyre {
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate() {}
+        virtual void OnUpdate(float timestep) {}
         virtual void OnImGuiRender() {}
         virtual void OnEvent(Event&) {}
 

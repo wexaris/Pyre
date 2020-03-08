@@ -13,11 +13,13 @@ set(PYRE_SRC
     src/Pyre/Renderer/RenderAPI.cpp
     src/Pyre/Renderer/OpenGLRenderAPI.cpp
     src/Pyre/Renderer/OpenGLContext.cpp
+    src/Pyre/Renderer/Shader.cpp
     src/Pyre/Renderer/OpenGLShader.cpp
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/OpenGLBuffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
     src/Pyre/Renderer/OpenGLVertexArray.cpp
+    src/Pyre/Renderer/Camera.cpp
     src/Pyre/Layers/Layer.cpp
     src/Pyre/Layers/LayerStack.cpp
     src/Pyre/Layers/ImGuiLayer.cpp

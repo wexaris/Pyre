@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 }
 
 
-#ifdef false // PYRE_PLATFORM_WINDOWS
+#ifdef PYRE_PLATFORM_WINDOWS
 
 #else // PYRE_PLATFORM_LINUX
 

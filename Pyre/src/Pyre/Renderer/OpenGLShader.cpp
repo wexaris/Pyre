@@ -2,6 +2,7 @@
 #include "Pyre/Renderer/OpenGLShader.hpp"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <algorithm>
 
 namespace Pyre {
@@ -124,6 +125,11 @@ namespace Pyre {
 
     void OpenGLShader::Unbind() const {
         glUseProgram(0);
+    }
+
+    void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {
+        GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
 }
