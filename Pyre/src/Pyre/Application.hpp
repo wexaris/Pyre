@@ -14,8 +14,8 @@ namespace Pyre {
 
         void Run();
 
-        void PushLayer(Layer* layer);
-        void PushOverlay(Layer* overlay);
+        void PushLayer(const Ref<Layer>& layer);
+        void PushOverlay(const Ref<Layer>& overlay);
 
         virtual void OnWindowClose(WindowCloseEvent&) {}
         virtual void OnWindowMove(WindowMoveEvent&) {}
@@ -35,7 +35,7 @@ namespace Pyre {
         static Application* s_Instance;
 
         Scope<Window> m_Window;
-        ImGuiLayer* m_ImGuiLayer;
+        Ref<ImGuiLayer> m_ImGuiLayer;
         LayerStack m_LayerStack;
         Time m_LastFrameTime;
         bool m_Running = true;

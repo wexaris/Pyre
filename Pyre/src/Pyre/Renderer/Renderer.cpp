@@ -5,6 +5,10 @@ namespace Pyre {
 
     OrthographicCamera* Renderer::s_Camera;
 
+    void Renderer::Init() {
+        RenderCommand::Init();
+    }
+
     void Renderer::BeginScene(OrthographicCamera* camera) {
         s_Camera = camera;
     }

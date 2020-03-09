@@ -13,7 +13,9 @@ namespace Pyre {
         m_Window = Scope<Window>(Window::Create());
         m_Window->SetEventCallback(PYRE_BIND_EVENT_CB(Application::OnEvent));
 
-        m_ImGuiLayer = new ImGuiLayer();
+        Renderer::Init();
+
+        m_ImGuiLayer = MakeRef<ImGuiLayer>();
         PushOverlay(m_ImGuiLayer);
     }
 
@@ -28,13 +30,13 @@ namespace Pyre {
             m_LastFrameTime = time;
 
             // Layer updates
-            for (Layer* layer : m_LayerStack) {
+            for (auto& layer : m_LayerStack) {
                 layer->OnUpdate(timestep);
             }
 
             // ImGui layer render
             m_ImGuiLayer->Begin();
-            for (Layer* layer : m_LayerStack) {
+            for (auto& layer : m_LayerStack) {
                 layer->OnImGuiRender();
             }
             m_ImGuiLayer->End();
@@ -43,11 +45,11 @@ namespace Pyre {
         }
     }
 
-    void Application::PushLayer(Layer* layer) {
+    void Application::PushLayer(const Ref<Layer>& layer) {
         m_LayerStack.PushLayer(layer);
     }
 
-    void Application::PushOverlay(Layer* overlay) {
+    void Application::PushOverlay(const Ref<Layer>& overlay) {
         m_LayerStack.PushOverlay(overlay);
     }
 

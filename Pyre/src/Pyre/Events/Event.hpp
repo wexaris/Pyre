@@ -40,21 +40,18 @@ namespace Pyre {
     int GetCategoryFlags() const override   { return category; }
 
     class EventDispatcher {
-
-        template<typename T>
-        using EventFun = std::function<bool(T&)>;
     public:
         EventDispatcher(Event& event)
             : m_Event(event)
         {}
 
-        template<typename T, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
-        bool Dispatch(EventFun<T> fun) {
+        template<typename T, typename Fn, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
+        bool Dispatch(const Fn& fn) {
             if (m_Event.Handled) {
                 return false;
             }
             if (m_Event.GetEventType() == T::GetStaticType()) {
-                m_Event.Handled = fun(*(T*)&m_Event);
+                m_Event.Handled = fn(static_cast<T&>(m_Event));
                 return true;
             }
             return false;

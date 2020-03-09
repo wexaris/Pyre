@@ -12,6 +12,7 @@
 #include "Pyre/Renderer/Renderer.hpp"
 #include "Pyre/Renderer/RenderCommand.hpp"
 
+#include "Pyre/Renderer/Texture.hpp"
 #include "Pyre/Renderer/Shader.hpp"
 #include "Pyre/Renderer/Buffer.hpp"
 #include "Pyre/Renderer/VertexArray.hpp"

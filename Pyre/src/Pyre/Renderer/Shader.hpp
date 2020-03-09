@@ -21,7 +21,7 @@ namespace Pyre {
         virtual void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) = 0;
         virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
 
-        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
+        static Ref<Shader> Create(const std::string& vertexSource, const std::string& fragmentSource);
     };
 
 }

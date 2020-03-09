@@ -7,37 +7,31 @@ namespace Pyre {
 
     }
 
-    LayerStack::~LayerStack() {
-        for (Layer* layer : m_Layers) {
-            delete layer;
-        }
-    }
-
-    void LayerStack::PushLayer(Layer* layer) {
+    void LayerStack::PushLayer(const Ref<Layer>& layer) {
         m_Layers.emplace(m_Layers.begin() + m_InsertIndex, layer);
         m_InsertIndex++;
         layer->OnAttach();
     }
 
-    void LayerStack::PushOverlay(Layer* overlay) {
+    void LayerStack::PushOverlay(const Ref<Layer>& overlay) {
         m_Layers.emplace_back(overlay);
         overlay->OnAttach();
     }
 
-    void LayerStack::PopLayer(Layer* layer) {
-        auto iter = std::find(m_Layers.begin(), m_Layers.end(), layer);
-        if (iter != m_Layers.end()) {
+    void LayerStack::PopLayer(const Ref<Layer>& layer) {
+        auto iter = std::find(m_Layers.begin(), m_Layers.begin() + m_InsertIndex, layer);
+        if (iter != m_Layers.begin() + m_InsertIndex) {
+            layer->OnDetach();
             m_Layers.erase(iter);
             m_InsertIndex--;
-            layer->OnDetach();
         }
     }
 
-    void LayerStack::PopOverlay(Layer* overlay) {
-        auto iter = std::find(m_Layers.begin(), m_Layers.end(), overlay);
+    void LayerStack::PopOverlay(const Ref<Layer>& overlay) {
+        auto iter = std::find(m_Layers.begin() + m_InsertIndex, m_Layers.end(), overlay);
         if (iter != m_Layers.end()) {
-            m_Layers.erase(iter);
             overlay->OnDetach();
+            m_Layers.erase(iter);
         }
     }
 

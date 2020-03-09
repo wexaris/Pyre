@@ -12,6 +12,8 @@ namespace Pyre {
         static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
 
     protected:
+        Input() = default;
+
         virtual bool IsKeyPressedImpl(int keycode) = 0;
 
         virtual bool IsMouseButtonPressedImpl(int button) = 0;
@@ -21,6 +23,7 @@ namespace Pyre {
 
     private:
         static Input* s_Instance;
+
     };
 
 }

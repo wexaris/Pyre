@@ -68,10 +68,10 @@ namespace Pyre {
 
     //////////////////////////////////////
     // VertexBuffer
-    VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size) {
+    Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
         switch (Renderer::GetAPI())
         {
-        case RenderAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLVertexBuffer>(vertices, size);
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");
@@ -80,10 +80,10 @@ namespace Pyre {
 
     //////////////////////////////////////
     // IndexBuffer
-    IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count) {
+    Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count) {
         switch (Renderer::GetAPI())
         {
-        case RenderAPI::API::OpenGL: return new OpenGLIndexBuffer(indices, count);
+        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLIndexBuffer>(indices, count);
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");

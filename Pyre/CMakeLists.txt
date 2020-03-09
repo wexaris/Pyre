@@ -10,6 +10,7 @@ set(PYRE_SRC
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
+    src/Pyre/Renderer/Texture.cpp
     src/Pyre/Renderer/Shader.cpp
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
@@ -19,6 +20,7 @@ set(PYRE_SRC
     src/Pyre/Layers/ImGuiLayer.cpp
     src/Platform/OpenGL/OpenGLRenderAPI.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
+    src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLShader.cpp
     src/Platform/OpenGL/OpenGLBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
@@ -33,7 +35,7 @@ target_precompile_headers(pyre PRIVATE ${PYRE_PCH})
 
 target_link_libraries(pyre
     PRIVATE glfw glad imgui_opengl_glfw
-    PUBLIC spdlog imgui glm_static 
+    PUBLIC spdlog imgui glm_static stb
 )
 target_compile_definitions(pyre
     PRIVATE

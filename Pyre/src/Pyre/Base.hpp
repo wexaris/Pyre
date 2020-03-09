@@ -29,4 +29,10 @@ namespace Pyre {
     template<typename T>
     using Ref = std::shared_ptr<T>;
 
+    template<typename T>
+    constexpr auto MakeScope = std::make_unique<T>;
+
+    template<typename T>
+    constexpr auto MakeRef = std::make_shared<T>;
+
 }

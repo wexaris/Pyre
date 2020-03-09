@@ -15,6 +15,8 @@ namespace Pyre {
         RenderAPI() = default;
         virtual ~RenderAPI() = default;
 
+        virtual void Init() = 0;
+
         virtual void Clear(const glm::vec4& color) = 0;
 
         virtual void DrawElement(const Ref<VertexArray>& vertexArray) = 0;

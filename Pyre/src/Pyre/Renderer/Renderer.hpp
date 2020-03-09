@@ -7,7 +7,7 @@ namespace Pyre {
 
     class Renderer {
     public:
-        Renderer() = delete;
+        static void Init();
 
         static void BeginScene(OrthographicCamera* camera);
         static void EndScene();
@@ -19,6 +19,8 @@ namespace Pyre {
 
     private:
         static OrthographicCamera* s_Camera;
+
+        Renderer() = delete;
     };
 
 }

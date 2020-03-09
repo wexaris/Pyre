@@ -47,17 +47,16 @@ namespace Pyre {
         glBindVertexArray(m_RendererID);
         vertexBuffer->Bind();
 
-        uint32_t index = 0;
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& e : layout) {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
+            glEnableVertexAttribArray(m_VertexBufferIndex);
+            glVertexAttribPointer(m_VertexBufferIndex,
                 e.GetItemCount(),
                 ShaderDataTypeOpenGLType(e.Type),
                 e.Normalized ? GL_TRUE : GL_FALSE,
                 layout.GetStride(),
-                reinterpret_cast<const void*>(e.Offset));
-            index++;
+                (const void*)(intptr_t)e.Offset);
+            m_VertexBufferIndex++;
         }
 
         m_VertexBuffers.push_back(vertexBuffer);
