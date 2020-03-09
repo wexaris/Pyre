@@ -12,6 +12,7 @@ namespace Pyre {
         const glm::vec3& GetPostition() const { return m_Position; }
         float GetRotation() const { return m_Rotation; }
 
+        void SetProjection(float left, float right, float bottom, float top);
         void SetPosition(const glm::vec3& pos) { m_Position = pos; RecalcViewMatrix(); }
         void SetRotation(float rotation) { m_Rotation = rotation; RecalcViewMatrix(); }
 

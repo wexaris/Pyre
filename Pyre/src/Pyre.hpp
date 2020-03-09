@@ -5,6 +5,8 @@
 #include "Pyre/Time.hpp"
 #include "Pyre/Application.hpp"
 
+#include "Pyre/CameraController.hpp"
+
 #include "Pyre/Layers/Layer.hpp"
 #include "Pyre/Layers/ImGuiLayer.hpp"
 

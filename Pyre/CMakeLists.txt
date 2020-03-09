@@ -7,6 +7,7 @@ add_subdirectory(external)
 set(PYRE_SRC
     src/Pyre/Application.cpp
     src/Pyre/Log.cpp
+    src/Pyre/CameraController.cpp
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp

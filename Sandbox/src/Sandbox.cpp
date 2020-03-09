@@ -6,7 +6,10 @@
 
 class TestLayer : public Pyre::Layer {
 public:
-    TestLayer() : Layer("Test") {
+    TestLayer() :
+        Layer("Test"),
+        m_CameraController(16.f / 9.f, true)
+    {
 
         float square_verts[5 * 4] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -43,36 +46,12 @@ public:
     void OnUpdate(float ts) override {
         PYRE_TRACE("Delta time: {}s", ts);
 
-        // Camera move
-        if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_LEFT)) {
-            m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-        }
-        else if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_RIGHT)) {
-            m_CameraPosition.x += m_CameraMoveSpeed * ts;
-        }
-
-        if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_UP)) {
-            m_CameraPosition.y += m_CameraMoveSpeed * ts;
-        }
-        else if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_DOWN)) {
-            m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-        }
-
-        // Camera rotate
-        if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_A)) {
-            m_CameraRotation += m_CameraRotationSpeed * ts;
-        }
-        else if (Pyre::Input::IsKeyPressed(Pyre::input::KEY_D)) {
-            m_CameraRotation -= m_CameraRotationSpeed * ts;
-        }
+        m_CameraController.OnUpdate(ts);
 
         // Render
         Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
 
-        m_Camera.SetPosition(m_CameraPosition);
-        m_Camera.SetRotation(m_CameraRotation);
-
-        Pyre::Renderer::BeginScene(m_Camera);
+        Pyre::Renderer::BeginScene(m_CameraController.GetCamera());
 
         glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
@@ -102,7 +81,7 @@ public:
     }
 
     void OnEvent(Pyre::Event& event) {
-
+        m_CameraController.OnEvent(event);
     }
 
 private:
@@ -111,13 +90,7 @@ private:
     Pyre::Ref<Pyre::Shader> m_FlatColorShader;
     Pyre::Ref<Pyre::Texture2D> m_Texture;
 
-    Pyre::OrthographicCamera m_Camera = Pyre::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
-    
-    glm::vec3 m_CameraPosition = glm::vec3();
-    float m_CameraMoveSpeed = 1.f;
-
-    float m_CameraRotation = 0.f;
-    float m_CameraRotationSpeed = 30.f;
+    Pyre::OrthographicCameraController m_CameraController;
 
     glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
