@@ -9,7 +9,7 @@ namespace Pyre {
     Ref<Texture2D> Texture2D::Create(const std::string& path) {
         switch (Renderer::GetAPI())
         {
-        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLTexture2D>(path);
+        case RenderAPI::API::OpenGL: return MakeRef<OpenGLTexture2D>(path);
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");

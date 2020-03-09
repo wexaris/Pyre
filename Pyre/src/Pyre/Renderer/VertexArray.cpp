@@ -9,7 +9,7 @@ namespace Pyre {
     Ref<VertexArray> VertexArray::Create() {
         switch (Renderer::GetAPI())
         {
-        case RenderAPI::API::OpenGL: return std::make_shared<OpenGLVertexArray>();
+        case RenderAPI::API::OpenGL: return MakeRef<OpenGLVertexArray>();
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");

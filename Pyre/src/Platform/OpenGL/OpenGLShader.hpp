@@ -1,15 +1,20 @@
 #pragma once
 #include "Pyre/Renderer/Shader.hpp"
 
+#include <glad/glad.h>
+
 namespace Pyre {
 
     class OpenGLShader : public Shader {
     public:
-        OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+        OpenGLShader(const std::string& path);
+        OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
         virtual ~OpenGLShader();
 
         void Bind() const override;
         void Unbind() const override;
+
+        const std::string& GetName() const override { return m_Name; }
 
         virtual void UploadUniformInt(const std::string& name, int value) override;
 
@@ -23,6 +28,11 @@ namespace Pyre {
 
     private:
         uint32_t m_RendererID;
+        std::string m_Name;
+
+        std::string ReadFile(const std::string& path);
+        std::unordered_map<GLenum, std::string> Split(const std::string& source);
+        void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
     };
 
 }

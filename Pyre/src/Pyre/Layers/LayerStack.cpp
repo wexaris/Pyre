@@ -7,6 +7,13 @@ namespace Pyre {
 
     }
 
+    LayerStack::~LayerStack() {
+        for (auto& layer : m_Layers) {
+            layer->OnDetach();
+            layer.reset();
+        }
+    }
+
     void LayerStack::PushLayer(const Ref<Layer>& layer) {
         m_Layers.emplace(m_Layers.begin() + m_InsertIndex, layer);
         m_InsertIndex++;

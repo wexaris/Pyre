@@ -8,7 +8,7 @@ namespace Pyre {
     class OpenGLContext : public GraphicsContext {
     public:
         OpenGLContext(GLFWwindow* window);
-        ~OpenGLContext();
+        virtual ~OpenGLContext() = default;
         
         void SwapBuffers() override;
 

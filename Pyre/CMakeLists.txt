@@ -37,13 +37,7 @@ target_link_libraries(pyre
     PRIVATE glfw glad imgui_opengl_glfw
     PUBLIC spdlog imgui glm_static stb
 )
-target_compile_definitions(pyre
-    PRIVATE
-        -DGLFW_INCLUDE_NONE  # GLFW won't include its own OpenGL
-    PUBLIC
-        $<$<PLATFORM_ID:Windows>:PYRE_PLATFORM_WINDOWS>
-        $<$<PLATFORM_ID:Linux>:PYRE_PLATFORM_LINUX>
-)  
+target_compile_definitions(pyre PRIVATE -DGLFW_INCLUDE_NONE) # GLFW won't include its own OpenGL 
 target_include_directories(pyre PUBLIC src)
 
 target_compile_options(pyre PUBLIC

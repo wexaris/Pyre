@@ -5,6 +5,6 @@
 
 namespace Pyre {
 
-    RenderAPI* RenderCommand::s_RenderAPI = new OpenGLRenderAPI();
+    Scope<RenderAPI> RenderCommand::s_RenderAPI = MakeScope<OpenGLRenderAPI>();
 
 }

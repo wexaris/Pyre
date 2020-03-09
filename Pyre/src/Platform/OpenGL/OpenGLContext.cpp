@@ -15,14 +15,18 @@ namespace Pyre {
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         PYRE_CORE_ASSERT(status, "Failed to initialize Glad!");
 
-        PYRE_CORE_INFO("OpenGL Info", glGetString(GL_VENDOR));
+        PYRE_CORE_INFO("OpenGL Information", glGetString(GL_VENDOR));
         PYRE_CORE_INFO("  Vendor: {}", glGetString(GL_VENDOR));
         PYRE_CORE_INFO("  Renderer: {}", glGetString(GL_RENDERER));
         PYRE_CORE_INFO("  Version: {}", glGetString(GL_VERSION));
-    }
 
-    OpenGLContext::~OpenGLContext() {
-        
+#ifdef PYRE_ENABLE_ASSERTS
+        int verMajor, verMinor;
+        glGetIntegerv(GL_MAJOR_VERSION, &verMajor);
+        glGetIntegerv(GL_MINOR_VERSION, &verMinor);
+
+        PYRE_CORE_ASSERT(verMajor > 4 || (verMajor == 4 && verMinor >= 5), "Pyre requires OpenGL 4.5 or newer!");
+#endif
     }
 
     void OpenGLContext::SwapBuffers() {

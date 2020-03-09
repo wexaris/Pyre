@@ -6,7 +6,7 @@ namespace Pyre {
     class LayerStack {
     public:
         LayerStack();
-        ~LayerStack() = default;
+        ~LayerStack();
 
         void PushLayer(const Ref<Layer>& layer);
         void PushOverlay(const Ref<Layer>& overlay);
