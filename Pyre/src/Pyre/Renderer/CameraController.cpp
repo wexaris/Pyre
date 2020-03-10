@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/CameraController.hpp"
+#include "Pyre/Renderer/CameraController.hpp"
 #include "Pyre/Input/Input.hpp"
 #include "Pyre/Input/KeyCodes.hpp"
 

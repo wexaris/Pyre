@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Layers/LayerStack.hpp"
+#include "Pyre/Core/LayerStack.hpp"
 
 namespace Pyre {
 

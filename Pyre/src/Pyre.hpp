@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Pyre/Base.hpp"
-#include "Pyre/Log.hpp"
-#include "Pyre/Time.hpp"
-#include "Pyre/Application.hpp"
+// ----- Core -----------------------------------
+#include "Pyre/Core/Base.hpp"
+#include "Pyre/Core/Log.hpp"
+#include "Pyre/Core/Time.hpp"
+#include "Pyre/Core/Application.hpp"
+#include "Pyre/Core/Layer.hpp"
 
-#include "Pyre/CameraController.hpp"
-
-#include "Pyre/Layers/Layer.hpp"
-#include "Pyre/Layers/ImGuiLayer.hpp"
+#include "Pyre/ImGui/ImGuiLayer.hpp"
 
 // ----- Renderer -------------------------------
 #include "Pyre/Renderer/Renderer.hpp"
@@ -20,16 +19,15 @@
 #include "Pyre/Renderer/VertexArray.hpp"
 
 #include "Pyre/Renderer/Camera.hpp"
+#include "Pyre/Renderer/CameraController.hpp"
+
+// ----- Events ---------------------------------
+#include "Pyre/Events/KeyEvents.hpp"
+#include "Pyre/Events/MouseEvents.hpp"
+#include "Pyre/Events/ApplicationEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
 
 // ----- Input ----------------------------------
 #include "Pyre/Input/Input.hpp"
 #include "Pyre/Input/KeyCodes.hpp"
 #include "Pyre/Input/MouseButtonCodes.hpp"
-
-#include "Pyre/Events/KeyEvents.hpp"
-#include "Pyre/Events/MouseEvents.hpp"
-#include "Pyre/Events/AppEvents.hpp"
-#include "Pyre/Events/WindowEvents.hpp"
-
-// ----- Entry point ----------------------------
-#include "Pyre/EntryPoint.hpp"

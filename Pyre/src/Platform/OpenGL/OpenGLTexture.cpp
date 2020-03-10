@@ -13,7 +13,7 @@ namespace Pyre {
 
         stbi_set_flip_vertically_on_load(1);
         stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-        PYRE_CORE_ASSERT(data, "Failed to load image: \"{}\"", path);
+        PYRE_CORE_ASSERT(data, "Failed to load image: '{}'", path);
 
         m_Width = width;
         m_Height = height;
@@ -29,7 +29,7 @@ namespace Pyre {
             dataFormat = GL_RGB;
         }
 
-        PYRE_CORE_ASSERT(internalFormat & dataFormat, "Unsupported image format: \"{}\"", path)
+        PYRE_CORE_ASSERT(internalFormat & dataFormat, "Unsupported image format: '{}'", path)
 
         glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);

@@ -1,6 +1,7 @@
 #pragma once
-#include "Pyre/Window/Window.hpp"
+#include "Pyre/Core/Window.hpp"
 #include "Pyre/Renderer/GraphicsContext.hpp"
+
 #include <GLFW/glfw3.h>
 
 namespace Pyre {

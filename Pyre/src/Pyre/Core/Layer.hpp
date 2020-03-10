@@ -6,7 +6,7 @@ namespace Pyre {
     class Layer {
     public:
         Layer(const std::string& name = "Layer");
-        virtual ~Layer();
+        virtual ~Layer() = default;
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
@@ -15,8 +15,8 @@ namespace Pyre {
         virtual void OnEvent(Event&) {}
 
         inline const std::string& GetName() const { return m_Name; }
-        inline void Enable(bool enable) { m_Enabled = enable; }
         inline bool IsEnabled() const   { return m_Enabled; }
+        inline void Enable(bool enable) { m_Enabled = enable; }
 
     protected:
         std::string m_Name;

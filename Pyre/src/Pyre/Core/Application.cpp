@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Application.hpp"
+#include "Pyre/Core/Application.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
 namespace Pyre {

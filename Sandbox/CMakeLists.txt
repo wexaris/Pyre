@@ -3,6 +3,7 @@ project(sandbox)
 
 set(SOURCE_FILES
     src/Sandbox.cpp
+    src/TestLayer2D.cpp
 )
 
 add_executable(sandbox ${SOURCE_FILES})

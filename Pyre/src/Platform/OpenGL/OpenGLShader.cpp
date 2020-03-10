@@ -14,7 +14,7 @@ namespace Pyre {
         else if (str == "fragment" || str == "pixel") {
             return GL_FRAGMENT_SHADER;
         }
-        PYRE_CORE_ASSERT(false, "Invalid shader type: \"{}\"", str);
+        PYRE_CORE_ASSERT(false, "Invalid shader type: '{}'", str);
         return 0;
     }
 
@@ -56,11 +56,11 @@ namespace Pyre {
                 file.close();
             }
             else {
-                PYRE_CORE_ERROR("Failed to read file: \"{}\"", path);
+                PYRE_CORE_ERROR("Failed to read file: '{}'", path);
             }
         }
         else {
-            PYRE_CORE_ERROR("Failed to open file: \"{}\"", path);
+            PYRE_CORE_ERROR("Failed to open file: '{}'", path);
         }
 
         return content;
@@ -79,7 +79,7 @@ namespace Pyre {
             PYRE_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
             size_t begin = pos + delimLength + 1;
             std::string type = source.substr(begin, eol - begin);
-            PYRE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type: \"{}\"", type);
+            PYRE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type: '{}'", type);
 
             size_t nextLinePos = source.find_first_not_of("\r\n", eol);
             PYRE_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error!");

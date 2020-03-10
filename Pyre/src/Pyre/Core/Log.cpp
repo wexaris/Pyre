@@ -1,5 +1,5 @@
 #include "pyrepch.hpp"
-#include "Pyre/Log.hpp"
+#include "Pyre/Core/Log.hpp"
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Pyre {

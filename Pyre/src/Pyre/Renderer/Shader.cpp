@@ -48,7 +48,7 @@ namespace Pyre {
     }
 
     Ref<Shader> ShaderLibrary::Get(const std::string& name) {
-        PYRE_CORE_ASSERT(Exists(name), "Shader not found: \"{}\"", name);
+        PYRE_CORE_ASSERT(Exists(name), "Shader not found: '{}'", name);
         return m_Shaders[name];
     }
 

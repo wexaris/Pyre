@@ -1,6 +1,6 @@
 #include "pyrepch.hpp"
-#include "Pyre/Application.hpp"
-#include "Pyre/Layers/ImGuiLayer.hpp"
+#include "Pyre/Core/Application.hpp"
+#include "Pyre/ImGui/ImGuiLayer.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui/examples/imgui_impl_opengl3.h>

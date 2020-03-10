@@ -1,5 +1,5 @@
 #pragma once
-#include "Pyre/Layers/Layer.hpp"
+#include "Pyre/Core/Layer.hpp"
 
 namespace Pyre {
 

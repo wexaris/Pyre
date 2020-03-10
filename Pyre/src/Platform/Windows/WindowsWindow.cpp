@@ -24,8 +24,6 @@ namespace Pyre {
         m_Data.Height = properties.Height;
         m_Data.VSync = true;
 
-        PYRE_CORE_INFO("Creating window '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
-
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {
             int good = glfwInit();
@@ -37,6 +35,8 @@ namespace Pyre {
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
         m_Context = GraphicsContext::Create(m_Window);
         s_GLFWWindowCount++;
+
+        PYRE_CORE_INFO("Created window: '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);

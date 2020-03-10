@@ -1,9 +1,9 @@
 #pragma once
-#include "Pyre/Window/Window.hpp"
-#include "Pyre/Layers/LayerStack.hpp"
-#include "Pyre/Layers/ImGuiLayer.hpp"
+#include "Pyre/Core/Window.hpp"
+#include "Pyre/Core/LayerStack.hpp"
+#include "Pyre/Core/Time.hpp"
+#include "Pyre/ImGui/ImGuiLayer.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
-#include "Pyre/Time.hpp"
 
 namespace Pyre {
 

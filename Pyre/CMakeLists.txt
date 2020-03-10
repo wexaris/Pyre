@@ -5,9 +5,12 @@ project(pyre)
 add_subdirectory(external)
 
 set(PYRE_SRC
-    src/Pyre/Application.cpp
-    src/Pyre/Log.cpp
-    src/Pyre/CameraController.cpp
+    src/Pyre/Core/Application.cpp
+    src/Pyre/Core/Layer.cpp
+    src/Pyre/Core/LayerStack.cpp
+    src/Pyre/Core/Log.cpp
+    src/Pyre/ImGui/ImGuiLayer.cpp
+    src/Pyre/Renderer/CameraController.cpp
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
@@ -17,9 +20,6 @@ set(PYRE_SRC
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
     src/Pyre/Renderer/Camera.cpp
-    src/Pyre/Layers/Layer.cpp
-    src/Pyre/Layers/LayerStack.cpp
-    src/Pyre/Layers/ImGuiLayer.cpp
     src/Platform/OpenGL/OpenGLRenderAPI.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
     src/Platform/OpenGL/OpenGLTexture.cpp
