@@ -48,10 +48,16 @@ namespace Pyre {
         std::ifstream file(path, std::ios::in | std::ios::binary);
         if (file) {
             file.seekg(0, std::ios::end);
-            content.resize(file.tellg());
-            file.seekg(0, std::ios::beg);
-            file.read(&content[0], content.size());
-            file.close();
+            size_t size = file.tellg();
+            if (size != -1) {
+                content.resize(file.tellg());
+                file.seekg(0, std::ios::beg);
+                file.read(&content[0], content.size());
+                file.close();
+            }
+            else {
+                PYRE_CORE_ERROR("Failed to read file: \"{}\"", path);
+            }
         }
         else {
             PYRE_CORE_ERROR("Failed to open file: \"{}\"", path);
@@ -173,37 +179,37 @@ namespace Pyre {
         glUseProgram(0);
     }
 
-    void OpenGLShader::UploadUniformInt(const std::string& name, int value) {
+    void OpenGLShader::SetInt(const std::string& name, int value) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1i(loc, value);
     }
 
-    void OpenGLShader::UploadUniformFloat(const std::string& name, float value) {
+    void OpenGLShader::SetFloat(const std::string& name, float value) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1f(loc, value);
     }
 
-    void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& values) {
+    void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& values) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform2f(loc, values.x, values.y);
     }
 
-    void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& values) {
+    void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& values) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform3f(loc, values.x, values.y, values.z);
     }
 
-    void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values) {
+    void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& values) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform4f(loc, values.x, values.y, values.z, values.w);
     }
 
-    void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix) {
+    void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
-    void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {
+    void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix) {
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }

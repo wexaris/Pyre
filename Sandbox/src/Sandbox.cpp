@@ -40,7 +40,7 @@ public:
         m_Texture = Pyre::Texture2D::Create("../../../Sandbox/assets/textures/test.png");
         auto textureShader = m_ShaderLib.Load("../../../Sandbox/assets/shaders/Texture.glsl");
         textureShader->Bind();
-        textureShader->UploadUniformInt("uTexture", 0);
+        textureShader->SetInt("uTexture", 0);
     }
 
     void OnUpdate(float ts) override {
@@ -56,7 +56,7 @@ public:
         glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
         m_FlatColorShader->Bind();
-        m_FlatColorShader->UploadUniformFloat3("uColor", m_SquareColor);
+        m_FlatColorShader->SetFloat3("uColor", m_SquareColor);
 
         for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {

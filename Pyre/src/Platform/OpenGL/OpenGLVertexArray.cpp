@@ -55,7 +55,7 @@ namespace Pyre {
                 ShaderDataTypeOpenGLType(e.Type),
                 e.Normalized ? GL_TRUE : GL_FALSE,
                 layout.GetStride(),
-                (const void*)(intptr_t)e.Offset);
+                (const void*)e.Offset);
             m_VertexBufferIndex++;
         }
 

@@ -19,8 +19,8 @@ namespace Pyre {
 
     void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
         shader->Bind();
-        shader->UploadUniformMat4("uViewProj", s_SceneData->ViewProjMatrix);
-        shader->UploadUniformMat4("uTransform", transform);
+        shader->SetMat4("uViewProj", s_SceneData->ViewProjMatrix);
+        shader->SetMat4("uTransform", transform);
 
         vertexArray->Bind();
         RenderCommand::DrawElement(vertexArray);

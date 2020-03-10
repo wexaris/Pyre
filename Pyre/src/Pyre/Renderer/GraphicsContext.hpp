@@ -4,10 +4,11 @@ namespace Pyre {
 
     class GraphicsContext {
     public:
-        GraphicsContext() = default;
         virtual ~GraphicsContext() = default;
 
         virtual void SwapBuffers() = 0;
+
+        static Scope<GraphicsContext> Create(void* window);
     };
 
 }

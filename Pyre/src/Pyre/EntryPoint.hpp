@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
 	(void)argv;
 
 	Pyre::Log::Init();
-	PYRE_CORE_TRACE("Initialized Logger!");
+	PYRE_CORE_INFO("Initialized Logger");
 
 	auto app = Pyre::CreateApplication();
 	app->Run();

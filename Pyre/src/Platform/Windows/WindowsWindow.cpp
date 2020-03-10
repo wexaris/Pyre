@@ -1,6 +1,5 @@
 #include "pyrepch.hpp"
 #include "Platform/Windows/WindowsWindow.hpp"
-#include "Platform/OpenGL/OpenGLContext.hpp"
 #include "Pyre/Events/MouseEvents.hpp"
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
@@ -9,14 +8,14 @@
 
 namespace Pyre {
 
-    static bool s_GLFWInitialized = false;
+    static uint8_t s_GLFWWindowCount = 0;
 
     static void GLFWError(int error, const char* msg) {
         PYRE_CORE_ERROR("GLFW Error ({}): {}", error, msg);
     }
 
-    Window* Window::Create(const WindowProperties& properties) {
-        return new WindowsWindow(properties);
+    Scope<Window> Window::Create(const WindowProperties& properties) {
+        return MakeScope<WindowsWindow>(properties);
     }
 
     WindowsWindow::WindowsWindow(const WindowProperties& properties) {
@@ -28,17 +27,17 @@ namespace Pyre {
         PYRE_CORE_INFO("Creating window '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
         // Initialize GLFW
-        if (!s_GLFWInitialized) {
+        if (s_GLFWWindowCount == 0) {
             int good = glfwInit();
             PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
             glfwSetErrorCallback(GLFWError);
-            s_GLFWInitialized = true;
         }
 
         // Create window
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-        m_Context = MakeScope<OpenGLContext>(m_Window);
-        
+        m_Context = GraphicsContext::Create(m_Window);
+        s_GLFWWindowCount++;
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
         
@@ -202,6 +201,12 @@ namespace Pyre {
 
     WindowsWindow::~WindowsWindow() {
         glfwDestroyWindow(m_Window);
+        s_GLFWWindowCount--;
+
+        if (s_GLFWWindowCount == 0) {
+            PYRE_CORE_INFO("Terminating GLFW");
+            glfwTerminate();
+        }
     }
 
     void WindowsWindow::OnUpdate() {

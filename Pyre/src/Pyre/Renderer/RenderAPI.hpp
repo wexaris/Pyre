@@ -26,6 +26,8 @@ namespace Pyre {
         static inline API GetAPI() { return s_API; }
         static inline void SetAPI(API api) { s_API = api; }
 
+        static Scope<RenderAPI> Create();
+
     private:
         static API s_API;
     };

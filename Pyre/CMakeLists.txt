@@ -11,6 +11,7 @@ set(PYRE_SRC
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
+    src/Pyre/Renderer/GraphicsContext.cpp
     src/Pyre/Renderer/Texture.cpp
     src/Pyre/Renderer/Shader.cpp
     src/Pyre/Renderer/Buffer.cpp

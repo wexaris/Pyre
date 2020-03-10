@@ -57,7 +57,7 @@ namespace Pyre {
     }
 
     void BufferLayout::CalcOffsetAndStride() {
-        uint32_t offset = 0;
+        size_t offset = 0;
         m_Stride = 0;
         for (auto& e : m_Elements) {
             e.Offset = offset;
