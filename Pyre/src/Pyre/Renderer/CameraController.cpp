@@ -55,8 +55,8 @@ namespace Pyre {
 
     void OrthographicCameraController::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_EVENT_CB(OrthographicCameraController::OnMouseScroll));
-        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_EVENT_CB(OrthographicCameraController::OnWindowResize));
+        dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnMouseScroll));
+        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnWindowResize));
     }
 
     bool OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e) {

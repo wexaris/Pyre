@@ -11,7 +11,7 @@ namespace Pyre {
         s_Instance = this;
 
         m_Window = Window::Create();
-        m_Window->SetEventCallback(PYRE_BIND_EVENT_CB(Application::OnEvent));
+        m_Window->SetEventCallback(PYRE_BIND_METHOD(Application::OnEvent));
 
         Renderer::Init();
 
@@ -53,14 +53,14 @@ namespace Pyre {
 
     void Application::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowClose));
-        dispatcher.Dispatch<WindowMoveEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMove));
-        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowResize));
-        dispatcher.Dispatch<WindowFocusEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowFocus));
-        dispatcher.Dispatch<WindowLoseFocusEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowLoseFocus));
-        dispatcher.Dispatch<WindowMaximizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMaximize));
-        dispatcher.Dispatch<WindowMinimizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMinimize));
-        dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowRestore));
+        dispatcher.Dispatch<WindowCloseEvent>(PYRE_BIND_METHOD(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowMoveEvent>(PYRE_BIND_METHOD(Application::OnWindowMove));
+        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(Application::OnWindowResize));
+        dispatcher.Dispatch<WindowFocusEvent>(PYRE_BIND_METHOD(Application::OnWindowFocus));
+        dispatcher.Dispatch<WindowLoseFocusEvent>(PYRE_BIND_METHOD(Application::OnWindowLoseFocus));
+        dispatcher.Dispatch<WindowMaximizeEvent>(PYRE_BIND_METHOD(Application::OnWindowMaximize));
+        dispatcher.Dispatch<WindowMinimizeEvent>(PYRE_BIND_METHOD(Application::OnWindowMinimize));
+        dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_METHOD(Application::OnWindowRestore));
 
         for (auto iter = m_LayerStack.rbegin(); iter != m_LayerStack.rend(); iter++) {
             (*iter)->OnEvent(e);
