@@ -12,7 +12,9 @@ namespace Pyre {
         void OnUpdate(float timestep);
         void OnEvent(Event& e);
 
-        OrthographicCamera& GetCamera()             { return m_Camera; }
+        float GetZoom() const           { return m_Zoom; }
+        void SetZoom(float zoom)        { m_Zoom = zoom; }
+        OrthographicCamera& GetCamera() { return m_Camera; }
         const OrthographicCamera& GetCamera() const { return m_Camera; }
 
     private:

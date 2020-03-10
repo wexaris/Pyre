@@ -19,19 +19,16 @@ namespace Pyre {
         PushOverlay(m_ImGuiLayer);
     }
 
-    Application::~Application() {
-            
-    }
-
     void Application::Run() {
         while (m_Running) {
             auto time = Time();
             float timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
-            // Layer updates
-            for (auto& layer : m_LayerStack) {
-                layer->OnUpdate(timestep);
+            if (!m_Minimized) {
+                for (auto& layer : m_LayerStack) {
+                    layer->OnUpdate(timestep);
+                }
             }
 
             // ImGui layer render
@@ -40,6 +37,7 @@ namespace Pyre {
                 layer->OnImGuiRender();
             }
             m_ImGuiLayer->End();
+
 
             m_Window->OnUpdate();
         }
@@ -55,14 +53,14 @@ namespace Pyre {
 
     void Application::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowClose));
-        dispatcher.Dispatch<WindowMoveEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowMove));
-        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowResize));
-        dispatcher.Dispatch<WindowFocusEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowFocus));
-        dispatcher.Dispatch<WindowLoseFocusEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowLoseFocus));
-        dispatcher.Dispatch<WindowMaximizeEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowMaximize));
-        dispatcher.Dispatch<WindowMinimizeEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowMinimize));
-        dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_EVENT_CB(Application::_OnWindowRestore));
+        dispatcher.Dispatch<WindowCloseEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowMoveEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMove));
+        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowResize));
+        dispatcher.Dispatch<WindowFocusEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowFocus));
+        dispatcher.Dispatch<WindowLoseFocusEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowLoseFocus));
+        dispatcher.Dispatch<WindowMaximizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMaximize));
+        dispatcher.Dispatch<WindowMinimizeEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowMinimize));
+        dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_EVENT_CB(Application::OnWindowRestore));
 
         for (auto iter = m_LayerStack.rbegin(); iter != m_LayerStack.rend(); iter++) {
             (*iter)->OnEvent(e);
@@ -72,44 +70,42 @@ namespace Pyre {
         }
     }
 
-    bool Application::_OnWindowClose(WindowCloseEvent& e) {
+    bool Application::OnWindowClose(WindowCloseEvent& e) {
         Shutdown();
-        OnWindowClose(e);
         return false;
     }
 
-    bool Application::_OnWindowMove(WindowMoveEvent& e) {
-        OnWindowMove(e);
+    bool Application::OnWindowMove(WindowMoveEvent& e) {
         return false;
     }
 
-    bool Application::_OnWindowResize(WindowResizeEvent& e) {
-        OnWindowResize(e);
+    bool Application::OnWindowResize(WindowResizeEvent& e) {
+        if (e.GetWidth() == 0 && e.GetHeigth() == 0) {
+            m_Minimized = true;
+            return false;
+        }
+        m_Minimized = false;
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeigth());
         return false;
     }
 
-    bool Application::_OnWindowFocus(WindowFocusEvent& e) {
-        OnWindowFocus(e);
+    bool Application::OnWindowFocus(WindowFocusEvent& e) {
         return false;
     }
 
-    bool Application::_OnWindowLoseFocus(WindowLoseFocusEvent& e) {
-        OnWindowLoseFocus(e);
+    bool Application::OnWindowLoseFocus(WindowLoseFocusEvent& e) {
         return false;
     }
 
-    bool Application::_OnWindowMaximize(WindowMaximizeEvent& e) {
-        OnWindowMaximize(e);
+    bool Application::OnWindowMaximize(WindowMaximizeEvent& e) {
         return false;
     }
 
-    bool Application::_OnWindowMinimize(WindowMinimizeEvent& e) {
-        OnWindowMinimize(e);
+    bool Application::OnWindowMinimize(WindowMinimizeEvent& e) {
         return false;
     }
 
-    bool Application::_OnWindowRestore(WindowRestoreEvent& e) {
-        OnWindowRestore(e);
+    bool Application::OnWindowRestore(WindowRestoreEvent& e) {
         return false;
     }
 

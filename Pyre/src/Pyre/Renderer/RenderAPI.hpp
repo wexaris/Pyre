@@ -21,6 +21,8 @@ namespace Pyre {
 
         virtual void DrawElement(const Ref<VertexArray>& vertexArray) = 0;
 
+        virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
+
         static inline API GetAPI() { return s_API; }
         static inline void SetAPI(API api) { s_API = api; }
 

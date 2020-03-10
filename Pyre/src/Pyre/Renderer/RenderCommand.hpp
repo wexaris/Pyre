@@ -19,6 +19,10 @@ namespace Pyre {
             s_RenderAPI->DrawElement(vertexArray);
         }
 
+        static inline void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+            s_RenderAPI->SetViewport(x, y, width, height);
+        }
+
     private:
         static Scope<RenderAPI> s_RenderAPI;
     };
