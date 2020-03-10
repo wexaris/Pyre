@@ -35,8 +35,8 @@ add_library(pyre STATIC ${PYRE_SRC})
 target_precompile_headers(pyre PRIVATE ${PYRE_PCH})
 
 target_link_libraries(pyre
-    PRIVATE glfw glad imgui_opengl_glfw
-    PUBLIC spdlog imgui glm_static stb
+    PRIVATE glfw glad imgui_opengl_glfw stb_image
+    PUBLIC spdlog imgui glm_static
 )
 target_compile_definitions(pyre PRIVATE -DGLFW_INCLUDE_NONE) # GLFW won't include its own OpenGL 
 target_include_directories(pyre PUBLIC src)

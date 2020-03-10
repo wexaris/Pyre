@@ -1,7 +1,7 @@
 #include "pyrepch.hpp"
 #include "Platform/OpenGL/OpenGLTexture.hpp"
 
-#include <stb/stb_image.h>
+#include <stb_image/stb_image.h>
 #include <glad/glad.h>
 
 namespace Pyre {
