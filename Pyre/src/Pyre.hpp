@@ -11,6 +11,7 @@
 
 // ----- Renderer -------------------------------
 #include "Pyre/Renderer/Renderer.hpp"
+#include "Pyre/Renderer/Renderer2D.hpp"
 #include "Pyre/Renderer/RenderCommand.hpp"
 
 #include "Pyre/Renderer/Texture.hpp"

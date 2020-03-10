@@ -10,8 +10,8 @@ set(PYRE_SRC
     src/Pyre/Core/LayerStack.cpp
     src/Pyre/Core/Log.cpp
     src/Pyre/ImGui/ImGuiLayer.cpp
-    src/Pyre/Renderer/CameraController.cpp
     src/Pyre/Renderer/Renderer.cpp
+    src/Pyre/Renderer/Renderer2D.cpp
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
     src/Pyre/Renderer/GraphicsContext.cpp
@@ -20,6 +20,7 @@ set(PYRE_SRC
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
     src/Pyre/Renderer/Camera.cpp
+    src/Pyre/Renderer/CameraController.cpp
     src/Platform/OpenGL/OpenGLRenderAPI.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
     src/Platform/OpenGL/OpenGLTexture.cpp

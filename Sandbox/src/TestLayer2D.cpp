@@ -9,32 +9,7 @@ TextLayer2D::TextLayer2D() :
 {}
 
 void TextLayer2D::OnAttach() {
-
-    float square_verts[4 * 3] = {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.5f,  0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f,
-    };
-
-    uint32_t square_indices[6] = { 0, 1 , 2, 2, 3, 0 };
-
-    Pyre::BufferLayout square_layout = {
-        { Pyre::ShaderDataType::Float3, "aPos" },
-    };
-
-    m_SquareVA = Pyre::VertexArray::Create();
-
-    Pyre::Ref<Pyre::VertexBuffer> square_vb;
-    square_vb = Pyre::VertexBuffer::Create(square_verts, sizeof(square_verts));
-    square_vb->SetLayout(square_layout);
-    m_SquareVA->AddVertexBuffer(square_vb);
-
-    Pyre::Ref<Pyre::IndexBuffer> square_ib;
-    square_ib = Pyre::IndexBuffer::Create(square_indices, sizeof(square_indices) / sizeof(uint32_t));
-    m_SquareVA->SetIndexBuffer(square_ib);
-
-    m_Shader = Pyre::Shader::Create("../../../Sandbox/assets/shaders/FlatColor.glsl");
+    m_Texture = Pyre::Texture2D::Create("../../../Sandbox/assets/textures/test.png");
 }
 
 void TextLayer2D::OnDetach() {
@@ -45,15 +20,12 @@ void TextLayer2D::OnUpdate(float ts) {
     m_CameraController.OnUpdate(ts);
 
     Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
-    Pyre::Renderer::BeginScene(m_CameraController.GetCamera());
 
-    glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
-
-    m_Shader->Bind();
-    m_Shader->SetFloat4("uColor", m_SquareColor);
-    Pyre::Renderer::Submit(m_Shader, m_SquareVA, glm::mat4(1.f));
-
-    Pyre::Renderer::EndScene();
+    Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 0.5f, 0.2f }, m_SquareColor);
+    Pyre::Renderer2D::DrawQuad({ 0.0f, 0.5f, -0.1f }, 45.0f, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+    Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 1.0f, 1.0f }, m_Texture, m_SquareColor);
+    Pyre::Renderer2D::EndScene();
 }
 
 void TextLayer2D::OnImGuiRender() {

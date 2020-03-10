@@ -1,5 +1,6 @@
 #include "pyrepch.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
+#include "Pyre/Renderer/Renderer2D.hpp"
 
 namespace Pyre {
 
@@ -7,6 +8,11 @@ namespace Pyre {
 
     void Renderer::Init() {
         RenderCommand::Init();
+        Renderer2D::Init();
+    }
+
+    void Renderer::Shutdown() {
+        Renderer2D::Shutdown();
     }
 
     void Renderer::BeginScene(OrthographicCamera& camera) {

@@ -12,10 +12,8 @@ public:
     void OnEvent(Pyre::Event& e) override;
 
 private:
-    Pyre::Ref<Pyre::VertexArray> m_SquareVA;
-    Pyre::Ref<Pyre::Shader> m_Shader;
-
     Pyre::OrthographicCameraController m_CameraController;
 
-    glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+    Pyre::Ref<Pyre::Texture2D> m_Texture;
+    glm::vec4 m_SquareColor = { 0.8f, 0.3f, 0.6f, 1.0f };
 };
