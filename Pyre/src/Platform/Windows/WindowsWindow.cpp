@@ -15,10 +15,6 @@ namespace Pyre {
         PYRE_CORE_ERROR("GLFW Error ({}): {}", error, msg);
     }
 
-    Scope<Window> Window::Create(const WindowProperties& properties) {
-        return MakeScope<WindowsWindow>(properties);
-    }
-
     WindowsWindow::WindowsWindow(const WindowProperties& properties) {
         PYRE_PROFILE_FUNCTION();
 

@@ -33,12 +33,9 @@ namespace Pyre {
 
         void NonLockingEndSession();
 
-        std::string m_SessionName;
+        std::string* m_Session;
         std::ofstream m_Output;
-        int m_ProfileCount = 0;
-
         std::mutex m_Lock;
-        bool m_IsActive = false;
     };
 
     class InstrumentationTimer {

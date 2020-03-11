@@ -10,17 +10,16 @@ namespace Pyre {
     void Instrumentor::BeginSession(const std::string& name, const std::string& path) {
         std::lock_guard<std::mutex> lock(m_Lock);
 
-        if (m_IsActive) {
+        if (m_Session) {
             if (Log::GetCoreLogger()) { // In case profiling before Log initialization
-                PYRE_CORE_ERROR("Cannot begin Instrumetor session '{}' while session '{}' is in progress!", name, m_SessionName);
+                PYRE_CORE_ERROR("Cannot begin Instrumetor session '{}' while session '{}' is in progress!", name, *m_Session);
             }
             NonLockingEndSession();
         }
         
         m_Output.open(path);
         if (m_Output.is_open()) {
-            m_IsActive = true;
-            m_SessionName = name;
+            m_Session = new std::string(name);
             WriteHeader();
         }
         else {
@@ -36,31 +35,27 @@ namespace Pyre {
     }
 
     void Instrumentor::NonLockingEndSession() {
-        if (m_IsActive) {
+        if (m_Session) {
             WriteFooter();
             m_Output.close();
-            m_ProfileCount = 0;
-            m_IsActive = false;
+            delete m_Session;
+            m_Session = nullptr;
         }
     }
 
     void Instrumentor::WriteHeader() {
-        m_Output << "{\"otherData\": {},\"traceEvents\":[";
+        m_Output << "{\"otherData\": {},\"traceEvents\":[{}";
         m_Output.flush();
     }
 
     void Instrumentor::WriteProfile(const ProfileResult& result) {
         std::string res;
-        
-        if (m_ProfileCount++ > 0) {
-            res = ",";
-        }
 
         std::string name = result.Name;
         std::replace(name.begin(), name.end(), '"', '\'');
 
         res += fmt::format(
-            "{{"
+            ",{{"
             "\"cat\":\"function\","
             "\"dur\":{0},"
             "\"name\":\"{1}\","
@@ -76,7 +71,7 @@ namespace Pyre {
         );
 
         std::lock_guard<std::mutex> lock(m_Lock);
-        if (m_IsActive) {
+        if (m_Session) {
             m_Output << res;
             m_Output.flush();
         }

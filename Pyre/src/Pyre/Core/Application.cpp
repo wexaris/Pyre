@@ -96,7 +96,7 @@ namespace Pyre {
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         PYRE_PROFILE_FUNCTION();
 
-        Shutdown();
+        m_Running = false;
         return false;
     }
 

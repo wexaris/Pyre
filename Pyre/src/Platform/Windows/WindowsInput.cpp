@@ -6,8 +6,6 @@
 
 namespace Pyre {
 
-    Scope<Input> Input::s_Instance = MakeScope<WindowsInput>();;
-
     bool WindowsInput::IsKeyPressedImpl(KeyCode key) {
         auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         auto state = glfwGetKey(window, static_cast<int32_t>(key));

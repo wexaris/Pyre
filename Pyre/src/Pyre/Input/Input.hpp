@@ -13,6 +13,8 @@ namespace Pyre {
         static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
         static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
 
+        static Scope<Input> Create();
+
     protected:
         Input() = default;
 

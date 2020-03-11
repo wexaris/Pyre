@@ -5,6 +5,8 @@
 #include "Pyre/ImGui/ImGuiLayer.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
 
+int main(int argc, char* argv[]);
+
 namespace Pyre {
 
     class Application {
@@ -12,7 +14,6 @@ namespace Pyre {
         Application();
         virtual ~Application();
 
-        void Run();
 
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
@@ -20,19 +21,9 @@ namespace Pyre {
         static inline Application& Get() { return *s_Instance; }
         inline Window& GetWindow()       { return *m_Window; }
 
-        inline void Shutdown() { m_Running = false; }
-
-    protected:
-        bool OnWindowClose(WindowCloseEvent&);
-        bool OnWindowMove(WindowMoveEvent&);
-        bool OnWindowResize(WindowResizeEvent&);
-        bool OnWindowFocus(WindowFocusEvent&);
-        bool OnWindowLoseFocus(WindowLoseFocusEvent&);
-        bool OnWindowMaximize(WindowMaximizeEvent&);
-        bool OnWindowMinimize(WindowMinimizeEvent&);
-        bool OnWindowRestore(WindowRestoreEvent&);
-
     private:
+        friend int ::main(int argc, char* argv[]);
+
         static Application* s_Instance;
 
         Scope<Window> m_Window;
@@ -42,7 +33,17 @@ namespace Pyre {
         bool m_Running = true;
         bool m_Minimized = false;
 
+        void Run();
+
         void OnEvent(Event& e);
+        bool OnWindowClose(WindowCloseEvent&);
+        bool OnWindowMove(WindowMoveEvent&);
+        bool OnWindowResize(WindowResizeEvent&);
+        bool OnWindowFocus(WindowFocusEvent&);
+        bool OnWindowLoseFocus(WindowLoseFocusEvent&);
+        bool OnWindowMaximize(WindowMaximizeEvent&);
+        bool OnWindowMinimize(WindowMinimizeEvent&);
+        bool OnWindowRestore(WindowRestoreEvent&);
     };
 
     // To be defined by the client
