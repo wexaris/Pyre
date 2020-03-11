@@ -14,8 +14,8 @@ namespace Pyre {
 
         void Run();
 
-        void PushLayer(const Ref<Layer>& layer);
-        void PushOverlay(const Ref<Layer>& overlay);
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* overlay);
 
         static inline Application& Get() { return *s_Instance; }
         inline Window& GetWindow()       { return *m_Window; }
@@ -36,7 +36,7 @@ namespace Pyre {
         static Application* s_Instance;
 
         Scope<Window> m_Window;
-        Ref<ImGuiLayer> m_ImGuiLayer;
+        ImGuiLayer* m_ImGuiLayer;
         LayerStack m_LayerStack;
         Time m_LastFrameTime;
         bool m_Running = true;

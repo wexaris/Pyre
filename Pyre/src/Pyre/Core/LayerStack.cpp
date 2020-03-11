@@ -4,22 +4,22 @@
 namespace Pyre {
 
     LayerStack::~LayerStack() {
-        for (auto& layer : m_Layers) {
+        for (Layer* layer : m_Layers) {
             layer->OnDetach();
-            layer.reset();
+            delete layer;
         }
     }
 
-    void LayerStack::PushLayer(const Ref<Layer>& layer) {
+    void LayerStack::PushLayer(Layer* layer) {
         m_Layers.emplace(m_Layers.begin() + m_InsertIndex, layer);
         m_InsertIndex++;
     }
 
-    void LayerStack::PushOverlay(const Ref<Layer>& overlay) {
+    void LayerStack::PushOverlay(Layer* overlay) {
         m_Layers.emplace_back(overlay);
     }
 
-    void LayerStack::PopLayer(const Ref<Layer>& layer) {
+    void LayerStack::PopLayer(Layer* layer) {
         auto iter = std::find(m_Layers.begin(), m_Layers.begin() + m_InsertIndex, layer);
         if (iter != m_Layers.begin() + m_InsertIndex) {
             layer->OnDetach();
@@ -28,7 +28,7 @@ namespace Pyre {
         }
     }
 
-    void LayerStack::PopOverlay(const Ref<Layer>& overlay) {
+    void LayerStack::PopOverlay(Layer* overlay) {
         auto iter = std::find(m_Layers.begin() + m_InsertIndex, m_Layers.end(), overlay);
         if (iter != m_Layers.end()) {
             overlay->OnDetach();

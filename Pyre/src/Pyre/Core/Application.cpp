@@ -17,7 +17,7 @@ namespace Pyre {
 
         Renderer::Init();
 
-        m_ImGuiLayer = MakeRef<ImGuiLayer>();
+        m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
     }
 
@@ -58,14 +58,14 @@ namespace Pyre {
         }
     }
 
-    void Application::PushLayer(const Ref<Layer>& layer) {
+    void Application::PushLayer(Layer* layer) {
         PYRE_PROFILE_FUNCTION();
 
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
 
-    void Application::PushOverlay(const Ref<Layer>& overlay) {
+    void Application::PushOverlay(Layer* overlay) {
         PYRE_PROFILE_FUNCTION();
 
         m_LayerStack.PushOverlay(overlay);
