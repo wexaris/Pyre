@@ -3,10 +3,6 @@
 
 namespace Pyre {
 
-    LayerStack::LayerStack() {
-
-    }
-
     LayerStack::~LayerStack() {
         for (auto& layer : m_Layers) {
             layer->OnDetach();
@@ -17,12 +13,10 @@ namespace Pyre {
     void LayerStack::PushLayer(const Ref<Layer>& layer) {
         m_Layers.emplace(m_Layers.begin() + m_InsertIndex, layer);
         m_InsertIndex++;
-        layer->OnAttach();
     }
 
     void LayerStack::PushOverlay(const Ref<Layer>& overlay) {
         m_Layers.emplace_back(overlay);
-        overlay->OnAttach();
     }
 
     void LayerStack::PopLayer(const Ref<Layer>& layer) {

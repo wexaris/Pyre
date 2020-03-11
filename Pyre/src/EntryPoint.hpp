@@ -9,9 +9,17 @@ int main(int argc, char* argv[]) {
 	Pyre::Log::Init();
 	PYRE_CORE_INFO("Initialized Logger");
 
+	PYRE_PROFILE_BEGIN("Startup", "PyreProfile-Startup.json");
 	auto app = Pyre::CreateApplication();
-	app->Run();
-	delete app;
+	PYRE_PROFILE_END();
+
+    PYRE_PROFILE_BEGIN("Runtime", "PyreProfile-Runtime.json");
+    app->Run();
+	PYRE_PROFILE_END();
+
+    PYRE_PROFILE_BEGIN("Shutdown", "PyreProfile-Shutdown.json");
+    delete app;
+	PYRE_PROFILE_END();
 }
 
 

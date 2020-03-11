@@ -19,6 +19,8 @@ namespace Pyre {
     }
 
     OpenGLShader::OpenGLShader(const std::string& path) {
+        PYRE_PROFILE_FUNCTION();
+
         auto lastSlash = path.find_last_of("/\\");
         lastSlash = (lastSlash == std::string::npos) ? 0 : path.find_last_of("/\\") + 1;
         auto lastDot = path.rfind('.');
@@ -32,6 +34,8 @@ namespace Pyre {
     OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource) :
         m_Name(name)
     {
+        PYRE_PROFILE_FUNCTION();
+
         std::unordered_map<GLenum, std::string> shaders;
         shaders[GL_VERTEX_SHADER] = vertexSource;
         shaders[GL_FRAGMENT_SHADER] = fragmentSource;
@@ -39,10 +43,14 @@ namespace Pyre {
     }
 
     OpenGLShader::~OpenGLShader() {
+        PYRE_PROFILE_FUNCTION();
+
         glDeleteProgram(m_RendererID);
     }
 
     std::string OpenGLShader::ReadFile(const std::string& path) {
+        PYRE_PROFILE_FUNCTION();
+
         std::string content;
 
         std::ifstream file(path, std::ios::in | std::ios::binary);
@@ -67,6 +75,8 @@ namespace Pyre {
     }
 
     std::unordered_map<GLenum, std::string> OpenGLShader::Split(const std::string& source) {
+        PYRE_PROFILE_FUNCTION();
+
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char* delimToken = "#type";
@@ -94,6 +104,7 @@ namespace Pyre {
     }
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources) {
+        PYRE_PROFILE_FUNCTION();
 
         GLuint program = glCreateProgram();
         PYRE_CORE_ASSERT(shaderSources.size() <= 3, "A maximum of 3 shaders are supported!");
@@ -172,44 +183,62 @@ namespace Pyre {
     }
 
     void OpenGLShader::Bind() const {
+        PYRE_PROFILE_FUNCTION();
+
         glUseProgram(m_RendererID);
     }
 
     void OpenGLShader::Unbind() const {
+        PYRE_PROFILE_FUNCTION();
+
         glUseProgram(0);
     }
 
     void OpenGLShader::SetInt(const std::string& name, int value) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1i(loc, value);
     }
 
     void OpenGLShader::SetFloat(const std::string& name, float value) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1f(loc, value);
     }
 
     void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& values) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform2f(loc, values.x, values.y);
     }
 
     void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& values) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform3f(loc, values.x, values.y, values.z);
     }
 
     void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& values) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform4f(loc, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
     void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix) {
+        PYRE_PROFILE_FUNCTION();
+
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }

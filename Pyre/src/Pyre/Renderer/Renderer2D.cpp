@@ -17,6 +17,8 @@ namespace Pyre {
     static PrimitiveData* s_Data;
 
     void Renderer2D::Init() {
+        PYRE_PROFILE_FUNCTION();
+
         s_Data = new PrimitiveData();
         s_Data->QuadVA = Pyre::VertexArray::Create();
 
@@ -53,16 +55,20 @@ namespace Pyre {
     }
 
     void Renderer2D::Shutdown() {
+        PYRE_PROFILE_FUNCTION();
+
         delete s_Data;
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera& camera) {
+        PYRE_PROFILE_FUNCTION();
+
         s_Data->TextureShader->Bind();
         s_Data->TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
     }
 
     void Renderer2D::EndScene() {
-
+        PYRE_PROFILE_FUNCTION();
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
@@ -70,6 +76,8 @@ namespace Pyre {
     }
 
     void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
+        PYRE_PROFILE_FUNCTION();
+
         s_Data->TextureShader->SetMat4("uTransform", glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f), pos), glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f)), { size.x, size.y, 1.0f }));
         s_Data->TextureShader->SetFloat2("uTexScale", { 1.0f, 1.0f });
         s_Data->TextureShader->SetFloat4("uColor", color);
@@ -84,6 +92,8 @@ namespace Pyre {
     }
 
     void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color) {
+        PYRE_PROFILE_FUNCTION();
+
         s_Data->TextureShader->SetMat4("uTransform", glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f), pos), glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f)), { size.x, size.y, 1.0f }));
         s_Data->TextureShader->SetFloat2("uTexScale", { 1.0f, 1.0f });
         s_Data->TextureShader->SetFloat4("uColor", color);

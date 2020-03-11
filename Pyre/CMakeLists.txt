@@ -9,6 +9,7 @@ set(PYRE_SRC
     src/Pyre/Core/Layer.cpp
     src/Pyre/Core/LayerStack.cpp
     src/Pyre/Core/Log.cpp
+    src/Pyre/Debug/Instrumentor.cpp
     src/Pyre/ImGui/ImGuiLayer.cpp
     src/Pyre/Renderer/Renderer.cpp
     src/Pyre/Renderer/Renderer2D.cpp

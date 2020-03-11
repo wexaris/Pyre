@@ -7,6 +7,8 @@ namespace Pyre {
     Application* Application::s_Instance = nullptr;
 
     Application::Application() {
+        PYRE_PROFILE_FUNCTION();
+
         PYRE_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
@@ -20,27 +22,36 @@ namespace Pyre {
     }
 
     Application::~Application() {
+        PYRE_PROFILE_FUNCTION();
+
         Renderer::Shutdown();
     }
 
     void Application::Run() {
+        PYRE_PROFILE_FUNCTION();
+
         while (m_Running) {
-            auto time = Time();
+            PYRE_PROFILE_SCOPE("Run Loop - Application::Run()");
+
+            Time time;
             float timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
             if (!m_Minimized) {
+                PYRE_PROFILE_SCOPE("LayerStack OnUpdate - Application::Run()");
                 for (auto& layer : m_LayerStack) {
                     layer->OnUpdate(timestep);
                 }
             }
 
-            // ImGui layer render
-            m_ImGuiLayer->Begin();
-            for (auto& layer : m_LayerStack) {
-                layer->OnImGuiRender();
+            {
+                PYRE_PROFILE_SCOPE("LayerStack OnImGuiRender - Application::Run()");
+                m_ImGuiLayer->Begin();
+                for (auto& layer : m_LayerStack) {
+                    layer->OnImGuiRender();
+                }
+                m_ImGuiLayer->End();
             }
-            m_ImGuiLayer->End();
 
 
             m_Window->OnUpdate();
@@ -48,14 +59,22 @@ namespace Pyre {
     }
 
     void Application::PushLayer(const Ref<Layer>& layer) {
+        PYRE_PROFILE_FUNCTION();
+
         m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
     void Application::PushOverlay(const Ref<Layer>& overlay) {
+        PYRE_PROFILE_FUNCTION();
+
         m_LayerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 
     void Application::OnEvent(Event& e) {
+        PYRE_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(PYRE_BIND_METHOD(Application::OnWindowClose));
         dispatcher.Dispatch<WindowMoveEvent>(PYRE_BIND_METHOD(Application::OnWindowMove));
@@ -75,15 +94,21 @@ namespace Pyre {
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         Shutdown();
         return false;
     }
 
     bool Application::OnWindowMove(WindowMoveEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 
     bool Application::OnWindowResize(WindowResizeEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         if (e.GetWidth() == 0 && e.GetHeigth() == 0) {
             m_Minimized = true;
             return false;
@@ -94,22 +119,32 @@ namespace Pyre {
     }
 
     bool Application::OnWindowFocus(WindowFocusEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 
     bool Application::OnWindowLoseFocus(WindowLoseFocusEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 
     bool Application::OnWindowMaximize(WindowMaximizeEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 
     bool Application::OnWindowMinimize(WindowMinimizeEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 
     bool Application::OnWindowRestore(WindowRestoreEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         return false;
     }
 

@@ -14,6 +14,7 @@
 
 #include "Pyre/Core/Base.hpp"
 #include "Pyre/Core/Log.hpp"
+#include "Pyre/Debug/Instrumentor.hpp"
 
 #ifdef PYRE_PLATFORM_WINDOWS
     #include <Windows.h>

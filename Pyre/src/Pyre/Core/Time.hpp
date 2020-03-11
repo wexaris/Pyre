@@ -10,23 +10,19 @@ namespace Pyre {
         operator float() const { return AsSeconds(); }
 
         inline float AsSeconds() const {
-            SecondTime time = m_TimePoint.time_since_epoch();
-            return time.count();
+            auto time = std::chrono::time_point_cast<std::chrono::milliseconds>(m_TimePoint);
+            return time.time_since_epoch().count() / 1000.f;
         }
         
         inline float AsMilliseconds() const {
-            MilliTime time = m_TimePoint.time_since_epoch();
-            return time.count();
+            auto time = std::chrono::time_point_cast<std::chrono::microseconds>(m_TimePoint);
+            return time.time_since_epoch().count() / 1000.f;
         }
 
     private:
-        using Clock = std::chrono::high_resolution_clock;
-        using TimePoint = std::chrono::time_point<Clock>;
+        using Clock = std::chrono::steady_clock;
 
-        using SecondTime = std::chrono::duration<float>;
-        using MilliTime = std::chrono::duration<float, std::milli>;
-        
-        TimePoint m_TimePoint;
+        std::chrono::time_point<Clock> m_TimePoint;
     };
 
 }

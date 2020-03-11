@@ -65,6 +65,6 @@ namespace Pyre {
         return os << e.AsString();
     }
 
-#define PYRE_BIND_METHOD(fun) (std::bind(&fun, this, std::placeholders::_1))
-
 }
+
+#define PYRE_BIND_METHOD(fun) (std::bind(&fun, this, std::placeholders::_1))

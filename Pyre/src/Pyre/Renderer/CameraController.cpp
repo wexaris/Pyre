@@ -10,10 +10,11 @@ namespace Pyre {
         m_RotationEnable(rotation),
         m_Camera(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom)
     {
-
     }
 
     void OrthographicCameraController::OnUpdate(float ts) {
+        PYRE_PROFILE_FUNCTION();
+
         if (Input::IsKeyPressed(input::KEY_A)) {
             m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
@@ -47,19 +48,22 @@ namespace Pyre {
                 m_Rotation += 360.0f;
             }
 
-            m_Camera.SetRotation(m_Rotation);
         }
 
-        m_Camera.SetPosition(m_Position);
+        m_Camera.SetTransform(m_Position, m_Rotation);
     }
 
     void OrthographicCameraController::OnEvent(Event& e) {
+        PYRE_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnMouseScroll));
         dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnWindowResize));
     }
 
     bool OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         m_Zoom -= e.GetYOffset() * 0.25f;
         m_Zoom = std::max(m_Zoom, 0.25f);
         m_Camera.SetProjection(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom);
@@ -67,6 +71,8 @@ namespace Pyre {
     }
 
     bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e) {
+        PYRE_PROFILE_FUNCTION();
+
         m_AspecRatio = (float)e.GetWidth() / (float)e.GetHeigth();
         m_Camera.SetProjection(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom);
         return false;

@@ -19,6 +19,8 @@ namespace Pyre {
     }
 
     WindowsWindow::WindowsWindow(const WindowProperties& properties) {
+        PYRE_PROFILE_FUNCTION();
+
         m_Data.Title = properties.Title;
         m_Data.Width = properties.Width;
         m_Data.Height = properties.Height;
@@ -26,13 +28,16 @@ namespace Pyre {
 
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {
+            PYRE_PROFILE_SCOPE("glfwInit()");
             int good = glfwInit();
             PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
             glfwSetErrorCallback(GLFWError);
         }
 
-        // Create window
-        m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+        { // Create window
+            PYRE_PROFILE_SCOPE("glfwCreateWindow()");
+            m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+        }
         m_Context = GraphicsContext::Create(m_Window);
         s_GLFWWindowCount++;
 
@@ -47,7 +52,6 @@ namespace Pyre {
         m_Data.PosX = x;
         m_Data.PosY = y;
 
-        // Add GLFW callbacks
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
@@ -197,9 +201,12 @@ namespace Pyre {
                 break;
             }
         });
+        
     }
 
     WindowsWindow::~WindowsWindow() {
+        PYRE_PROFILE_FUNCTION();
+
         glfwDestroyWindow(m_Window);
         s_GLFWWindowCount--;
 
@@ -210,11 +217,15 @@ namespace Pyre {
     }
 
     void WindowsWindow::OnUpdate() {
+        PYRE_PROFILE_FUNCTION();
+
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
 
     void WindowsWindow::SetVSync(bool enabled) {
+        PYRE_PROFILE_FUNCTION();
+
         m_Data.VSync = enabled;
 
         if (m_Data.VSync) { glfwSwapInterval(1); } 

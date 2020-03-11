@@ -9,6 +9,8 @@ namespace Pyre {
     OpenGLContext::OpenGLContext(GLFWwindow* window) 
         : m_Window(window)
     {
+        PYRE_PROFILE_FUNCTION();
+
         PYRE_CORE_ASSERT(m_Window, "Window handle is null!")
 
         glfwMakeContextCurrent(m_Window);
@@ -30,6 +32,8 @@ namespace Pyre {
     }
 
     void OpenGLContext::SwapBuffers() {
+        PYRE_PROFILE_FUNCTION();
+
         glfwSwapBuffers(m_Window);
     }
 

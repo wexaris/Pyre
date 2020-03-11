@@ -9,6 +9,8 @@
 
 #include "Pyre/ImGui/ImGuiLayer.hpp"
 
+#include "Pyre/Debug/Instrumentor.hpp"
+
 // ----- Renderer -------------------------------
 #include "Pyre/Renderer/Renderer.hpp"
 #include "Pyre/Renderer/Renderer2D.hpp"

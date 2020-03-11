@@ -31,6 +31,7 @@
 
 #ifdef _DEBUG
     #define PYRE_ENABLE_ASSERTS
+    #define PYRE_ENABLE_PROFILE
 #endif
 
 #ifdef PYRE_ENABLE_ASSERTS
