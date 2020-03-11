@@ -5,7 +5,7 @@
 class Sandbox : public Pyre::Application {
 public:
     Sandbox() {
-        PushLayer(new TextLayer2D());
+        PushLayer(new TestLayer2D());
     }
 
     ~Sandbox() {

@@ -3,22 +3,22 @@
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-TextLayer2D::TextLayer2D() :
+TestLayer2D::TestLayer2D() :
     Layer("TestLayer2D"),
     m_CameraController(16.f / 9.f, true)
 {}
 
-void TextLayer2D::OnAttach() {
+void TestLayer2D::OnAttach() {
     PYRE_PROFILE_FUNCTION();
 
     m_Texture = Pyre::Texture2D::Create("../../../Sandbox/assets/textures/test.png");
 }
 
-void TextLayer2D::OnDetach() {
+void TestLayer2D::OnDetach() {
     PYRE_PROFILE_FUNCTION();
 }
 
-void TextLayer2D::OnUpdate(float ts) {
+void TestLayer2D::OnUpdate(float ts) {
     PYRE_PROFILE_FUNCTION();
 
     m_CameraController.OnUpdate(ts);
@@ -35,7 +35,7 @@ void TextLayer2D::OnUpdate(float ts) {
     }
 }
 
-void TextLayer2D::OnImGuiRender() {
+void TestLayer2D::OnImGuiRender() {
     PYRE_PROFILE_FUNCTION();
 
     ImGui::Begin("Settings");
@@ -43,6 +43,6 @@ void TextLayer2D::OnImGuiRender() {
     ImGui::End();
 }
 
-void TextLayer2D::OnEvent(Pyre::Event& e) {
+void TestLayer2D::OnEvent(Pyre::Event& e) {
     m_CameraController.OnEvent(e);
 }

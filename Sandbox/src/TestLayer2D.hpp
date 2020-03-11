@@ -1,8 +1,8 @@
 #include <Pyre.hpp>
 
-class TextLayer2D : public Pyre::Layer {
+class TestLayer2D : public Pyre::Layer {
 public:
-    TextLayer2D();
+    TestLayer2D();
 
     void OnAttach() override;
     void OnDetach() override;
