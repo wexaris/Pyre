@@ -30,6 +30,7 @@
 #endif
 
 #ifdef _DEBUG
+    #define PYRE_DEBUG
     #define PYRE_ENABLE_ASSERTS
     #define PYRE_ENABLE_PROFILE
 #endif

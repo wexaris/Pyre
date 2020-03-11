@@ -1,5 +1,6 @@
 #include "pyrepch.hpp"
 #include "Platform/Windows/WindowsWindow.hpp"
+#include "Pyre/Renderer/Renderer.hpp"
 #include "Pyre/Events/MouseEvents.hpp"
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
@@ -36,10 +37,16 @@ namespace Pyre {
 
         { // Create window
             PYRE_PROFILE_SCOPE("glfwCreateWindow()");
+
+#ifdef PYRE_DEBUG
+            if (Renderer::GetAPI() == RenderAPI::API::OpenGL)
+                glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
             m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+            s_GLFWWindowCount++;
         }
         m_Context = GraphicsContext::Create(m_Window);
-        s_GLFWWindowCount++;
 
         PYRE_CORE_INFO("Created window: '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
 
