@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
 	(void)argc;
 	(void)argv;
 
-	Pyre::Log::Init();
+	Pyre::Log::Init("Pyre.log");
 	PYRE_CORE_INFO("Initialized Logger");
 
 	PYRE_PROFILE_BEGIN("Startup", "PyreProfile-Startup.json");

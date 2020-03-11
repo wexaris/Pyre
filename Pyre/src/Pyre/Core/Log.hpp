@@ -7,7 +7,7 @@ namespace Pyre {
 
     class Log { 
     public:
-        static void Init();
+        static void Init(const std::string& path);
 
         inline static Ref<spdlog::logger>& GetCoreLogger()   { return s_CoreLogger; }
         inline static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
