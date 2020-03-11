@@ -8,15 +8,34 @@ namespace Pyre {
     }
 
     void Instrumentor::BeginSession(const std::string& name, const std::string& path) {
-        if (!m_IsActive) {
+        std::lock_guard<std::mutex> lock(m_Lock);
+
+        if (m_IsActive) {
+            if (Log::GetCoreLogger()) { // In case profiling before Log initialization
+                PYRE_CORE_ERROR("Cannot begin Instrumetor session '{}' while session '{}' is in progress!", name, m_SessionName);
+            }
+            NonLockingEndSession();
+        }
+        
+        m_Output.open(path);
+        if (m_Output.is_open()) {
             m_IsActive = true;
             m_SessionName = name;
-            m_Output.open(path);
             WriteHeader();
+        }
+        else {
+            if (Log::GetCoreLogger()) { // In case profiling before Log initialization
+                PYRE_CORE_ERROR("Instrumentor failed to open results file: ", path);
+            }
         }
     }
 
     void Instrumentor::EndSession() {
+        std::lock_guard<std::mutex> lock(m_Lock);
+        NonLockingEndSession();
+    }
+
+    void Instrumentor::NonLockingEndSession() {
         if (m_IsActive) {
             WriteFooter();
             m_Output.close();
@@ -27,36 +46,50 @@ namespace Pyre {
 
     void Instrumentor::WriteHeader() {
         m_Output << "{\"otherData\": {},\"traceEvents\":[";
+        m_Output.flush();
     }
 
     void Instrumentor::WriteProfile(const ProfileResult& result) {
-        std::lock_guard<std::mutex> lock(m_Lock);
-
+        std::string res;
+        
         if (m_ProfileCount++ > 0) {
-            m_Output << ",";
+            res = ",";
         }
 
         std::string name = result.Name;
         std::replace(name.begin(), name.end(), '"', '\'');
 
-        m_Output << "{";
-        m_Output << "\"cat\":\"function\",";
-        m_Output << "\"dur\":" << (result.End - result.Start) << ',';
-        m_Output << "\"name\":\"" << name << "\",";
-        m_Output << "\"ph\":\"X\",";
-        m_Output << "\"pid\":0,";
-        m_Output << "\"tid\":" << result.ThreadID << ",";
-        m_Output << "\"ts\":" << result.Start;
-        m_Output << "}";
+        res += fmt::format(
+            "{{"
+            "\"cat\":\"function\","
+            "\"dur\":{0},"
+            "\"name\":\"{1}\","
+            "\"ph\":\"X\","
+            "\"pid\":0,"
+            "\"tid\":{2},"
+            "\"ts\":{3}"
+            "}}",
+            result.Elapsed.count(),
+            name,
+            result.ThreadID,
+            result.Start.count()
+        );
+
+        std::lock_guard<std::mutex> lock(m_Lock);
+        if (m_IsActive) {
+            m_Output << res;
+            m_Output.flush();
+        }
     }
 
     void Instrumentor::WriteFooter() {
         m_Output << "]}";
+        m_Output.flush();
     }
 
 
     InstrumentationTimer::InstrumentationTimer(const char* name) :
-        m_Result({ name, 0, 0, 0 }),
+        m_Result({ name, {}, {}, {} }),
         m_StartTime(Clock::now())
     {}
 
@@ -69,9 +102,10 @@ namespace Pyre {
     void InstrumentationTimer::Stop() {
         auto endTime = Clock::now();
 
-        m_Result.Start    = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTime).time_since_epoch().count();
-        m_Result.End      = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch().count();
-        m_Result.ThreadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+        m_Result.Start = ProfileResult::FloatMicroseconds{ m_StartTime.time_since_epoch() };
+        m_Result.Elapsed = std::chrono::time_point_cast<std::chrono::microseconds>(endTime).time_since_epoch() -
+            std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTime).time_since_epoch();
+        m_Result.ThreadID = std::this_thread::get_id();
 
         Instrumentor::Get().WriteProfile(std::move(m_Result));
         m_Stopped = true;

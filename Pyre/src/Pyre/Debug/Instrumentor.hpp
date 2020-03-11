@@ -5,9 +5,12 @@
 namespace Pyre {
 
     struct ProfileResult {
+        using FloatMicroseconds = std::chrono::duration<double, std::micro>;
+
         const char* Name;
-        long long Start, End;
-        size_t ThreadID;
+        FloatMicroseconds Start;
+        std::chrono::microseconds Elapsed;
+        std::thread::id ThreadID;
     };
 
     class Instrumentor {
@@ -28,6 +31,8 @@ namespace Pyre {
         Instrumentor() = default;
         ~Instrumentor();
 
+        void NonLockingEndSession();
+
         std::string m_SessionName;
         std::ofstream m_Output;
         int m_ProfileCount = 0;
@@ -44,7 +49,7 @@ namespace Pyre {
         void Stop();
 
     private:
-        using Clock = std::chrono::high_resolution_clock;
+        using Clock = std::chrono::steady_clock;
 
         ProfileResult m_Result;
         std::chrono::time_point<Clock> m_StartTime;
@@ -70,15 +75,15 @@ namespace Pyre {
         #define PYRE_FUNCSIG __func__
     #else
         #define PYRE_FUNCSIG "Function signature unknown!"
-#endif
+    #endif
 
-#define PYRE_PROFILE_BEGIN(name, path) ::Pyre::Instrumentor::Get().BeginSession(name, path)
-#define PYRE_PROFILE_END()             ::Pyre::Instrumentor::Get().EndSession()
-#define PYRE_PROFILE_SCOPE(name)       ::Pyre::InstrumentationTimer timer##__LINE__(name)
-#define PYRE_PROFILE_FUNCTION()        PYRE_PROFILE_SCOPE(PYRE_FUNCSIG)
+    #define PYRE_PROFILE_BEGIN(name, path) ::Pyre::Instrumentor::Get().BeginSession(name, path)
+    #define PYRE_PROFILE_END()             ::Pyre::Instrumentor::Get().EndSession()
+    #define PYRE_PROFILE_SCOPE(name)       ::Pyre::InstrumentationTimer timer##__LINE__(name)
+    #define PYRE_PROFILE_FUNCTION()        PYRE_PROFILE_SCOPE(PYRE_FUNCSIG)
 #else
-#define PYRE_PROFILE_BEGIN(name, path)
-#define PYRE_PROFILE_END()
-#define PYRE_PROFILE_SCOPE(name)
-#define PYRE_PROFILE_FUNCTION()
+    #define PYRE_PROFILE_BEGIN(name, path)
+    #define PYRE_PROFILE_END()
+    #define PYRE_PROFILE_SCOPE(name)
+    #define PYRE_PROFILE_FUNCTION()
 #endif
