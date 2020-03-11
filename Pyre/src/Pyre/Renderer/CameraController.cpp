@@ -15,29 +15,29 @@ namespace Pyre {
     void OrthographicCameraController::OnUpdate(float ts) {
         PYRE_PROFILE_FUNCTION();
 
-        if (Input::IsKeyPressed(input::KEY_A)) {
+        if (Input::IsKeyPressed(PYRE_KEY_A)) {
             m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
-        else if (Input::IsKeyPressed(input::KEY_D)) {
+        else if (Input::IsKeyPressed(PYRE_KEY_D)) {
             m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
 
-        if (Input::IsKeyPressed(input::KEY_W)) {
+        if (Input::IsKeyPressed(PYRE_KEY_W)) {
             m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
-        else if (Input::IsKeyPressed(input::KEY_S)) {
+        else if (Input::IsKeyPressed(PYRE_KEY_S)) {
             m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
 
         if (m_RotationEnable) {
-            if (Input::IsKeyPressed(input::KEY_Q)) {
+            if (Input::IsKeyPressed(PYRE_KEY_Q)) {
                 m_Rotation += m_RotationSpeed * ts;
             }
-            else if (Input::IsKeyPressed(input::KEY_E)) {
+            else if (Input::IsKeyPressed(PYRE_KEY_E)) {
                 m_Rotation -= m_RotationSpeed * ts;
             }
 

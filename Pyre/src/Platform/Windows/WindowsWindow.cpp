@@ -65,17 +65,17 @@ namespace Pyre {
             switch (action)
             {
             case GLFW_PRESS: {
-                KeyPressEvent event(key, 0);
+                KeyPressEvent event(static_cast<KeyCode>(key), 0);
                 data.EventCallback(event);
                 break;
             }
             case GLFW_RELEASE: {
-                KeyReleaseEvent event(key);
+                KeyReleaseEvent event(static_cast<KeyCode>(key));
                 data.EventCallback(event);
                 break;
             }
             case GLFW_REPEAT: {
-                KeyPressEvent event(key, 1); // TODO: get repeat count
+                KeyPressEvent event(static_cast<KeyCode>(key), 1); // TODO: get repeat count
                 data.EventCallback(event);
                 break;
             }
@@ -87,7 +87,7 @@ namespace Pyre {
 
         glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-            KeyTypeEvent event(keycode);
+            KeyTypeEvent event(static_cast<KeyCode>(keycode));
             data.EventCallback(event);
         });
 
@@ -97,12 +97,12 @@ namespace Pyre {
             switch (action)
             {
             case GLFW_PRESS: {
-                MouseButtonPressEvent event(button);
+                MouseButtonPressEvent event(static_cast<MouseCode>(button));
                 data.EventCallback(event);
                 break;
             }
             case GLFW_RELEASE: {
-                MouseButtonReleaseEvent event(button);
+                MouseButtonReleaseEvent event(static_cast<MouseCode>(button));
                 data.EventCallback(event);
                 break;
             }

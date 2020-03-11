@@ -1,25 +1,26 @@
 #pragma once
 #include "Pyre/Events/Event.hpp"
+#include "Pyre/Input/Input.hpp"
 
 namespace Pyre {
 
     class KeyEvent : public Event {
     public:
-        inline int GetKeyCode() const { return m_KeyCode; }
+        inline KeyCode GetKeyCode() const { return m_KeyCode; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
 
     protected:
-        int m_KeyCode;
+        KeyCode m_KeyCode;
 
-        KeyEvent(int keycode) :
+        KeyEvent(KeyCode keycode) :
             m_KeyCode(keycode)
         {}
     };
 
     class KeyPressEvent : public KeyEvent {
     public:
-        KeyPressEvent(int keycode, int repeatCount) :
+        KeyPressEvent(KeyCode keycode, int repeatCount) :
             KeyEvent(keycode), m_RepeatCount(repeatCount)
         {}
 
@@ -36,7 +37,7 @@ namespace Pyre {
 
     class KeyReleaseEvent : public KeyEvent {
     public:
-        KeyReleaseEvent(int keycode) :
+        KeyReleaseEvent(KeyCode keycode) :
             KeyEvent(keycode)
         {}
 
@@ -48,7 +49,7 @@ namespace Pyre {
 
     class KeyTypeEvent : public KeyEvent {
     public:
-        KeyTypeEvent(int keycode) :
+        KeyTypeEvent(KeyCode keycode) :
             KeyEvent(keycode)
         {}
 

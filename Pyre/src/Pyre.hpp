@@ -33,4 +33,4 @@
 // ----- Input ----------------------------------
 #include "Pyre/Input/Input.hpp"
 #include "Pyre/Input/KeyCodes.hpp"
-#include "Pyre/Input/MouseButtonCodes.hpp"
+#include "Pyre/Input/MouseCodes.hpp"

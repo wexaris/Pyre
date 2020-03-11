@@ -1,25 +1,26 @@
 #pragma once
 #include "Pyre/Events/Event.hpp"
+#include "Pyre/Input/Input.hpp"
 
 namespace Pyre {
 
     class MouseButtonEvent : public Event {
     public:
-        inline int GetMouseButton() const { return m_MouseButton; }
+        inline MouseCode GetMouseButton() const { return m_MouseButton; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouseButton)
 
     protected:
-        int m_MouseButton;
+        MouseCode m_MouseButton;
 
-        MouseButtonEvent(int button) :
+        MouseButtonEvent(MouseCode button) :
             m_MouseButton(button)
         {}
     };
 
     class MouseButtonPressEvent : public MouseButtonEvent {
     public:
-        MouseButtonPressEvent(int keycode) :
+        MouseButtonPressEvent(MouseCode keycode) :
             MouseButtonEvent(keycode)
         {}
 
@@ -31,7 +32,7 @@ namespace Pyre {
 
     class MouseButtonReleaseEvent : public MouseButtonEvent {
     public:
-        MouseButtonReleaseEvent(int keycode) :
+        MouseButtonReleaseEvent(MouseCode keycode) :
             MouseButtonEvent(keycode)
         {}
 
