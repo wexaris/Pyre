@@ -30,7 +30,7 @@ void TextLayer2D::OnUpdate(float ts) {
         Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
         Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 0.5f, 0.2f }, m_SquareColor);
         Pyre::Renderer2D::DrawQuad({ 0.0f, 0.5f, -0.1f }, 45.0f, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-        Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 1.0f, 1.0f }, m_Texture, m_SquareColor);
+        Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 1.0f, 1.0f }, m_Texture, 2.0f, m_SquareColor);
         Pyre::Renderer2D::EndScene();
     }
 }

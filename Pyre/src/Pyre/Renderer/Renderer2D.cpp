@@ -12,7 +12,7 @@ namespace Pyre {
     struct PrimitiveData {
         Ref<VertexArray> QuadVA;
         Ref<Shader> TextureShader;
-        Ref<Texture> WhiteTexture;
+        Ref<Texture2D> WhiteTexture;
     };
     static PrimitiveData* s_Data;
 
@@ -76,27 +76,34 @@ namespace Pyre {
     }
 
     void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
-        PYRE_PROFILE_FUNCTION();
-
-        s_Data->TextureShader->SetMat4("uTransform", glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f), pos), glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f)), { size.x, size.y, 1.0f }));
-        s_Data->TextureShader->SetFloat2("uTexScale", { 1.0f, 1.0f });
-        s_Data->TextureShader->SetFloat4("uColor", color);
-
-        s_Data->WhiteTexture->Bind(0);
-        s_Data->QuadVA->Bind();
-        RenderCommand::DrawElement(s_Data->QuadVA);
+        DrawQuad(pos, rot, size, s_Data->WhiteTexture, color);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color) {
-        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, color);
+    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, tint);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color) {
+    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawQuad(pos, rot, size, texture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, texScale, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint) {
         PYRE_PROFILE_FUNCTION();
 
-        s_Data->TextureShader->SetMat4("uTransform", glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f), pos), glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f)), { size.x, size.y, 1.0f }));
-        s_Data->TextureShader->SetFloat2("uTexScale", { 1.0f, 1.0f });
-        s_Data->TextureShader->SetFloat4("uColor", color);
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
+        if (rot != 0) {
+            // Rotation is expensive
+            transform = glm::rotate(transform, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
+        }
+        transform = glm::scale(transform, { size.x, size.y, 1.0f });
+
+        s_Data->TextureShader->SetMat4("uTransform", transform);
+        s_Data->TextureShader->SetFloat("uTexScale", texScale);
+        s_Data->TextureShader->SetFloat4("uColor", tint);
 
         texture->Bind(0);
         s_Data->QuadVA->Bind();
