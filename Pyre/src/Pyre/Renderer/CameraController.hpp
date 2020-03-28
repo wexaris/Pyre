@@ -25,7 +25,7 @@ namespace Pyre {
         bool m_RotationEnable;
         glm::vec3 m_Position = glm::vec3();
         float m_Rotation = 0.f;
-        float m_MovementSpeed = 1.f;
+        float m_MovementSpeed;
         float m_RotationSpeed = 60.f;
 
         bool OnMouseScroll(MouseScrollEvent& e);

@@ -8,7 +8,8 @@ namespace Pyre {
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation) :
         m_AspecRatio(aspectRatio),
         m_RotationEnable(rotation),
-        m_Camera(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom)
+        m_Camera(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom),
+        m_MovementSpeed(m_Zoom)
     {
     }
 
@@ -67,6 +68,8 @@ namespace Pyre {
         m_Zoom -= e.GetYOffset() * 0.25f;
         m_Zoom = std::max(m_Zoom, 0.25f);
         m_Camera.SetProjection(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom);
+
+        m_MovementSpeed = m_Zoom;
         return false;
     }
 
