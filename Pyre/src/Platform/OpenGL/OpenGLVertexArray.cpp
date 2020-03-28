@@ -1,6 +1,6 @@
 #include "pyrepch.hpp"
 #include "Platform/OpenGL/OpenGLVertexArray.hpp"
-
+#include "Platform/OpenGL/OpenGLBuffer.hpp"
 #include <glad/glad.h>
 
 namespace Pyre {
@@ -54,18 +54,19 @@ namespace Pyre {
 
         PYRE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer missing layout!");
 
-        glBindVertexArray(m_RendererID);
-        vertexBuffer->Bind();
-
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& e : layout) {
-            glEnableVertexAttribArray(m_VertexBufferIndex);
-            glVertexAttribPointer(m_VertexBufferIndex,
+            glEnableVertexArrayAttrib(m_RendererID, m_VertexBufferIndex);
+            glVertexArrayVertexBuffer(m_RendererID, m_VertexBufferIndex,
+                std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer)->m_RendererID,
+                e.Offset, layout.GetStride());
+            glVertexArrayAttribFormat(m_RendererID, m_VertexBufferIndex,
                 e.GetItemCount(),
                 ShaderDataTypeOpenGLType(e.Type),
                 e.Normalized ? GL_TRUE : GL_FALSE,
-                layout.GetStride(),
-                (const void*)e.Offset);
+                0);
+
+            glVertexArrayAttribBinding(m_RendererID, m_VertexBufferIndex, m_VertexBufferIndex);
             m_VertexBufferIndex++;
         }
 
@@ -75,8 +76,8 @@ namespace Pyre {
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
         PYRE_PROFILE_FUNCTION();
 
-        glBindVertexArray(m_RendererID);
-        indexBuffer->Bind();
+        glVertexArrayElementBuffer(m_RendererID,
+            std::static_pointer_cast<OpenGLIndexBuffer>(indexBuffer)->m_RendererID);
 
         m_IndexBuffer = indexBuffer;
     }

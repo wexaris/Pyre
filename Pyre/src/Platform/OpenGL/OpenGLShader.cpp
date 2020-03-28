@@ -198,49 +198,49 @@ namespace Pyre {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniform1i(loc, value);
+        glProgramUniform1i(m_RendererID, loc, value);
     }
 
     void OpenGLShader::SetFloat(const std::string& name, float value) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniform1f(loc, value);
+        glProgramUniform1f(m_RendererID, loc, value);
     }
 
     void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& values) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniform2f(loc, values.x, values.y);
+        glProgramUniform2f(m_RendererID, loc, values.x, values.y);
     }
 
     void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& values) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniform3f(loc, values.x, values.y, values.z);
+        glProgramUniform3f(m_RendererID, loc, values.x, values.y, values.z);
     }
 
     void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& values) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniform4f(loc, values.x, values.y, values.z, values.w);
+        glProgramUniform4f(m_RendererID, loc, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+        glProgramUniformMatrix3fv(m_RendererID, loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
     void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix) {
         PYRE_PROFILE_FUNCTION();
 
         GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+        glProgramUniformMatrix4fv(m_RendererID, loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
 }

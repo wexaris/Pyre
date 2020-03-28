@@ -17,6 +17,8 @@ namespace Pyre {
         void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
 
     protected:
+        friend class OpenGLVertexArray;
+
         uint32_t m_RendererID;
         BufferLayout m_Layout;
     };
@@ -35,6 +37,8 @@ namespace Pyre {
         uint32_t GetCount() const override { return m_Count; }
 
     protected:
+        friend class OpenGLVertexArray;
+
         uint32_t m_RendererID;
         uint32_t m_Count;
     };
