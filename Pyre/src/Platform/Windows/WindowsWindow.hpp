@@ -13,6 +13,8 @@ namespace Pyre {
 
         void OnUpdate() override;
 
+        void SetIcon(const std::string& path) override;
+
         inline unsigned int GetWidth() const override { return m_Data.Width; }
         inline unsigned int GetHeight() const override { return m_Data.Height; }
 

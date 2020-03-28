@@ -7,10 +7,12 @@ namespace Pyre {
     public:
         std::string Title;
         unsigned int Width, Height;
+        std::string IconPath;
 
-        WindowProperties(const std::string& title = "Pyre Engine",
-                         unsigned int w = 1280, unsigned int h = 720)
-            : Title(title), Width(w), Height(h)
+        WindowProperties(const std::string& title = "Pyre Engine", unsigned int w = 1280, unsigned int h = 720, const std::string& iconPath = "") :
+            Title(title),
+            Width(w), Height(h),
+            IconPath(iconPath)
         {}
     };
 
@@ -23,6 +25,8 @@ namespace Pyre {
         virtual ~Window() = default;
 
         virtual void OnUpdate() = 0;
+
+        virtual void SetIcon(const std::string& path) = 0;
 
         virtual unsigned int GetWidth() const = 0;
         virtual unsigned int GetHeight() const = 0;

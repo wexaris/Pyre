@@ -5,6 +5,7 @@
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
 
+#include <stb_image/stb_image.h>
 #include <glad/glad.h>
 
 namespace Pyre {
@@ -48,7 +49,8 @@ namespace Pyre {
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(m_Data.VSync);
-        
+        SetIcon(properties.IconPath);
+
         // Get window position
         int x, y;
         glfwGetWindowPos(m_Window, &x, &y);
@@ -224,6 +226,30 @@ namespace Pyre {
 
         glfwPollEvents();
         m_Context->SwapBuffers();
+    }
+
+    void WindowsWindow::SetIcon(const std::string& path) {
+        PYRE_PROFILE_FUNCTION();
+
+        PYRE_CORE_ASSERT(m_Window, "Attempting to set icon before window creation!");
+
+        if (path.empty()) {
+            return;
+        }
+
+        int width, height, channels;
+        stbi_set_flip_vertically_on_load(1);
+
+        stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 4);
+        PYRE_CORE_ASSERT(channels == 4, "Window icon must be RGBA!");
+
+        GLFWimage images[1];
+        images[0].width = width;
+        images[0].height = height;
+        images[0].pixels = data;
+        glfwSetWindowIcon(m_Window, 1, images);
+
+        stbi_image_free(data);
     }
 
     void WindowsWindow::SetVSync(bool enabled) {

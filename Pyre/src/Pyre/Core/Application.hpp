@@ -11,7 +11,7 @@ namespace Pyre {
 
     class Application {
     public:
-        Application();
+        Application(const WindowProperties& properties = WindowProperties());
         virtual ~Application();
 
 
