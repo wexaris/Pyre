@@ -107,8 +107,8 @@ namespace Pyre {
         PYRE_PROFILE_FUNCTION();
 
         GLuint program = glCreateProgram();
-        PYRE_CORE_ASSERT(shaderSources.size() <= 3, "A maximum of 3 shaders are supported!");
-        std::array<GLenum, 3> shaderIDs;
+        PYRE_CORE_ASSERT(shaderSources.size() <= 2, "A maximum of 3 shaders are supported!");
+        std::array<GLenum, 2> shaderIDs;
 
         int shaderIDIndex = 0;
         for (auto& shaderSource : shaderSources) {
