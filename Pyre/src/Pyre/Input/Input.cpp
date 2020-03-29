@@ -9,6 +9,7 @@
 namespace Pyre {
 
     Scope<Input> Input::s_Instance = Input::Create();
+    std::unordered_map<KeyCode, unsigned int> Input::s_KeyRepeatCount;
 
     Scope<Input> Input::Create() {
 #ifdef PYRE_PLATFORM_WINDOWS

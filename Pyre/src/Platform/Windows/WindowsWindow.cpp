@@ -63,7 +63,7 @@ namespace Pyre {
             switch (action)
             {
             case GLFW_PRESS: {
-                KeyPressEvent event(static_cast<KeyCode>(key), 0);
+                KeyPressEvent event(static_cast<KeyCode>(key));
                 data.EventCallback(event);
                 break;
             }
@@ -73,7 +73,7 @@ namespace Pyre {
                 break;
             }
             case GLFW_REPEAT: {
-                KeyPressEvent event(static_cast<KeyCode>(key), 1); // TODO: get repeat count
+                KeyPressEvent event(static_cast<KeyCode>(key));
                 data.EventCallback(event);
                 break;
             }

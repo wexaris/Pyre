@@ -20,8 +20,8 @@ namespace Pyre {
 
     class KeyPressEvent : public KeyEvent {
     public:
-        KeyPressEvent(KeyCode keycode, int repeatCount) :
-            KeyEvent(keycode), m_RepeatCount(repeatCount)
+        KeyPressEvent(KeyCode keycode) :
+            KeyEvent(keycode), m_RepeatCount(Input::IncrementKeyRepeatCount(keycode))
         {}
 
         inline int GetRepeatCount() const { return m_RepeatCount; }
@@ -39,7 +39,9 @@ namespace Pyre {
     public:
         KeyReleaseEvent(KeyCode keycode) :
             KeyEvent(keycode)
-        {}
+        {
+            Input::ResetKeyRepeatCount(keycode);
+        }
 
         EVENT_ADD_TYPE(KeyRelease)
         std::string AsString() const override {

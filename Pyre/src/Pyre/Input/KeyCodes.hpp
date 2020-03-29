@@ -2,7 +2,7 @@
 
 namespace Pyre {
 
-    enum class KeyCode {
+    enum class KeyCode : uint16_t {
 
         Space = 32,
         Apostrophe = 39,/* ' */

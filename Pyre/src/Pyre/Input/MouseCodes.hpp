@@ -2,7 +2,7 @@
 
 namespace Pyre {
 
-    enum class MouseCode {
+    enum class MouseCode : uint16_t {
 
         Button0 = 0,
         Button1 = 1,
