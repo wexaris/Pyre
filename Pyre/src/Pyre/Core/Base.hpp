@@ -31,13 +31,23 @@
 
 #ifdef _DEBUG
     #define PYRE_DEBUG
+#endif
+
+#ifdef PYRE_DEBUG
     #define PYRE_ENABLE_ASSERTS
     #define PYRE_ENABLE_PROFILE
+
+    #if defined PYRE_PLATFORM_WINDOWS
+        #define PYRE_DEBUGBREAK() __debugbreak()
+    #elif defined PYRE_PLATFORM_LINUX
+        #include <signal.h>
+        #define PYRE_DEBUGBREAK() raise(SIGTRAP)
+    #endif
 #endif
 
 #ifdef PYRE_ENABLE_ASSERTS
-    #define PYRE_CORE_ASSERT(x, ...) { if (!(x)) { PYRE_CORE_ERROR("Assertion Failed: {}", __VA_ARGS__); __debugbreak(); } }
-    #define PYRE_ASSERT(x, ...) { if (!(x)) { PYRE_ERROR("Assertion Failed: {}", __VA_ARGS__); __debugbreak(); } }
+    #define PYRE_CORE_ASSERT(x, ...) { if (!(x)) { PYRE_CORE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }
+    #define PYRE_ASSERT(x, ...) { if (!(x)) { PYRE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }
 #else
     #define PYRE_CORE_ASSERT(x, ...)
     #define PYRE_ASSERT(x, ...)

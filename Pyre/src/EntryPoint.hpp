@@ -21,10 +21,3 @@ int main(int argc, char* argv[]) {
     delete app;
 	PYRE_PROFILE_END();
 }
-
-
-#ifdef PYRE_PLATFORM_WINDOWS
-
-#else // PYRE_PLATFORM_LINUX
-
-#endif
