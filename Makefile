@@ -23,14 +23,12 @@ debug:
 release:
 	$(MAKE) build BUILD_TYPE=Release
 
-relwithdebinfo:
-	$(MAKE) build BUILD_TYPE=RelWithDebInfo
-
-minsizerel:
-	$(MAKE) build BUILD_TYPE=MinSizeRel
+dist:
+	mkdir -p build/dist && cd build/dist
+	cmake -DCMAKE_BUILD_TYPE=Release -DPYRE_DISTRIBUTION $(ROOT_DIR)
+	cmake --build . --config $(BUILD_TYPE) -- -j$(THREAD_NUM)
 
 clean:
 	rm -rf build/debug bin/debug
 	rm -rf build/release bin/release
-	rm -rf build/minsizerel bin/minsizerel
-	rm -rf build/relwithdebinfo bin/relwithdebinfo
+	rm -rf build/dist bin/dist

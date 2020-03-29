@@ -49,7 +49,7 @@ namespace Pyre {
         s_Data->WhiteTexture = Texture2D::Create(1, 1);
         s_Data->WhiteTexture->SetData(&white, sizeof(uint32_t));
 
-        s_Data->TextureShader = Pyre::Shader::Create("../../../Sandbox/assets/shaders/Texture.glsl");
+        s_Data->TextureShader = Shader::Create("../../../Pyre/assets/shaders/Texture.glsl");
         s_Data->TextureShader->Bind();
         s_Data->TextureShader->SetInt("uTexture", 0);
     }

@@ -2,17 +2,21 @@
 #include "Pyre/Core/Application.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
+#include <filesystem>
+
 namespace Pyre {
 
     Application* Application::s_Instance = nullptr;
 
-    Application::Application(const WindowProperties& properties) {
+    Application::Application(const std::string& baseDirectory, const WindowProperties& windowProperties) {
         PYRE_PROFILE_FUNCTION();
 
         PYRE_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        m_Window = Window::Create(properties);
+        m_BaseDirectory = baseDirectory;
+
+        m_Window = Window::Create(windowProperties);
         m_Window->SetEventCallback(PYRE_BIND_METHOD(Application::OnEvent));
 
         Renderer::Init();
@@ -146,6 +150,25 @@ namespace Pyre {
         PYRE_PROFILE_FUNCTION();
 
         return false;
+    }
+
+    std::string Application::CorrectFilePath(const std::string& path) {
+#ifndef PYRE_DISTRIB
+        if (std::filesystem::exists(path)) {
+            return path;
+        }
+
+        auto newPath = std::filesystem::path(".") / m_BaseDirectory / path;
+        if (std::filesystem::exists(newPath)) {
+            return newPath.string();
+        }
+
+        newPath = std::filesystem::path("../../..") / m_BaseDirectory / path;
+        if (std::filesystem::exists(newPath)) {
+            return newPath.string();
+        }
+#endif
+        return path;
     }
 
 }

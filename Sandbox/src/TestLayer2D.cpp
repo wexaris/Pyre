@@ -11,7 +11,7 @@ TestLayer2D::TestLayer2D() :
 void TestLayer2D::OnAttach() {
     PYRE_PROFILE_FUNCTION();
 
-    m_Texture = Pyre::Texture2D::Create("../../../Sandbox/assets/textures/test.png");
+    m_Texture = Pyre::Texture2D::Create("assets/textures/test.png");
 }
 
 void TestLayer2D::OnDetach() {

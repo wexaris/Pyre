@@ -11,12 +11,13 @@ namespace Pyre {
 
     class Application {
     public:
-        Application(const WindowProperties& properties = WindowProperties());
+        Application(const std::string& baseDirectory, const WindowProperties& windowProperties = WindowProperties());
         virtual ~Application();
-
 
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
+
+        std::string CorrectFilePath(const std::string& path);
 
         static inline Application& Get() { return *s_Instance; }
         inline Window& GetWindow()       { return *m_Window; }
@@ -25,6 +26,7 @@ namespace Pyre {
         friend int ::main(int argc, char* argv[]);
 
         static Application* s_Instance;
+        std::string m_BaseDirectory;
 
         Scope<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;

@@ -242,9 +242,14 @@ namespace Pyre {
         }
 
         int width, height, channels;
-        stbi_set_flip_vertically_on_load(1);
 
-        stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 4);
+        stbi_set_flip_vertically_on_load(1);
+        stbi_uc* data = nullptr;
+        {
+            PYRE_PROFILE_SCOPE("stbi_load - WindowsWindow::SetIcon(path)");
+            data = stbi_load(path.c_str(), &width, &height, &channels, 4);
+        }
+        PYRE_CORE_ASSERT(data, "Failed to load image: '{}'", path);
         PYRE_CORE_ASSERT(channels == 4, "Window icon must be RGBA!");
 
         GLFWimage images[1];

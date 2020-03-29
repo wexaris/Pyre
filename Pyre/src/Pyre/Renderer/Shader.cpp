@@ -1,4 +1,5 @@
 #include "pyrepch.hpp"
+#include "Pyre/Core/Application.hpp"
 #include "Pyre/Renderer/Shader.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
 
@@ -9,7 +10,7 @@ namespace Pyre {
     Ref<Shader> Shader::Create(const std::string& path) {
         switch (Renderer::GetAPI())
         {
-        case RenderAPI::API::OpenGL: return MakeRef<OpenGLShader>(path);
+        case RenderAPI::API::OpenGL: return MakeRef<OpenGLShader>(Application::Get().CorrectFilePath(path));
         default: break;
         }
         PYRE_CORE_ASSERT(false, "Invalid Renderer API!");

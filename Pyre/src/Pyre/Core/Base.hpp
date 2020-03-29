@@ -31,6 +31,8 @@
 
 #ifdef _DEBUG
     #define PYRE_DEBUG
+#else
+    #define PYRE_RELEASE
 #endif
 
 #ifdef PYRE_DEBUG
