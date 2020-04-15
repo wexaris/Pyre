@@ -33,7 +33,7 @@ namespace Pyre {
 
         void NonLockingEndSession();
 
-        std::string* m_Session;
+        std::string* m_Session = nullptr;
         std::ofstream m_Output;
         std::mutex m_Lock;
     };

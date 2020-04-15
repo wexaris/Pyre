@@ -35,7 +35,7 @@ namespace Pyre {
         std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
         uint32_t TextureSlotIndex = 1; // 0 should be occupied by the white texture
 
-        glm::vec4 QuadVertexPositions[4];
+        glm::vec4 QuadVertexPositions[4] = {};
     };
     static RenderData s_Data;
 
