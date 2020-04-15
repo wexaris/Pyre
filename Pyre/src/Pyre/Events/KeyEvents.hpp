@@ -6,7 +6,7 @@ namespace Pyre {
 
     class KeyEvent : public Event {
     public:
-        inline KeyCode GetKeyCode() const { return m_KeyCode; }
+        KeyCode GetKeyCode() const { return m_KeyCode; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
 
@@ -24,7 +24,7 @@ namespace Pyre {
             KeyEvent(keycode), m_RepeatCount(Input::IncrementKeyRepeatCount(keycode))
         {}
 
-        inline int GetRepeatCount() const { return m_RepeatCount; }
+        int GetRepeatCount() const { return m_RepeatCount; }
         
         EVENT_ADD_TYPE(KeyPress)
         std::string AsString() const override {

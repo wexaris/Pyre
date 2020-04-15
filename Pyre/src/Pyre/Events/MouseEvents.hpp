@@ -6,7 +6,7 @@ namespace Pyre {
 
     class MouseButtonEvent : public Event {
     public:
-        inline MouseCode GetMouseButton() const { return m_MouseButton; }
+        MouseCode GetMouseButton() const { return m_MouseButton; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouseButton)
 
@@ -48,8 +48,8 @@ namespace Pyre {
             m_MouseX(x), m_MouseY(y)
         {}
 
-        inline float GetX() const { return m_MouseX; }
-        inline float GetY() const { return m_MouseY; }
+        float GetX() const { return m_MouseX; }
+        float GetY() const { return m_MouseY; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouse)
         EVENT_ADD_TYPE(MouseMove)
@@ -68,8 +68,8 @@ namespace Pyre {
             m_XOffset(xOffset), m_YOffset(yOffset)
         {}
 
-        inline float GetXOffset() const { return m_XOffset; }
-        inline float GetYOffset() const { return m_YOffset; }
+        float GetXOffset() const { return m_XOffset; }
+        float GetYOffset() const { return m_YOffset; }
 
         EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryMouse)
         EVENT_ADD_TYPE(MouseScroll)

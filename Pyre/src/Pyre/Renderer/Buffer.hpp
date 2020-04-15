@@ -5,6 +5,7 @@ namespace Pyre {
     enum class ShaderDataType {
         None = 0,
         Int, Int2, Int3, Int4,
+        UInt, UInt2, UInt3, UInt4,
         Float, Float2, Float3, Float4,
         Mat3, Mat4,
         Bool
@@ -23,7 +24,7 @@ namespace Pyre {
         BufferElement() = default;
         BufferElement(ShaderDataType type, const std::string& name, bool normalized = false);
 
-        inline uint32_t GetItemCount() const { return ShaderDataTypeItemCount(Type); }
+        uint32_t GetItemCount() const { return ShaderDataTypeItemCount(Type); }
     };
 
     class BufferLayout {
@@ -31,8 +32,8 @@ namespace Pyre {
         BufferLayout() = default;
         BufferLayout(const std::initializer_list<BufferElement>& elements);
 
-        inline const std::vector<BufferElement>& GetElements() const { return m_Elements; }
-        inline uint32_t GetStride() const { return m_Stride; }
+        const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+        uint32_t GetStride() const { return m_Stride; }
 
         std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
         std::vector<BufferElement>::iterator end()   { return m_Elements.end(); }
@@ -63,6 +64,9 @@ namespace Pyre {
         virtual const BufferLayout& GetLayout() const = 0;
         virtual void SetLayout(const BufferLayout& layout) = 0;
 
+        virtual void SetData(const void* data, uint32_t size) = 0;
+
+        static Ref<VertexBuffer> Create(uint32_t size);
         static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 
     protected:

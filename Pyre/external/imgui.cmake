@@ -7,7 +7,7 @@ project(imgui)
 file(GLOB IMGUI_SRC_FILES imgui/*.cpp)
 
 add_library(imgui STATIC ${IMGUI_SRC_FILES})
-target_include_directories(imgui PRIVATE imgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(imgui INTERFACE imgui)
 
 
 # # # # # # # # # # # # # # # # # # # #

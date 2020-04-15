@@ -13,6 +13,10 @@ namespace Pyre {
         case ShaderDataType::Int2:   return 4 * 2;
         case ShaderDataType::Int3:   return 4 * 3;
         case ShaderDataType::Int4:   return 4 * 4;
+        case ShaderDataType::UInt:   return 4;
+        case ShaderDataType::UInt2:  return 4 * 2;
+        case ShaderDataType::UInt3:  return 4 * 3;
+        case ShaderDataType::UInt4:  return 4 * 4;
         case ShaderDataType::Float:  return 4;
         case ShaderDataType::Float2: return 4 * 2;
         case ShaderDataType::Float3: return 4 * 3;
@@ -33,6 +37,10 @@ namespace Pyre {
         case ShaderDataType::Int2:   return 2;
         case ShaderDataType::Int3:   return 3;
         case ShaderDataType::Int4:   return 4;
+        case ShaderDataType::UInt:   return 1;
+        case ShaderDataType::UInt2:  return 2;
+        case ShaderDataType::UInt3:  return 3;
+        case ShaderDataType::UInt4:  return 4;
         case ShaderDataType::Float:  return 1;
         case ShaderDataType::Float2: return 2;
         case ShaderDataType::Float3: return 3;
@@ -68,6 +76,15 @@ namespace Pyre {
 
     //////////////////////////////////////
     // VertexBuffer
+    Ref<VertexBuffer> VertexBuffer::Create(uint32_t size) {
+        switch (Renderer::GetAPI()) {
+        case RenderAPI::API::OpenGL: return MakeRef<OpenGLVertexBuffer>(size);
+        default: break;
+        }
+        PYRE_CORE_ASSERT(false, "Invalid Renderer API!");
+        return nullptr;
+    }
+    
     Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
         switch (Renderer::GetAPI())
         {

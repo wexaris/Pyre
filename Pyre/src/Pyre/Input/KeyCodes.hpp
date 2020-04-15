@@ -137,7 +137,7 @@ namespace Pyre {
     };
     using Key = KeyCode;
 
-    inline std::ostream& operator<<(std::ostream& os, KeyCode key) {
+    static std::ostream& operator<<(std::ostream& os, KeyCode key) {
         return os << static_cast<int32_t>(key);
     }
 

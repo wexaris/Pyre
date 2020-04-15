@@ -10,12 +10,15 @@ namespace Pyre {
         OpenGLTexture2D(const std::string& path);
         virtual ~OpenGLTexture2D();
 
-        void Bind(uint32_t slot = 0) const override;
+        void Bind(uint32_t slot) const override;
 
         void SetData(void* data, uint32_t size) override;
 
         uint32_t GetWidth() const override { return m_Width; }
         uint32_t GetHeight() const override { return m_Height; }
+
+        bool operator==(const Texture& other) const override { return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID; }
+        bool operator!=(const Texture& other) const override { return m_RendererID != ((OpenGLTexture2D&)other).m_RendererID; }
 
     private:
         uint32_t m_RendererID;

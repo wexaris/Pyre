@@ -17,8 +17,8 @@ namespace Pyre {
             m_PosX(posX), m_PosY(posY)
         {}
 
-        inline int GetPosX() const { return m_PosX; }
-        inline int GetPosY() const { return m_PosY; }
+        int GetPosX() const { return m_PosX; }
+        int GetPosY() const { return m_PosY; }
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowMove)
@@ -37,8 +37,8 @@ namespace Pyre {
             m_Width(width), m_Height(height)
         {}
 
-        inline int GetWidth() const { return m_Width; }
-        inline int GetHeigth() const { return m_Height; }
+        int GetWidth() const { return m_Width; }
+        int GetHeigth() const { return m_Height; }
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowResize)

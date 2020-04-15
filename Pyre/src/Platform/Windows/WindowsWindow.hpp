@@ -15,14 +15,14 @@ namespace Pyre {
 
         void SetIcon(const std::string& path) override;
 
-        inline unsigned int GetWidth() const override { return m_Data.Width; }
-        inline unsigned int GetHeight() const override { return m_Data.Height; }
+        unsigned int GetWidth() const override { return m_Data.Width; }
+        unsigned int GetHeight() const override { return m_Data.Height; }
 
-        inline void SetEventCallback(const EventCallbackFun& cb) override { m_Data.EventCallback = cb; }
+        void SetEventCallback(const EventCallbackFun& cb) override { m_Data.EventCallback = cb; }
         void SetVSync(bool enabled) override;
-        inline bool IsVSync() const override { return m_Data.VSync; }
+        bool IsVSync() const override { return m_Data.VSync; }
 
-        inline void* GetNativeWindow() const { return m_Window; }
+        void* GetNativeWindow() const { return m_Window; }
 
     private:
         GLFWwindow* m_Window;

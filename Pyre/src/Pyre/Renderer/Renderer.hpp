@@ -21,8 +21,8 @@ namespace Pyre {
 
         static void OnWindowResize(uint32_t width, uint32_t height);
 
-        static inline RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
-        static inline void SetAPI(RenderAPI::API api) { RenderAPI::SetAPI(api); }
+        static RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
+        static void SetAPI(RenderAPI::API api) { RenderAPI::SetAPI(api); }
 
     private:
         static Scope<SceneData> s_SceneData;

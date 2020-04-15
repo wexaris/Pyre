@@ -29,11 +29,11 @@ namespace Pyre {
         virtual int GetCategoryFlags() const   = 0;
         virtual std::string AsString() const   { return GetName(); }
 
-        inline bool IsCategory(EventCategory category) { return GetCategoryFlags() & category; }
+        bool IsCategory(EventCategory category) { return GetCategoryFlags() & category; }
     };
 
 #define EVENT_ADD_TYPE(type) \
-    inline static EventType GetStaticType() { return EventType::type; } \
+    static EventType GetStaticType() { return EventType::type; } \
     EventType GetEventType() const override { return GetStaticType(); } \
     const char* GetName() const override    { return #type; }
 #define EVENT_ADD_CATEGORY(category) \
@@ -61,7 +61,7 @@ namespace Pyre {
         Event& m_Event;
     };
 
-    inline std::ostream& operator<<(std::ostream& os, const Event& e) {
+    static std::ostream& operator<<(std::ostream& os, const Event& e) {
         return os << e.AsString();
     }
 

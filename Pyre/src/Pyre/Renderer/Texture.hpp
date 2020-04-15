@@ -12,6 +12,9 @@ namespace Pyre {
 
         virtual uint32_t GetWidth() const = 0;
         virtual uint32_t GetHeight() const = 0;
+
+        virtual bool operator==(const Texture& other) const = 0;
+        virtual bool operator!=(const Texture& other) const = 0;
     };
 
     class Texture2D : public Texture {
@@ -21,5 +24,13 @@ namespace Pyre {
         static Ref<Texture2D> Create(uint32_t width, uint32_t height);
         static Ref<Texture2D> Create(const std::string& path);
     };
+
+    // Make Ref<Texture2D> comparisons redirect to the overloaded comparison operators
+    static bool operator==(const Ref<Texture2D>& first, const Ref<Texture2D>& second) {
+        return *first.get() == *second.get();
+    }
+    static bool operator!=(const Ref<Texture2D>& first, const Ref<Texture2D>& second) {
+        return *first.get() != *second.get();
+    }
 
 }

@@ -2,9 +2,9 @@
 #include "Pyre/Core/Application.hpp"
 #include "Pyre/ImGui/ImGuiLayer.hpp"
 
-#include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_opengl3.h>
-#include <imgui/examples/imgui_impl_glfw.h>
+#include <imgui.h>
+#include <examples/imgui_impl_opengl3.h>
+#include <examples/imgui_impl_glfw.h>
 
 #include <GLFW/glfw3.h>
 

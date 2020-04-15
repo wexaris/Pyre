@@ -19,7 +19,7 @@ ExternalProject_Add(${PROJ}_proj
     BUILD_BYPRODUCTS ${LIB_DIR}/${LIB_NAME}
 )
 
-set(INCL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ})
+set(INCL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${PROJ} STATIC IMPORTED GLOBAL)
 add_dependencies(${PROJ} ${PROJ}_proj)

@@ -9,12 +9,12 @@ namespace Pyre {
 
         operator float() const { return AsSeconds(); }
 
-        inline float AsSeconds() const {
+        float AsSeconds() const {
             auto time = std::chrono::time_point_cast<std::chrono::milliseconds>(m_TimePoint);
             return time.time_since_epoch().count() / 1000.f;
         }
         
-        inline float AsMilliseconds() const {
+        float AsMilliseconds() const {
             auto time = std::chrono::time_point_cast<std::chrono::microseconds>(m_TimePoint);
             return time.time_since_epoch().count() / 1000.f;
         }

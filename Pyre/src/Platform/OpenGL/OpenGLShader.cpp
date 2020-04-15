@@ -201,6 +201,27 @@ namespace Pyre {
         glProgramUniform1i(m_RendererID, loc, value);
     }
 
+    void OpenGLShader::SetUInt(const std::string& name, unsigned int value) {
+        PYRE_PROFILE_FUNCTION();
+
+        GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
+        glProgramUniform1ui(m_RendererID, loc, value);
+    }
+
+    void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count) {
+        PYRE_PROFILE_FUNCTION();
+
+        GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
+        glProgramUniform1iv(m_RendererID, loc, count, values);
+    }
+
+    void OpenGLShader::SetUIntArray(const std::string& name, unsigned int* values, uint32_t count) {
+        PYRE_PROFILE_FUNCTION();
+
+        GLint loc = glGetUniformLocation(m_RendererID, name.c_str());
+        glProgramUniform1uiv(m_RendererID, loc, count, values);
+    }
+
     void OpenGLShader::SetFloat(const std::string& name, float value) {
         PYRE_PROFILE_FUNCTION();
 

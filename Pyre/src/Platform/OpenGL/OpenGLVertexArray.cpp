@@ -12,6 +12,10 @@ namespace Pyre {
         case Pyre::ShaderDataType::Int2:   return GL_INT;
         case Pyre::ShaderDataType::Int3:   return GL_INT;
         case Pyre::ShaderDataType::Int4:   return GL_INT;
+        case Pyre::ShaderDataType::UInt:   return GL_UNSIGNED_INT;
+        case Pyre::ShaderDataType::UInt2:  return GL_UNSIGNED_INT;
+        case Pyre::ShaderDataType::UInt3:  return GL_UNSIGNED_INT;
+        case Pyre::ShaderDataType::UInt4:  return GL_UNSIGNED_INT;
         case Pyre::ShaderDataType::Float:  return GL_FLOAT;
         case Pyre::ShaderDataType::Float2: return GL_FLOAT;
         case Pyre::ShaderDataType::Float3: return GL_FLOAT;

@@ -19,8 +19,8 @@ namespace Pyre {
 
         std::string CorrectFilePath(const std::string& path);
 
-        static inline Application& Get() { return *s_Instance; }
-        inline Window& GetWindow()       { return *m_Window; }
+        static Application& Get() { return *s_Instance; }
+        Window& GetWindow()       { return *m_Window; }
 
     private:
         friend int ::main(int argc, char* argv[]);

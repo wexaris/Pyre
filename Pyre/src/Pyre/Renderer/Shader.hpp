@@ -14,6 +14,9 @@ namespace Pyre {
         virtual const std::string& GetName() const = 0;
         
         virtual void SetInt(const std::string& name, int values) = 0;
+        virtual void SetUInt(const std::string& name, unsigned int values) = 0;
+        virtual void SetIntArray(const std::string& name, int* values, uint32_t count) = 0;
+        virtual void SetUIntArray(const std::string& name, unsigned int* values, uint32_t count) = 0;
 
         virtual void SetFloat(const std::string& name, float values) = 0;
         virtual void SetFloat2(const std::string& name, const glm::vec2& values) = 0;

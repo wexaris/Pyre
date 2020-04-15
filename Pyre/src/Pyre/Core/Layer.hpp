@@ -14,9 +14,9 @@ namespace Pyre {
         virtual void OnImGuiRender() {}
         virtual void OnEvent(Event&) {}
 
-        inline const std::string& GetName() const { return m_Name; }
-        inline bool IsEnabled() const   { return m_Enabled; }
-        inline void Enable(bool enable) { m_Enabled = enable; }
+        const std::string& GetName() const { return m_Name; }
+        bool IsEnabled() const   { return m_Enabled; }
+        void Enable(bool enable) { m_Enabled = enable; }
 
     protected:
         std::string m_Name;

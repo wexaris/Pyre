@@ -1,6 +1,6 @@
 #include "TestLayer2D.hpp"
 
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
 TestLayer2D::TestLayer2D() :
@@ -24,14 +24,18 @@ void TestLayer2D::OnUpdate(float ts) {
     m_CameraController.OnUpdate(ts);
 
     {
+        static float rotation = 0.0f;
+
         PYRE_PROFILE_SCOPE("Render");
         Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
 
         Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
-        Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 0.5f, 0.2f }, m_SquareColor);
-        Pyre::Renderer2D::DrawQuad({ 0.0f, 0.5f, -0.1f }, 45.0f, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-        Pyre::Renderer2D::DrawQuad({ 0.0f, 0.0f }, 0.0f, { 1.0f, 1.0f }, m_Texture, 2.0f, m_SquareColor);
+        Pyre::Renderer2D::DrawQuad({  0.0f,  0.0f, -0.5f }, rotation, { 1.0f, 1.0f }, m_Texture, 10.0f, m_SquareColor);
+        Pyre::Renderer2D::DrawQuad({  0.5f,  0.0f,  0.1f }, 0.0f, { 0.5f, 0.2f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+        Pyre::Renderer2D::DrawQuad({ -1.0f,  0.0f,  0.2f }, 90.0f, { 0.3f, 0.2f }, m_SquareColor);
         Pyre::Renderer2D::EndScene();
+
+        rotation += 0.1f;
     }
 }
 
