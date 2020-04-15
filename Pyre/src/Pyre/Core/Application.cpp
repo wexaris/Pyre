@@ -27,7 +27,6 @@ namespace Pyre {
 
     Application::~Application() {
         PYRE_PROFILE_FUNCTION();
-
         Renderer::Shutdown();
     }
 
@@ -41,7 +40,7 @@ namespace Pyre {
             float timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
-            if (!m_Minimized) {
+            {
                 PYRE_PROFILE_SCOPE("LayerStack OnUpdate - Application::Run()");
                 for (auto& layer : m_LayerStack) {
                     layer->OnUpdate(timestep);
@@ -64,14 +63,12 @@ namespace Pyre {
 
     void Application::PushLayer(Layer* layer) {
         PYRE_PROFILE_FUNCTION();
-
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* overlay) {
         PYRE_PROFILE_FUNCTION();
-
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
     }
@@ -99,56 +96,43 @@ namespace Pyre {
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         m_Running = false;
         return false;
     }
 
     bool Application::OnWindowMove(WindowMoveEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 
     bool Application::OnWindowResize(WindowResizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
-        if (e.GetWidth() == 0 && e.GetHeigth() == 0) {
-            m_Minimized = true;
-            return false;
-        }
-        m_Minimized = false;
         Renderer::OnWindowResize(e.GetWidth(), e.GetHeigth());
         return false;
     }
 
     bool Application::OnWindowFocus(WindowFocusEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 
     bool Application::OnWindowLoseFocus(WindowLoseFocusEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 
     bool Application::OnWindowMaximize(WindowMaximizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 
     bool Application::OnWindowMinimize(WindowMinimizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 
     bool Application::OnWindowRestore(WindowRestoreEvent& e) {
         PYRE_PROFILE_FUNCTION();
-
         return false;
     }
 

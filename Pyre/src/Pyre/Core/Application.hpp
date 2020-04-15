@@ -33,7 +33,6 @@ namespace Pyre {
         LayerStack m_LayerStack;
         Time m_LastFrameTime;
         bool m_Running = true;
-        bool m_Minimized = false;
 
         void Run();
 

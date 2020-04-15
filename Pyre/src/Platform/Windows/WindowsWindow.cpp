@@ -19,10 +19,10 @@ namespace Pyre {
     WindowsWindow::WindowsWindow(const WindowProperties& properties) {
         PYRE_PROFILE_FUNCTION();
 
-        m_Data.Title = properties.Title;
-        m_Data.Width = properties.Width;
-        m_Data.Height = properties.Height;
-        m_Data.VSync = true;
+        m_WindowData.Title = properties.Title;
+        m_WindowData.Width = properties.Width;
+        m_WindowData.Height = properties.Height;
+        m_WindowData.VSync = true;
 
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {
@@ -30,6 +30,14 @@ namespace Pyre {
             int good = glfwInit();
             PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
             glfwSetErrorCallback(GLFWError);
+        }
+
+        { // Store video mode properties
+            GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+            m_VideoMode = *glfwGetVideoMode(monitor);
+            PYRE_CORE_INFO("Video mode: {}x{}@{}Hz (r{}g{}b{})",
+                            m_VideoMode.width, m_VideoMode.height, m_VideoMode.refreshRate,
+                            m_VideoMode.redBits, m_VideoMode.greenBits, m_VideoMode.blueBits);
         }
 
         { // Create window
@@ -44,22 +52,21 @@ namespace Pyre {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-            m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+            m_Window = glfwCreateWindow((int)m_WindowData.Width, (int)m_WindowData.Height, m_WindowData.Title.c_str(), nullptr, nullptr);
+            m_Context = GraphicsContext::Create(m_Window);
             s_GLFWWindowCount++;
+
+            PYRE_CORE_INFO("Created window: '{}' ({}, {})", m_WindowData.Title, m_WindowData.Width, m_WindowData.Height);
         }
-        m_Context = GraphicsContext::Create(m_Window);
-
-        PYRE_CORE_INFO("Created window: '{}' ({}, {})", m_Data.Title, m_Data.Width, m_Data.Height);
-
-        glfwSetWindowUserPointer(m_Window, &m_Data);
-        SetVSync(m_Data.VSync);
-        SetIcon(properties.IconPath);
 
         // Get window position
-        int x, y;
-        glfwGetWindowPos(m_Window, &x, &y);
-        m_Data.PosX = x;
-        m_Data.PosY = y;
+        glfwGetWindowPos(m_Window, &(m_WindowData.PosX), &(m_WindowData.PosY));
+
+        // Set window properties
+        glfwSetWindowUserPointer(m_Window, &m_WindowData);
+        SetWindowMode(properties.Mode, properties.Width, properties.Height);
+        SetVSync(m_WindowData.VSync);
+        SetIcon(properties.IconPath);
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -232,10 +239,83 @@ namespace Pyre {
         m_Context->SwapBuffers();
     }
 
+    void WindowsWindow::Resize(unsigned int width, unsigned int height) {
+        PYRE_PROFILE_FUNCTION();
+
+        m_WindowData.Width = width;
+        m_WindowData.Height = height;
+
+        glfwSetWindowSize(m_Window, m_WindowData.Width, m_WindowData.Height);
+    }
+
+    void WindowsWindow::SetWindowMode(WindowMode mode, unsigned int width, unsigned int height) {
+        PYRE_PROFILE_FUNCTION();
+
+        PYRE_CORE_ASSERT(m_Window, "Cannot set window mode before window creation!");
+
+        if (mode == m_WindowData.Mode) {
+            return;
+        }
+
+        // If currently windowed, save window position and size
+        if (m_WindowData.Mode == WindowMode::Windowed) {
+            m_PrevWindowedProps.PosX = m_WindowData.PosX;
+            m_PrevWindowedProps.PosY = m_WindowData.PosY;
+            m_PrevWindowedProps.Width = m_WindowData.Width;
+            m_PrevWindowedProps.Height = m_WindowData.Height;
+        }
+
+        GLFWmonitor* monitor = nullptr;
+
+        if (mode == WindowMode::Windowed) {
+            if (width == 0 || height == 0) {
+                m_WindowData.Width = m_PrevWindowedProps.Width;
+                m_WindowData.Height = m_PrevWindowedProps.Height;
+            }
+            else {
+                m_WindowData.Width = width;
+                m_WindowData.Height = height;
+            }
+        }
+        else if (mode == WindowMode::Borderless) {
+            m_WindowData.Width = m_VideoMode.width;
+            m_WindowData.Height = m_VideoMode.height;
+            monitor = glfwGetPrimaryMonitor();
+        }
+        else if (mode == WindowMode::FullScreen) {
+            if (width == 0 || height == 0) {
+                m_WindowData.Width = m_VideoMode.width;
+                m_WindowData.Height = m_VideoMode.height;
+            }
+            else {
+                m_WindowData.Width = width;
+                m_WindowData.Height = height;
+            }
+            monitor = glfwGetPrimaryMonitor();
+        }
+
+        m_WindowData.Mode = mode;
+
+        if (m_WindowData.EventCallback) {
+            WindowResizeEvent event(m_WindowData.Width, m_WindowData.Height);
+            m_WindowData.EventCallback(event);
+        }
+
+        glfwSetWindowMonitor(m_Window, monitor, m_WindowData.PosX, m_WindowData.PosY, m_WindowData.Width, m_WindowData.Height, m_VideoMode.refreshRate);
+    }
+
+    void WindowsWindow::SetVSync(bool enabled) {
+        PYRE_PROFILE_FUNCTION();
+
+        m_WindowData.VSync = enabled;
+        if (m_WindowData.VSync) { glfwSwapInterval(1); }
+        else { glfwSwapInterval(0); }
+    }
+
     void WindowsWindow::SetIcon(const std::string& path) {
         PYRE_PROFILE_FUNCTION();
 
-        PYRE_CORE_ASSERT(m_Window, "Attempting to set icon before window creation!");
+        PYRE_CORE_ASSERT(m_Window, "Cannot set icon before window creation!");
 
         if (path.empty()) {
             return;
@@ -252,23 +332,13 @@ namespace Pyre {
         PYRE_CORE_ASSERT(data, "Failed to load image: '{}'", path);
         PYRE_CORE_ASSERT(channels == 4, "Window icon must be RGBA!");
 
-        GLFWimage images[1];
-        images[0].width = width;
-        images[0].height = height;
-        images[0].pixels = data;
-        glfwSetWindowIcon(m_Window, 1, images);
+        GLFWimage image;
+        image.width = width;
+        image.height = height;
+        image.pixels = data;
+        glfwSetWindowIcon(m_Window, 1, &image);
 
         stbi_image_free(data);
     }
-
-    void WindowsWindow::SetVSync(bool enabled) {
-        PYRE_PROFILE_FUNCTION();
-
-        m_Data.VSync = enabled;
-
-        if (m_Data.VSync) { glfwSwapInterval(1); } 
-        else { glfwSwapInterval(0); }
-    }
-
 
 }

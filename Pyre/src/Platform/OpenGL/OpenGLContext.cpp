@@ -11,7 +11,7 @@ namespace Pyre {
     {
         PYRE_PROFILE_FUNCTION();
 
-        PYRE_CORE_ASSERT(m_Window, "Window handle is null!")
+        PYRE_CORE_ASSERT(m_Window, "Cannot create a graphics context before window creation!")
 
         glfwMakeContextCurrent(m_Window);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
