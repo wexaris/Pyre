@@ -1,43 +1,57 @@
 #include "pyrepch.hpp"
 #include "Pyre/Renderer/CameraController.hpp"
 #include "Pyre/Input/Input.hpp"
-#include "Pyre/Input/KeyCodes.hpp"
 
 namespace Pyre {
+
+    enum class CameraInput : uint16_t {
+        MoveLeft,
+        MoveRight,
+        MoveUp,
+        MoveDown,
+        RotateClockwise,
+        RotateCounterClockwise,
+    };
 
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool enableRotation) :
         m_AspectRatio(aspectRatio),
         m_EnableRotation(enableRotation),
         m_Camera(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom)
     {
+        Input::Remap(CameraInput::MoveLeft, Key::A);
+        Input::Remap(CameraInput::MoveRight, Key::D);
+        Input::Remap(CameraInput::MoveUp, Key::W);
+        Input::Remap(CameraInput::MoveDown, Key::S);
+        Input::Remap(CameraInput::RotateClockwise, Key::E);
+        Input::Remap(CameraInput::RotateCounterClockwise, Key::Q);
     }
 
     void OrthographicCameraController::OnUpdate(float ts) {
         PYRE_PROFILE_FUNCTION();
 
-        if (Input::IsKeyPressed(PYRE_KEY_A)) {
+        if (Input::IsInputPressed(CameraInput::MoveLeft)) {
             m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
-        else if (Input::IsKeyPressed(PYRE_KEY_D)) {
+        else if (Input::IsInputPressed(CameraInput::MoveRight)) {
             m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
 
-        if (Input::IsKeyPressed(PYRE_KEY_W)) {
+        if (Input::IsInputPressed(CameraInput::MoveUp)) {
             m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
-        else if (Input::IsKeyPressed(PYRE_KEY_S)) {
+        else if (Input::IsInputPressed(CameraInput::MoveDown)) {
             m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
             m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
 
         if (m_EnableRotation) {
-            if (Input::IsKeyPressed(PYRE_KEY_Q)) {
+            if (Input::IsInputPressed(CameraInput::RotateClockwise)) {
                 m_Rotation += m_RotationSpeed * ts;
             }
-            else if (Input::IsKeyPressed(PYRE_KEY_E)) {
+            else if (Input::IsInputPressed(CameraInput::RotateCounterClockwise)) {
                 m_Rotation -= m_RotationSpeed * ts;
             }
 
