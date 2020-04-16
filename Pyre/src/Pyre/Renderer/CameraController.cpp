@@ -5,11 +5,10 @@
 
 namespace Pyre {
 
-    OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation) :
-        m_AspecRatio(aspectRatio),
-        m_RotationEnable(rotation),
-        m_Camera(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom),
-        m_MovementSpeed(m_Zoom)
+    OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool enableRotation) :
+        m_AspectRatio(aspectRatio),
+        m_EnableRotation(enableRotation),
+        m_Camera(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom)
     {
     }
 
@@ -34,7 +33,7 @@ namespace Pyre {
             m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
         }
 
-        if (m_RotationEnable) {
+        if (m_EnableRotation) {
             if (Input::IsKeyPressed(PYRE_KEY_Q)) {
                 m_Rotation += m_RotationSpeed * ts;
             }
@@ -54,6 +53,14 @@ namespace Pyre {
         m_Camera.SetTransform(m_Position, m_Rotation);
     }
 
+    void OrthographicCameraController::SetZoom(float zoom) {
+        PYRE_CORE_ASSERT(zoom > 0.0f, "Zoom level has to be higher than 0.0f!");
+        float diff = zoom / m_Zoom;
+        m_MovementSpeed *= diff;
+        m_Zoom = zoom;
+        UpdateProjectionMatrix();
+    }
+
     void OrthographicCameraController::OnEvent(Event& e) {
         PYRE_PROFILE_FUNCTION();
 
@@ -65,19 +72,17 @@ namespace Pyre {
     bool OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e) {
         PYRE_PROFILE_FUNCTION();
 
-        m_Zoom -= e.GetYOffset() * 0.25f;
-        m_Zoom = std::max(m_Zoom, 0.25f);
-        m_Camera.SetProjection(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom);
-
-        m_MovementSpeed = m_Zoom;
+        float zoom = m_Zoom - e.GetYOffset() * m_ZoomSpeed;
+        zoom = std::clamp(zoom, m_MinZoom, m_MaxZoom);
+        SetZoom(zoom);
         return false;
     }
 
     bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
 
-        m_AspecRatio = (float)e.GetWidth() / (float)e.GetHeigth();
-        m_Camera.SetProjection(-m_AspecRatio * m_Zoom, m_AspecRatio * m_Zoom, -m_Zoom, m_Zoom);
+        m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeigth();
+        UpdateProjectionMatrix();
         return false;
     }
 
