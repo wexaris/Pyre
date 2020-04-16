@@ -87,6 +87,8 @@ namespace Pyre {
         if (m_MessageBuffer.size() == m_MessageBufferMaxSize) {
             Clear();
         }
+
+        m_ShouldAutoscroll = m_AllowAutoscroll;
     }
 
     void ImGuiConsole::RenderHeader() {
@@ -151,7 +153,7 @@ namespace Pyre {
         //ImGui::AlignFirstTextHeightToWidgets();
         ImGui::Text("Autoscroll");
         ImGui::SameLine(0.0f, spacing + maxWidth - ImGui::CalcTextSize("Autoscroll").x);
-        ImGui::Checkbox("##Autoscroll", &m_Autoscroll);
+        ImGui::Checkbox("##Autoscroll", &m_AllowAutoscroll);
 
         ImGui::SameLine(0.0f, spacing);
 
@@ -184,11 +186,13 @@ namespace Pyre {
                 }
             }
 
-            if (m_Autoscroll && ImGui::GetScrollMaxY() > 0) {
+            if (m_ShouldAutoscroll && ImGui::GetScrollMaxY() > 0) {
                 ImGui::SetScrollY(ImGui::GetScrollMaxY());
             }
         }
         ImGui::EndChild();
+
+        m_ShouldAutoscroll = false;
     }
 
 }

@@ -48,7 +48,8 @@ namespace Pyre {
         uint16_t m_MessageBufferMaxSize = 200;
         std::vector<Ref<Message>> m_MessageBuffer;
         Message::Level m_Filter = Message::Level::Trace;
-        bool m_Autoscroll = true;
+        bool m_AllowAutoscroll = true;
+        bool m_ShouldAutoscroll = false;
 
         ImGuiConsole();
         ~ImGuiConsole() = default;
