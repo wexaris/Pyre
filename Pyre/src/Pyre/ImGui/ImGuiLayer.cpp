@@ -1,6 +1,7 @@
 #include "pyrepch.hpp"
 #include "Pyre/Core/Application.hpp"
 #include "Pyre/ImGui/ImGuiLayer.hpp"
+#include "Pyre/ImGui/ImGuiConsole.hpp"
 
 #include <imgui.h>
 #include <examples/imgui_impl_opengl3.h>
@@ -10,13 +11,10 @@
 
 namespace Pyre {
 
-    ImGuiLayer::ImGuiLayer() :
-        Layer("ImGuiLayer")
+    ImGuiLayer::ImGuiLayer(bool showConsole) :
+        Layer("ImGuiLayer"),
+        m_ShowConsole(showConsole)
     {}
-
-    ImGuiLayer::~ImGuiLayer() {
-
-    }
 
     void ImGuiLayer::OnAttach() {
         PYRE_PROFILE_FUNCTION();
@@ -85,6 +83,10 @@ namespace Pyre {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(curr_context_backup);
         }
+    }
+
+    void ImGuiLayer::OnImGuiRender() {
+        ImGuiConsole::Get().OnImGuiRender(&m_ShowConsole);
     }
 
 }

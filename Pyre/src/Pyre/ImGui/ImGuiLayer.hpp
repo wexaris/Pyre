@@ -5,8 +5,8 @@ namespace Pyre {
 
     class ImGuiLayer : public Layer {
     public:
-        ImGuiLayer();
-        ~ImGuiLayer();
+        ImGuiLayer(bool showConsole = true);
+        ~ImGuiLayer() = default;
 
         void OnAttach() override;
         void OnDetach() override;
@@ -14,8 +14,10 @@ namespace Pyre {
         void Begin();
         void End();
 
-    private: 
-        float m_Time = 0.f;
+        void OnImGuiRender() override;
+
+    private:
+        bool m_ShowConsole;
     };
 
 }

@@ -6,7 +6,7 @@ set(SOURCE_FILES
     src/TestLayer2D.cpp
 )
 
-add_executable(sandbox ${SOURCE_FILES})
+add_executable(sandbox WIN32 ${SOURCE_FILES})
 add_dependencies(sandbox pyre)
 
 target_link_libraries(sandbox PRIVATE pyre)
