@@ -55,7 +55,7 @@ namespace Pyre {
         m_Message(msg), m_Level(level)
     {}
 
-    void ImGuiConsole::Message::OnImGuiRender() {
+    void ImGuiConsole::Message::ImGuiDraw() {
         Color color = LevelColor(m_Level);
         ImGui::PushStyleColor(ImGuiCol_Text, { color.r, color.g, color.b, color.a });
         ImGui::TextUnformatted(m_Message.c_str());
@@ -71,12 +71,12 @@ namespace Pyre {
         m_MessageBuffer.reserve(m_MessageBufferMaxSize);
     }
 
-    void ImGuiConsole::OnImGuiRender(bool show) {
+    void ImGuiConsole::ImGuiDraw() {
         ImGui::SetNextWindowSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
-        ImGui::Begin("Console", &show);
-        RenderHeader();
+        ImGui::Begin("Console", &m_Enabled);
+        DrawHeader();
         ImGui::Separator();
-        RenderMessages();
+        DrawMessages();
         ImGui::End();
     }
 
@@ -91,7 +91,7 @@ namespace Pyre {
         m_ShouldAutoscroll = m_AllowAutoscroll;
     }
 
-    void ImGuiConsole::RenderHeader() {
+    void ImGuiConsole::DrawHeader() {
         ImGuiStyle& style = ImGui::GetStyle();
         const float spacing = style.ItemInnerSpacing.x;
 
@@ -140,12 +140,12 @@ namespace Pyre {
             ImGui::OpenPopup("SettingsPopup");
         }
         if (ImGui::BeginPopup("SettingsPopup")) {
-            RenderSettings();
+            DrawSettings();
             ImGui::EndPopup();
         }
     }
 
-    void ImGuiConsole::RenderSettings() {
+    void ImGuiConsole::DrawSettings() {
         const float maxWidth = ImGui::CalcTextSize("Autoscroll").x * 1.1f;
         const float spacing = ImGui::GetStyle().ItemInnerSpacing.x + ImGui::CalcTextSize(" ").x;
 
@@ -172,7 +172,7 @@ namespace Pyre {
         ImGui::PopItemWidth();
     }
 
-    void ImGuiConsole::RenderMessages() {
+    void ImGuiConsole::DrawMessages() {
         ImGui::BeginChild("ScrollRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
         {
             ImGui::SetWindowFontScale(m_DisplayScale);
@@ -182,7 +182,7 @@ namespace Pyre {
                     break;
                 }
                 if ((*buffer)->m_Level >= m_Filter) {
-                    (*buffer)->OnImGuiRender();
+                    (*buffer)->ImGuiDraw();
                 }
             }
 

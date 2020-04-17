@@ -26,7 +26,7 @@ namespace Pyre {
         WindowsWindow(const WindowProperties& properties);
         ~WindowsWindow();
 
-        void OnUpdate() override;
+        void Update() override;
 
         void Resize(unsigned int width, unsigned int height) override;
         unsigned int GetWidth() const override { return m_WindowData.Width; }

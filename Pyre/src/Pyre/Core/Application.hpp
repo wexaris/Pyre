@@ -32,9 +32,16 @@ namespace Pyre {
         ImGuiLayer* m_ImGuiLayer;
         LayerStack m_LayerStack;
         Time m_LastFrameTime;
+        int m_MaxTickCount = 60;
         bool m_Running = true;
 
         void Run();
+        float GetDeltaTime() {
+            Time time;
+            float dt = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+            return dt;
+        }
 
         void OnEvent(Event& e);
         bool OnWindowClose(WindowCloseEvent&);

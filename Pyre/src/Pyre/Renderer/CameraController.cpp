@@ -2,6 +2,8 @@
 #include "Pyre/Renderer/CameraController.hpp"
 #include "Pyre/Input/Input.hpp"
 
+#include <imgui.h>
+
 namespace Pyre {
 
     enum class CameraInput : uint16_t {
@@ -26,53 +28,49 @@ namespace Pyre {
         Input::Remap(CameraInput::RotateCounterClockwise, Key::Q);
     }
 
-    void OrthographicCameraController::OnUpdate(float ts) {
+    void OrthographicCameraController::Tick(float dt) {
         PYRE_PROFILE_FUNCTION();
 
-        if (Input::IsInputPressed(CameraInput::MoveLeft)) {
-            m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-            m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-        }
-        else if (Input::IsInputPressed(CameraInput::MoveRight)) {
-            m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-            m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-        }
+        ImGuiIO& io = ImGui::GetIO();
+        if (!io.WantCaptureKeyboard) {
 
-        if (Input::IsInputPressed(CameraInput::MoveUp)) {
-            m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-            m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-        }
-        else if (Input::IsInputPressed(CameraInput::MoveDown)) {
-            m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-            m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * ts;
-        }
-
-        if (m_EnableRotation) {
-            if (Input::IsInputPressed(CameraInput::RotateClockwise)) {
-                m_Rotation += m_RotationSpeed * ts;
+            if (Input::IsInputPressed(CameraInput::MoveLeft)) {
+                m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+                m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
             }
-            else if (Input::IsInputPressed(CameraInput::RotateCounterClockwise)) {
-                m_Rotation -= m_RotationSpeed * ts;
+            else if (Input::IsInputPressed(CameraInput::MoveRight)) {
+                m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+                m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
             }
 
-            if (m_Rotation > 180.0f) {
-                m_Rotation -= 360.0f;
+            if (Input::IsInputPressed(CameraInput::MoveUp)) {
+                m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+                m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
             }
-            else if (m_Rotation <= -180.0f) {
-                m_Rotation += 360.0f;
+            else if (Input::IsInputPressed(CameraInput::MoveDown)) {
+                m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+                m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
             }
 
+            if (m_EnableRotation) {
+                if (Input::IsInputPressed(CameraInput::RotateClockwise)) {
+                    m_Rotation += m_RotationSpeed * dt;
+                }
+                else if (Input::IsInputPressed(CameraInput::RotateCounterClockwise)) {
+                    m_Rotation -= m_RotationSpeed * dt;
+                }
+
+                if (m_Rotation > 180.0f) {
+                    m_Rotation -= 360.0f;
+                }
+                else if (m_Rotation <= -180.0f) {
+                    m_Rotation += 360.0f;
+                }
+
+            }
+
+            m_Camera.SetTransform(m_Position, m_Rotation);
         }
-
-        m_Camera.SetTransform(m_Position, m_Rotation);
-    }
-
-    void OrthographicCameraController::SetZoom(float zoom) {
-        PYRE_CORE_ASSERT(zoom > 0.0f, "Zoom level has to be higher than 0.0f!");
-        float diff = zoom / m_Zoom;
-        m_MovementSpeed *= diff;
-        m_Zoom = zoom;
-        UpdateProjectionMatrix();
     }
 
     void OrthographicCameraController::OnEvent(Event& e) {
@@ -81,6 +79,14 @@ namespace Pyre {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnMouseScroll));
         dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnWindowResize));
+    }
+
+    void OrthographicCameraController::SetZoom(float zoom) {
+        PYRE_CORE_ASSERT(zoom > 0.0f, "Zoom level has to be higher than 0.0f!");
+        float diff = zoom / m_Zoom;
+        m_MovementSpeed *= diff;
+        m_Zoom = zoom;
+        UpdateProjectionMatrix();
     }
 
     bool OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e) {

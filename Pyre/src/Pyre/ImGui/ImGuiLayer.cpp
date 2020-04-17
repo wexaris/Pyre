@@ -58,6 +58,19 @@ namespace Pyre {
         ImGui::DestroyContext();
     }
 
+    void ImGuiLayer::ImGuiDraw() {
+        PYRE_PROFILE_FUNCTION();
+
+        ImGuiConsole::Get().ImGuiDraw();
+    }
+
+    void ImGuiLayer::OnEvent(Event& event) {
+        auto& io =ImGui::GetIO();
+        if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+            event.Handled = true;
+        }
+    }
+
     void ImGuiLayer::Begin() {
         PYRE_PROFILE_FUNCTION();
 
@@ -83,10 +96,6 @@ namespace Pyre {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(curr_context_backup);
         }
-    }
-
-    void ImGuiLayer::OnImGuiRender() {
-        ImGuiConsole::Get().OnImGuiRender(&m_ShowConsole);
     }
 
 }

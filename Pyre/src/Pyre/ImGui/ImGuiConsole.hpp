@@ -1,4 +1,6 @@
 #pragma once
+#include "Pyre/Core/Drawable.hpp"
+
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/details/null_mutex.h>
 
@@ -6,9 +8,9 @@
 
 namespace Pyre {
 
-    class ImGuiConsole {
+    class ImGuiConsole : public ImGuiDrawable {
     public:
-        struct Message {
+        struct Message : public ImGuiDrawable {
             enum class Level : int8_t {
                 Invalid = -1,
                 Trace = 0,
@@ -27,7 +29,7 @@ namespace Pyre {
             Message() = default;
             Message(const std::string& msg, Level level);
 
-            void OnImGuiRender();
+            void ImGuiDraw() override;
 
             std::string m_Message;
             Level m_Level = Level::Invalid;
@@ -39,7 +41,7 @@ namespace Pyre {
         }
         
         void Clear();
-        void OnImGuiRender(bool show);
+        void ImGuiDraw() override;
 
         void AddMessage(Message&& message);
 
@@ -50,13 +52,14 @@ namespace Pyre {
         Message::Level m_Filter = Message::Level::Trace;
         bool m_AllowAutoscroll = true;
         bool m_ShouldAutoscroll = false;
+        bool m_Enabled = true;
 
         ImGuiConsole();
         ~ImGuiConsole() = default;
 
-        void RenderHeader();
-        void RenderSettings();
-        void RenderMessages();
+        void DrawHeader();
+        void DrawSettings();
+        void DrawMessages();
     };
 
     template<typename Mutex>

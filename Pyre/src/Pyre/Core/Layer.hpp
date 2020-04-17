@@ -1,17 +1,17 @@
 #pragma once
+#include "Pyre/Core/Drawable.hpp"
 #include "Pyre/Events/Event.hpp"
 
 namespace Pyre {
 
-    class Layer {
+    class Layer : public Drawable, public ImGuiDrawable {
     public:
         Layer(const std::string& name = "Layer");
         virtual ~Layer() = default;
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate(float timestep) {}
-        virtual void OnImGuiRender() {}
+        virtual void Tick(float dt) {}
         virtual void OnEvent(Event&) {}
 
         const std::string& GetName() const { return m_Name; }

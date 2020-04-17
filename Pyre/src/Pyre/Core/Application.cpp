@@ -33,31 +33,47 @@ namespace Pyre {
     void Application::Run() {
         PYRE_PROFILE_FUNCTION();
 
-        while (m_Running) {
-            PYRE_PROFILE_SCOPE("Run Loop - Application::Run()");
+        float tickTime = 1.0f / m_MaxTickCount;
+        float accumulator = 0.0f;
+        m_LastFrameTime = Time();
 
-            Time time;
-            float timestep = time - m_LastFrameTime;
-            m_LastFrameTime = time;
+        while (m_Running) {
+            PYRE_PROFILE_SCOPE("Game Loop");
+
+            float dt = GetDeltaTime();
+            accumulator += dt;
 
             {
-                PYRE_PROFILE_SCOPE("LayerStack OnUpdate - Application::Run()");
-                for (auto& layer : m_LayerStack) {
-                    layer->OnUpdate(timestep);
+                PYRE_PROFILE_SCOPE("Logic Loop");
+                int tickCount = 0;
+                while (accumulator >= tickTime && tickCount <= m_MaxTickCount) {
+                    for (auto& layer : m_LayerStack) {
+                        layer->Tick(tickTime);
+                    }
+                    accumulator -= tickTime;
                 }
             }
 
+            // For interpolation
+            float alpha = (float)((double)accumulator / (double)tickTime);
+
             {
-                PYRE_PROFILE_SCOPE("LayerStack OnImGuiRender - Application::Run()");
+                PYRE_PROFILE_SCOPE("Draw Loop");
+                for (auto& layer : m_LayerStack) {
+                    layer->Draw(alpha);
+                }
+            }
+            {
+                PYRE_PROFILE_SCOPE("ImGuiDraw Loop");
                 m_ImGuiLayer->Begin();
                 for (auto& layer : m_LayerStack) {
-                    layer->OnImGuiRender();
+                    layer->ImGuiDraw();
                 }
                 m_ImGuiLayer->End();
             }
 
-
-            m_Window->OnUpdate();
+            // Poll events and swap buffers
+            m_Window->Update();
         }
     }
 
@@ -86,11 +102,8 @@ namespace Pyre {
         dispatcher.Dispatch<WindowMinimizeEvent>(PYRE_BIND_METHOD(Application::OnWindowMinimize));
         dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_METHOD(Application::OnWindowRestore));
 
-        for (auto iter = m_LayerStack.rbegin(); iter != m_LayerStack.rend(); iter++) {
+        for (auto iter = m_LayerStack.rbegin(); !e.Handled && iter != m_LayerStack.rend(); iter++) {
             (*iter)->OnEvent(e);
-            if (e.Handled) {
-                break;
-            }
         }
     }
 

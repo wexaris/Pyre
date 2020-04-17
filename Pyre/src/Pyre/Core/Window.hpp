@@ -33,7 +33,7 @@ namespace Pyre {
         Window() = default;
         virtual ~Window() = default;
 
-        virtual void OnUpdate() = 0;
+        virtual void Update() = 0;
 
         virtual void Resize(unsigned int width, unsigned int height) = 0;
         virtual unsigned int GetWidth() const = 0;

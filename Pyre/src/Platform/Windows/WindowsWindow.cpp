@@ -232,7 +232,7 @@ namespace Pyre {
         }
     }
 
-    void WindowsWindow::OnUpdate() {
+    void WindowsWindow::Update() {
         PYRE_PROFILE_FUNCTION();
 
         glfwPollEvents();

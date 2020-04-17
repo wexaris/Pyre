@@ -7,8 +7,9 @@ public:
     void OnAttach() override;
     void OnDetach() override;
 
-    void OnUpdate(float ts) override;
-    void OnImGuiRender() override;
+    void Tick(float dt) override;
+    void Draw(float alpha) override;
+    void ImGuiDraw() override;
     void OnEvent(Pyre::Event& e) override;
 
 private:

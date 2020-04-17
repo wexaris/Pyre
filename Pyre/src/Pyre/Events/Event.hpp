@@ -47,12 +47,9 @@ namespace Pyre {
 
         template<typename T, typename Fn, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
         bool Dispatch(const Fn& fn) {
-            if (m_Event.Handled) {
-                return false;
-            }
-            if (m_Event.GetEventType() == T::GetStaticType()) {
+            if (!m_Event.Handled && m_Event.GetEventType() == T::GetStaticType()) {
                 m_Event.Handled = fn(static_cast<T&>(m_Event));
-                return true;
+                return m_Event.Handled;
             }
             return false;
         }

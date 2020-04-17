@@ -9,7 +9,7 @@ namespace Pyre {
     public:
         OrthographicCameraController(float aspectRatio, bool rotation = false);
 
-        void OnUpdate(float timestep);
+        void Tick(float dt);
         void OnEvent(Event& e);
 
         const glm::vec3& GetPosition() const   { return m_Position; }

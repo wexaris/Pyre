@@ -10,11 +10,12 @@ namespace Pyre {
 
         void OnAttach() override;
         void OnDetach() override;
+        void Draw(float alpha) override {}
+        void ImGuiDraw() override;
+        void OnEvent(Event& event) override;
 
         void Begin();
         void End();
-
-        void OnImGuiRender() override;
 
     private:
         bool m_ShowConsole;
