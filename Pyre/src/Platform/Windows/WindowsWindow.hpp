@@ -28,7 +28,10 @@ namespace Pyre {
 
         void Update() override;
 
-        void Resize(unsigned int width, unsigned int height) override;
+        void SetPosition(unsigned int posX, unsigned int posY) override;
+        unsigned int GetPosX() const override { return m_WindowData.PosX; }
+        unsigned int GetPosY() const override { return m_WindowData.PosY; }
+        void SetSize(unsigned int width, unsigned int height) override;
         unsigned int GetWidth() const override { return m_WindowData.Width; }
         unsigned int GetHeight() const override { return m_WindowData.Height; }
 

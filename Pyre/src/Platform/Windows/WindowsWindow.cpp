@@ -239,7 +239,16 @@ namespace Pyre {
         m_Context->SwapBuffers();
     }
 
-    void WindowsWindow::Resize(unsigned int width, unsigned int height) {
+    void WindowsWindow::SetPosition(unsigned int posX, unsigned int posY) {
+        PYRE_PROFILE_FUNCTION();
+
+        m_WindowData.PosX = posX;
+        m_WindowData.PosY = posY;
+
+        glfwSetWindowPos(m_Window, m_WindowData.PosX, m_WindowData.PosY);
+    }
+
+    void WindowsWindow::SetSize(unsigned int width, unsigned int height) {
         PYRE_PROFILE_FUNCTION();
 
         m_WindowData.Width = width;
