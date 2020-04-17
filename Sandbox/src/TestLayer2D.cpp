@@ -29,22 +29,38 @@ void TestLayer2D::Draw(float alpha) {
 
     static float rotation = 0.0f;
 
-    Pyre::RenderCommand::Clear({ 0.1f, 0.1f, 0.1f, 1 });
+    Pyre::Renderer2D::ResetStats();
+    Pyre::RenderCommand::Clear({ 0.1, 0.1, 0.1, 1 });
 
     Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
-    Pyre::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.5f }, rotation, { 1.0f, 1.0f }, m_Texture, 10.0f, m_SquareColor);
-    Pyre::Renderer2D::DrawQuad({ 0.5f,  0.0f,  0.1f }, 0.0f, { 0.5f, 0.2f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-    Pyre::Renderer2D::DrawQuad({ -1.0f,  0.0f,  0.2f }, 90.0f, { 0.3f, 0.2f }, m_SquareColor);
+    Pyre::Renderer2D::DrawQuad({ 0.0,  0.0, -0.5 }, { 10, 10 }, m_Texture, 10);
+    Pyre::Renderer2D::DrawRotatedQuad({ 1.0,  0.0,  0.2 }, rotation, { 1, 1 }, m_SquareColor);
+    Pyre::Renderer2D::DrawRotatedQuad({ -1.0,  0.0,  0.2 }, rotation, { 1, 1 }, m_Texture, m_SquareColor);
+    Pyre::Renderer2D::EndScene();
+    
+    Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    for (float y = -5.0f; y <= 5.0f; y += 0.5f) {
+        for (float x = -5.0f; x <= 5.0f; x += 0.5f) {
+            glm::vec4 col = { (x + 5.0f) / 10.0f, 0.5f, (y + 5.0f) / 10.0f, 1.0f };
+            Pyre::Renderer2D::DrawQuad({ x,  y }, { 0.5f, 0.5f }, col);
+        }
+    }
     Pyre::Renderer2D::EndScene();
 
-    rotation += 0.1f;
+    rotation += 0.2f;
 }
 
 void TestLayer2D::ImGuiDraw() {
     PYRE_PROFILE_FUNCTION();
 
-    ImGui::Begin("Settings");
+    ImGui::Begin("Debug");
     ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+    ImGui::End();
+
+    ImGui::Begin("Statistics");
+    auto stats = Pyre::Renderer2D::GetStats();
+    ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+    ImGui::Text("Quads: %d", stats.QuadCount);
     ImGui::End();
 }
 

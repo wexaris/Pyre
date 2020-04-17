@@ -38,10 +38,10 @@ namespace Pyre {
         float m_Zoom = 1.0f;
         bool m_EnableRotation = true;
 
-        float m_MovementSpeed = 2.0f;
+        float m_MovementSpeed = 1.25f;
         float m_RotationSpeed = 90.0f;
-        float m_ZoomSpeed = 0.2f;
-        float m_MaxZoom = 2.0f;
+        float m_ZoomSpeed = 0.3f;
+        float m_MaxZoom = 10.0f;
         float m_MinZoom = 0.15f;
 
         OrthographicCamera m_Camera;

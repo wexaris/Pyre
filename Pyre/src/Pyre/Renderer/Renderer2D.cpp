@@ -18,7 +18,7 @@ namespace Pyre {
     };
 
     struct RenderData {
-        static const uint32_t MaxQuads = 1000;
+        static const uint32_t MaxQuads = 20000;
         static const uint32_t MaxVerts = MaxQuads * 4;
         static const uint32_t MaxIndices = MaxQuads * 6;
         static const uint32_t MaxTextureSlots = 32;
@@ -38,6 +38,7 @@ namespace Pyre {
         glm::vec4 QuadVertexPositions[4] = {};
     };
     static RenderData s_Data;
+    static Renderer2D::Statistics s_Stats;
 
 
     void Renderer2D::Init() {
@@ -108,6 +109,10 @@ namespace Pyre {
         s_Data.TextureShader->Bind();
         s_Data.TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 
+        StartBatch();
+    }
+
+    void Renderer2D::StartBatch() {
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBeg;
         s_Data.QuadIndexCount = 0;
 
@@ -133,25 +138,129 @@ namespace Pyre {
 
         s_Data.QuadVA->Bind();
         RenderCommand::DrawElement(s_Data.QuadVA, s_Data.QuadIndexCount);
+
+        s_Stats.DrawCalls++;
+    }
+
+    // translation * size
+    glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, const glm::vec2& size) {
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
+        return glm::scale(transform, { size.x, size.y, 1.0f });
     }
 
     // translation * rotation * size
     glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, float rot, const glm::vec2& size) {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
-        if (rot != 0) {
-            // Rotation is expensive
-            transform = glm::rotate(transform, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
-        }
-        transform = glm::scale(transform, { size.x, size.y, 1.0f });
-        return transform;
+        transform = glm::rotate(transform, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
+        return glm::scale(transform, { size.x, size.y, 1.0f });
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
-        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, color);
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, size, color);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
         PYRE_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
+
+        constexpr float textureIndex = 0.0f; // 0 - white texture
+        constexpr float tilingFactor = 1.0f;
+        constexpr int vertex_count = 4;
+        constexpr float tex_coords[] = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f
+        };
+
+        // Handle transformations
+        glm::mat4 transform = MakeTransformationMatrix(pos, size);
+
+        for (int i = 0; i < vertex_count; i++) {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = color;
+            s_Data.QuadVertexBufferPtr->TexCoord = { tex_coords[i * 2], tex_coords[i * 2 + 1] };
+            s_Data.QuadVertexBufferPtr->TexID = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+            s_Data.QuadVertexBufferPtr++;
+        }
+        s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawQuad(pos, size, texture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tilingFactor, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
+        PYRE_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
+
+        constexpr int vertex_count = 4;
+        constexpr float tex_coords[] = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f
+        };
+
+        // Handle textures
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+            if (s_Data.TextureSlots[i] == texture) {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+        if (textureIndex == 0) {
+            textureIndex = (float)s_Data.TextureSlotIndex;
+            s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
+        }
+
+        // Handle transformations
+        glm::mat4 transform = MakeTransformationMatrix(pos, size);
+
+        for (int i = 0; i < vertex_count; i++) {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = tint;
+            s_Data.QuadVertexBufferPtr->TexCoord = { tex_coords[i * 2], tex_coords[i * 2 + 1] };
+            s_Data.QuadVertexBufferPtr->TexID = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+            s_Data.QuadVertexBufferPtr++;
+        }
+        s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
+        DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, color);
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
+        PYRE_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
 
         constexpr float textureIndex = 0.0f; // 0 - white texture
         constexpr float tilingFactor = 1.0f;
@@ -175,22 +284,29 @@ namespace Pyre {
             s_Data.QuadVertexBufferPtr++;
         }
         s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
-        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, 1.0f, tint);
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, 1.0f, tint);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
-        DrawQuad(pos, rot, size, texture, 1.0f, tint);
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint) {
+        DrawRotatedQuad(pos, rot, size, texture, 1.0f, tint);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
-        DrawQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, tilingFactor, tint);
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
+        DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, texture, tilingFactor, tint);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
         PYRE_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
 
         constexpr int vertex_count = 4;
         constexpr float tex_coords[] = {
@@ -225,6 +341,15 @@ namespace Pyre {
             s_Data.QuadVertexBufferPtr++;
         }
         s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
     }
 
+    Renderer2D::Statistics Renderer2D::GetStats() {
+        return s_Stats;
+    }
+
+    void Renderer2D::ResetStats() {
+        memset(&s_Stats, 0, sizeof(Renderer2D::Statistics));
+    }
 }
