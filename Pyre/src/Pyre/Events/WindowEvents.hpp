@@ -38,7 +38,7 @@ namespace Pyre {
         {}
 
         int GetWidth() const { return m_Width; }
-        int GetHeigth() const { return m_Height; }
+        int GetHeight() const { return m_Height; }
 
         EVENT_ADD_CATEGORY(EventCategoryApplication)
         EVENT_ADD_TYPE(WindowResize)

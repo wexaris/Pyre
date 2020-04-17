@@ -120,7 +120,7 @@ namespace Pyre {
 
     bool Application::OnWindowResize(WindowResizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeigth());
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
         return false;
     }
 

@@ -101,7 +101,7 @@ namespace Pyre {
     bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
 
-        m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeigth();
+        m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
         UpdateProjectionMatrix();
         return false;
     }
