@@ -7,7 +7,7 @@ namespace Pyre {
 
     class OrthographicCameraController {
     public:
-        OrthographicCameraController(float aspectRatio, bool rotation = false);
+        OrthographicCameraController(bool rotation = false);
 
         void Tick(float dt);
         void OnEvent(Event& e);

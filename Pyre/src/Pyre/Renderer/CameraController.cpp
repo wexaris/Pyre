@@ -1,4 +1,5 @@
 #include "pyrepch.hpp"
+#include "Pyre/Core/Application.hpp"
 #include "Pyre/Renderer/CameraController.hpp"
 #include "Pyre/Input/Input.hpp"
 
@@ -15,8 +16,8 @@ namespace Pyre {
         RotateCounterClockwise,
     };
 
-    OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool enableRotation) :
-        m_AspectRatio(aspectRatio),
+    OrthographicCameraController::OrthographicCameraController(bool enableRotation) :
+        m_AspectRatio((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight()),
         m_EnableRotation(enableRotation),
         m_Camera(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom)
     {

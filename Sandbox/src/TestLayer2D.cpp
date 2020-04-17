@@ -5,7 +5,7 @@
 
 TestLayer2D::TestLayer2D() :
     Layer("TestLayer2D"),
-    m_CameraController(16.f / 9.f, true)
+    m_CameraController(true)
 {}
 
 void TestLayer2D::OnAttach() {
