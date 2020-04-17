@@ -40,6 +40,7 @@ void main() {
     for (int i = 0; i < MAX_TEXTURES; i++) {
         if (i == vTexID) {
             gl_FragColor = texture(uTextures[i], vTexCoord * vTilingFactor) * vColor;
+            break;
         }
     }
     
