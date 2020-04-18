@@ -27,7 +27,6 @@
 // ----- Events ---------------------------------
 #include "Pyre/Events/KeyEvents.hpp"
 #include "Pyre/Events/MouseEvents.hpp"
-#include "Pyre/Events/ApplicationEvents.hpp"
 #include "Pyre/Events/WindowEvents.hpp"
 
 // ----- Input ----------------------------------

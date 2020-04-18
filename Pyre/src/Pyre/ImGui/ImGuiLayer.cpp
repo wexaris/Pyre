@@ -66,7 +66,7 @@ namespace Pyre {
 
     void ImGuiLayer::OnEvent(Event& event) {
         auto& io = ImGui::GetIO();
-        if (event.IsCategory(EventCategoryInput) && (io.WantCaptureMouse || io.WantCaptureKeyboard)) {
+        if (event.IsCategory(Event::Category::Input) && (io.WantCaptureMouse || io.WantCaptureKeyboard)) {
             event.Handled = true;
         }
     }

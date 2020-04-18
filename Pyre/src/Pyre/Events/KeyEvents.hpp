@@ -8,7 +8,7 @@ namespace Pyre {
     public:
         KeyCode GetKeyCode() const { return m_KeyCode; }
 
-        EVENT_ADD_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
+        EVENT_ADD_CATEGORY(Event::Category::Input | Event::Category::Keyboard)
 
     protected:
         KeyCode m_KeyCode;

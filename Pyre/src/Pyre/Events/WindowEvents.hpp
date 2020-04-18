@@ -7,7 +7,7 @@ namespace Pyre {
     public:
         WindowCloseEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowClose)
     };
 
@@ -20,7 +20,7 @@ namespace Pyre {
         int GetPosX() const { return m_PosX; }
         int GetPosY() const { return m_PosY; }
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowMove)
         std::string AsString() const override {
             return FMT("WindowMove: {}, {}", m_PosX, m_PosY);
@@ -40,7 +40,7 @@ namespace Pyre {
         int GetWidth() const { return m_Width; }
         int GetHeight() const { return m_Height; }
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowResize)
         std::string AsString() const override {
             return FMT("WindowResize: {}, {}", m_Width, m_Height);
@@ -55,7 +55,7 @@ namespace Pyre {
     public:
         WindowFocusEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowFocus)
     };
 
@@ -63,7 +63,7 @@ namespace Pyre {
     public:
         WindowLoseFocusEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowLoseFocus)
     };
 
@@ -71,7 +71,7 @@ namespace Pyre {
     public:
         WindowMaximizeEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowMaximize)
     };
 
@@ -79,7 +79,7 @@ namespace Pyre {
     public:
         WindowMinimizeEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowMinimize)
     };
 
@@ -87,7 +87,7 @@ namespace Pyre {
     public:
         WindowRestoreEvent() = default;
 
-        EVENT_ADD_CATEGORY(EventCategoryApplication)
+        EVENT_ADD_CATEGORY(Event::Category::Window)
         EVENT_ADD_TYPE(WindowRestore)
     };
 
