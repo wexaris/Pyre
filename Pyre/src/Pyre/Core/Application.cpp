@@ -8,15 +8,16 @@ namespace Pyre {
 
     Application* Application::s_Instance = nullptr;
 
-    Application::Application(const std::string& baseDirectory, const WindowProperties& windowProperties) {
+    Application::Application(const ApplicationProperties& properties) :
+        m_BaseDirectory(properties.BaseDirectory),
+        m_MaxTickRate(properties.MaxTickRate)
+    {
         PYRE_PROFILE_FUNCTION();
 
         PYRE_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        m_BaseDirectory = baseDirectory;
-
-        m_Window = Window::Create(windowProperties);
+        m_Window = Window::Create(properties.WindowProperties);
         m_Window->SetEventCallback(PYRE_BIND_METHOD(Application::OnEvent));
 
         Renderer::Init();
@@ -33,24 +34,29 @@ namespace Pyre {
     void Application::Run() {
         PYRE_PROFILE_FUNCTION();
 
-        float tickTime = 1.0f / m_MaxTickCount;
-        float accumulator = 0.0f;
+        const float tickTime = 1.0f / m_MaxTickRate;
+        double accumulator = 0.0f;
         m_LastFrameTime = Time();
 
         while (m_Running) {
             PYRE_PROFILE_SCOPE("Game Loop");
 
-            float dt = GetDeltaTime();
-            accumulator += dt;
+            // Update delta time
+            Time time;
+            m_DeltaTime = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+            // Accumulate time for Tick()
+            accumulator += m_DeltaTime;
 
             {
                 PYRE_PROFILE_SCOPE("Logic Loop");
-                int tickCount = 0;
-                while (accumulator >= tickTime && tickCount <= m_MaxTickCount) {
+                unsigned int tickCount = 0;
+                while (accumulator >= tickTime && tickCount < m_MaxTickRate) {
                     for (auto& layer : m_LayerStack) {
                         layer->Tick(tickTime);
                     }
                     accumulator -= tickTime;
+                    tickCount++;
                 }
             }
 

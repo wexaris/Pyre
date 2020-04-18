@@ -22,7 +22,7 @@ namespace Pyre {
         m_WindowData.Title = properties.Title;
         m_WindowData.Width = properties.Width;
         m_WindowData.Height = properties.Height;
-        m_WindowData.VSync = true;
+        m_WindowData.VSync = properties.VSync;
 
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {

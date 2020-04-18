@@ -7,10 +7,10 @@
 namespace Pyre {
 
     struct WindowData {
-        std::string Title;
+        std::string Title = "Pyre Engine";
         int PosX = 0, PosY = 0;
         int Width = 0, Height = 0;
-        WindowMode Mode;
+        WindowMode Mode = WindowMode::Windowed;
         bool VSync = true;
 
         Window::EventCallbackFun EventCallback;

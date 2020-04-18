@@ -11,18 +11,12 @@ namespace Pyre {
 
     struct WindowProperties {
     public:
-        std::string Title;
-        unsigned int Width, Height;
-        WindowMode Mode;
+        std::string Title = "Pyre Engine";
+        unsigned int Width = 1280;
+        unsigned int Height = 720;
+        WindowMode Mode = WindowMode::Windowed;
+        bool VSync = true;
         std::string IconPath;
-
-        WindowProperties(const std::string& title = "Pyre Engine",
-                         unsigned int width = 1280,
-                         unsigned int height = 720,
-                         WindowMode mode = WindowMode::Windowed,
-                         const std::string& iconPath = "")
-            : Title(title), Width(width), Height(height), Mode(mode), IconPath(iconPath)
-        {}
     };
 
     // Abstract representation of a desktop window

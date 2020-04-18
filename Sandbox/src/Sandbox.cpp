@@ -4,9 +4,8 @@
 
 class Sandbox : public Pyre::Application {
 public:
-    Sandbox(const Pyre::WindowProperties& props) :
-        Pyre::Application("Sandbox", props)
-    {
+    Sandbox(const Pyre::ApplicationProperties& props) : Pyre::Application(props) {
+
         PushLayer(new TestLayer2D());
     }
 
@@ -15,10 +14,12 @@ public:
 
 Pyre::Application* Pyre::CreateApplication() {
 
-    Pyre::WindowProperties windowProperties;
-    windowProperties.Title = "Sandbox";
-    windowProperties.Width = 1080;
-    windowProperties.Height = 720;
+    Pyre::ApplicationProperties props;
+    props.BaseDirectory = "Sandbox";
+    props.WindowProperties.Title = "Sandbox";
+    props.WindowProperties.Width = 1080;
+    props.WindowProperties.Height = 720;
+    props.WindowProperties.VSync = false;
 
-    return new Sandbox(windowProperties);
+    return new Sandbox(props);
 }
