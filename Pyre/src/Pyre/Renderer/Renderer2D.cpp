@@ -21,7 +21,7 @@ namespace Pyre {
         static const uint32_t MaxQuads = 20000;
         static const uint32_t MaxVerts = MaxQuads * 4;
         static const uint32_t MaxIndices = MaxQuads * 6;
-        static const uint32_t MaxTextureSlots = 32;
+        static const uint32_t MaxTextureSlots = 16;
 
         Ref<VertexArray> QuadVA;
         Ref<VertexBuffer> QuadVB;
@@ -162,6 +162,7 @@ namespace Pyre {
     void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
         PYRE_PROFILE_FUNCTION();
 
+        // Make sure we have space in the batch
         if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
             EndScene();
             StartBatch();
@@ -208,6 +209,7 @@ namespace Pyre {
     void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
         PYRE_PROFILE_FUNCTION();
 
+        // Make sure we have space in the batch
         if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
             EndScene();
             StartBatch();
@@ -230,6 +232,12 @@ namespace Pyre {
             }
         }
         if (textureIndex == 0) {
+            // Make sure we have a free texture slot
+            if (s_Data.TextureSlotIndex >= RenderData::MaxTextureSlots) {
+                EndScene();
+                StartBatch();
+            }
+
             textureIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
         }
@@ -257,6 +265,7 @@ namespace Pyre {
     void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
         PYRE_PROFILE_FUNCTION();
 
+        // Make sure we have space in the batch
         if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
             EndScene();
             StartBatch();
@@ -303,6 +312,7 @@ namespace Pyre {
     void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tint) {
         PYRE_PROFILE_FUNCTION();
 
+        // Make sure we have space in the batch
         if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
             EndScene();
             StartBatch();
@@ -325,6 +335,12 @@ namespace Pyre {
             }
         }
         if (textureIndex == 0) {
+            // Make sure we have a free texture slot
+            if (s_Data.TextureSlotIndex >= RenderData::MaxTextureSlots) {
+                EndScene();
+                StartBatch();
+            }
+
             textureIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
         }
