@@ -24,10 +24,12 @@ namespace Pyre {
     public:
         using EventCallbackFun = std::function<void(Event&)>;
 
-        Window() = default;
         virtual ~Window() = default;
 
         virtual void Update() = 0;
+
+        virtual void SetTitle(const std::string& title) = 0;
+        virtual const std::string& GetTitle() const = 0;
 
         virtual void SetPosition(unsigned int posX, unsigned int posY) = 0;
         virtual unsigned int GetPosX() const = 0;
@@ -40,7 +42,7 @@ namespace Pyre {
         virtual WindowMode GetWindowMode() const = 0;
 
         virtual void SetVSync(bool enabled) = 0;
-        virtual bool IsVSync() const = 0;
+        virtual bool GetVSync() const = 0;
 
         virtual void SetIcon(const std::string& path) = 0;
 

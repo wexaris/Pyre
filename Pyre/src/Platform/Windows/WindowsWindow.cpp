@@ -6,7 +6,6 @@
 #include "Pyre/Events/WindowEvents.hpp"
 
 #include <stb_image/stb_image.h>
-#include <glad/glad.h>
 
 namespace Pyre {
 
@@ -235,8 +234,15 @@ namespace Pyre {
     void WindowsWindow::Update() {
         PYRE_PROFILE_FUNCTION();
 
-        glfwPollEvents();
         m_Context->SwapBuffers();
+    }
+
+    void WindowsWindow::SetTitle(const std::string& title) {
+        PYRE_PROFILE_FUNCTION();
+
+        m_WindowData.Title = title;
+
+        glfwSetWindowTitle(m_Window, title.c_str());
     }
 
     void WindowsWindow::SetPosition(unsigned int posX, unsigned int posY) {

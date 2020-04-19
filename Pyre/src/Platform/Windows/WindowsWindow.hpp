@@ -28,18 +28,21 @@ namespace Pyre {
 
         void Update() override;
 
+        virtual void SetTitle(const std::string& title) override;
+        virtual const std::string& GetTitle() const override { return m_WindowData.Title; }
+
         void SetPosition(unsigned int posX, unsigned int posY) override;
         unsigned int GetPosX() const override { return m_WindowData.PosX; }
         unsigned int GetPosY() const override { return m_WindowData.PosY; }
         void SetSize(unsigned int width, unsigned int height) override;
-        unsigned int GetWidth() const override { return m_WindowData.Width; }
+        unsigned int GetWidth() const override  { return m_WindowData.Width; }
         unsigned int GetHeight() const override { return m_WindowData.Height; }
 
         void SetWindowMode(WindowMode mode, unsigned int width = 0, unsigned int height = 0) override;
         WindowMode GetWindowMode() const override { return m_WindowData.Mode; }
 
         void SetVSync(bool enabled) override;
-        bool IsVSync() const override { return m_WindowData.VSync; }
+        bool GetVSync() const override { return m_WindowData.VSync; }
 
         void SetIcon(const std::string& path) override;
 

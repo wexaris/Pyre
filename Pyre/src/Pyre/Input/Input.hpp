@@ -15,6 +15,8 @@ namespace Pyre {
 
     class Input {
     public:
+        static void PollInputs() { s_Instance->PollInputsImpl(); }
+
         template<typename T>
         static bool IsInputPressed(T input) {
             auto& item = s_Instance->m_InputMap.find(static_cast<uint16_t>(input));
@@ -56,6 +58,8 @@ namespace Pyre {
     protected:
         Input() = default;
 
+        virtual void PollInputsImpl() = 0;
+
         virtual bool IsKeyPressedImpl(KeyCode key) = 0;
 
         virtual bool IsMouseButtonPressedImpl(MouseCode button) = 0;
@@ -67,7 +71,6 @@ namespace Pyre {
         static Scope<Input> s_Instance;
         static std::unordered_map<uint16_t, InputKey> m_InputMap;
         static std::unordered_map<KeyCode, unsigned int> s_KeyRepeatCount;
-
     };
 
 }

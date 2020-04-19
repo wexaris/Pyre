@@ -5,6 +5,8 @@ namespace Pyre {
 
     class WindowsInput : public Input {
     protected:
+        void PollInputsImpl() override;
+
         bool IsKeyPressedImpl(KeyCode key) override;
 
         bool IsMouseButtonPressedImpl(MouseCode button) override;

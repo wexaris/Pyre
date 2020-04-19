@@ -1,6 +1,7 @@
 #include "pyrepch.hpp"
 #include "Pyre/Core/Application.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
+#include "Pyre/Input/Input.hpp"
 
 #include <filesystem>
 #include <thread>
@@ -57,6 +58,7 @@ namespace Pyre {
 
             {
                 PYRE_PROFILE_SCOPE("Logic Loop");
+                Input::PollInputs();
                 for (unsigned int i = 0; i < substepCount; i++) {
                     for (auto& layer : m_LayerStack) {
                         layer->Tick((float)substepDelta);
@@ -79,7 +81,6 @@ namespace Pyre {
                 m_ImGuiLayer->End();
             }
 
-            // Poll events and swap buffers
             m_Window->Update();
         }
     }
