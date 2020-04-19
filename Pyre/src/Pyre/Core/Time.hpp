@@ -3,26 +3,39 @@
 
 namespace Pyre {
 
-    class Time {
-    public:
-        Time() : m_TimePoint(Clock::now()) {}
+    struct Time {
+        std::chrono::time_point<std::chrono::steady_clock> Point;
 
-        operator double() const { return AsSeconds(); }
+        Time() : Point(std::chrono::steady_clock::now()) {}
 
-        double AsSeconds() const {
-            auto time = std::chrono::time_point_cast<std::chrono::microseconds>(m_TimePoint);
-            return time.time_since_epoch().count() / 1000000.0;
-        }
-        
-        double AsMilliseconds() const {
-            auto time = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_TimePoint);
-            return time.time_since_epoch().count() / 1000000.0;
+        long long AsSeconds() const {
+            return std::chrono::time_point_cast<std::chrono::seconds>(Point).time_since_epoch().count();
         }
 
-    private:
-        using Clock = std::chrono::steady_clock;
+        long long AsMilliseconds() const {
+            return std::chrono::time_point_cast<std::chrono::milliseconds>(Point).time_since_epoch().count();
+        }
 
-        std::chrono::time_point<Clock> m_TimePoint;
+        long long AsMicroseconds() const {
+            return std::chrono::time_point_cast<std::chrono::microseconds>(Point).time_since_epoch().count();
+        }
+
+        long long AsNanoseconds() const {
+            return std::chrono::time_point_cast<std::chrono::nanoseconds>(Point).time_since_epoch().count();
+        }
+
+        double AsSecondsf() const {
+            return AsNanoseconds() * 1E-9;
+        }
+
+        double AsMillisecondsf() const {
+            return AsNanoseconds() * 1E-6;
+        }
+
+        double AsMicrosecondsf() const {
+            return AsNanoseconds() * 1E-3;
+        }
+
     };
 
 }

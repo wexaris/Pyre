@@ -12,7 +12,8 @@ namespace Pyre {
     struct ApplicationProperties {
         std::string BaseDirectory;
         WindowProperties WindowProperties;
-        unsigned int MaxTickRate = 60;
+        unsigned int MinTickRate = 60;
+        unsigned int MaxSubsteps = 4;
     };
 
     class Application {
@@ -36,7 +37,8 @@ namespace Pyre {
 
         static Application* s_Instance;
         const std::string m_BaseDirectory;
-        const unsigned int m_MaxTickRate = 60;
+        const unsigned int m_MinTickRate; // Minimum Tick amount per second of real time
+        const unsigned int m_MaxSubsteps; // Maximum Tick amount per frame before slowing down simulation
         bool m_Running = true;
 
         Scope<Window> m_Window;

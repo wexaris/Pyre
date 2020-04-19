@@ -24,10 +24,10 @@ void TestLayer2D::Tick(float dt) {
     PYRE_PROFILE_FUNCTION();
 
     m_CameraController.Tick(dt);
-    s_Rotation += 0.3f;
+    s_Rotation += 45.0f * dt;
 }
 
-void TestLayer2D::Draw(float alpha) {
+void TestLayer2D::Draw() {
     PYRE_PROFILE_FUNCTION();
 
     Pyre::Renderer2D::ResetStats();
@@ -40,10 +40,10 @@ void TestLayer2D::Draw(float alpha) {
     Pyre::Renderer2D::EndScene();
     
     Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
-    for (float y = -5.0f; y <= 5.0f; y += 0.2f) {
-        for (float x = -5.0f; x <= 5.0f; x += 0.2f) {
-            glm::vec4 col = { (x + 5.0f) / 10.0f, 0.5f, (y + 5.0f) / 10.0f, 0.9f };
-            Pyre::Renderer2D::DrawQuad({ x,  y }, { 0.2f, 0.2f }, col);
+    for (float y = -5.0f; y <= 5.0f; y += 1.0f) {
+        for (float x = -5.0f; x <= 5.0f; x += 1.0f) {
+            glm::vec4 col = { (x + 5.0f) / 10.0f, 0.5f, (y + 5.0f) / 10.0f, 0.95f };
+            Pyre::Renderer2D::DrawQuad({ x,  y }, { 1.0f, 1.0f }, col);
         }
     }
     Pyre::Renderer2D::EndScene();

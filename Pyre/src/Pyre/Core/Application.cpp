@@ -3,6 +3,7 @@
 #include "Pyre/Renderer/Renderer.hpp"
 
 #include <filesystem>
+#include <thread>
 
 namespace Pyre {
 
@@ -10,7 +11,8 @@ namespace Pyre {
 
     Application::Application(const ApplicationProperties& properties) :
         m_BaseDirectory(properties.BaseDirectory),
-        m_MaxTickRate(properties.MaxTickRate)
+        m_MinTickRate(properties.MinTickRate),
+        m_MaxSubsteps(properties.MaxSubsteps)
     {
         PYRE_PROFILE_FUNCTION();
 
@@ -34,39 +36,38 @@ namespace Pyre {
     void Application::Run() {
         PYRE_PROFILE_FUNCTION();
 
-        const float tickTime = 1.0f / m_MaxTickRate;
-        double accumulator = 0.0f;
+        const float maxSubstepDelta = 1.0f / m_MinTickRate;
         m_LastFrameTime = Time();
 
         while (m_Running) {
             PYRE_PROFILE_SCOPE("Game Loop");
 
-            // Update delta time
+            // Update frame delta time
             Time time;
-            m_DeltaTime = time - m_LastFrameTime;
+            m_DeltaTime = time.AsSecondsf() - m_LastFrameTime.AsSecondsf();
             m_LastFrameTime = time;
-            // Accumulate time for Tick()
-            accumulator += m_DeltaTime;
+
+            // Calculate the required number of substeps
+            unsigned int substepCount = (int)ceil(m_DeltaTime / maxSubstepDelta);
+            if (substepCount > m_MaxSubsteps) { substepCount = m_MaxSubsteps; } // Upper bound
+            
+            // Calculate the delta time for each substep
+            double substepDelta = m_DeltaTime / substepCount;
+            if (substepDelta > maxSubstepDelta) { substepDelta = maxSubstepDelta; } // Lower bound
 
             {
                 PYRE_PROFILE_SCOPE("Logic Loop");
-                unsigned int tickCount = 0;
-                while (accumulator >= tickTime && tickCount < m_MaxTickRate) {
+                for (unsigned int i = 0; i < substepCount; i++) {
                     for (auto& layer : m_LayerStack) {
-                        layer->Tick(tickTime);
+                        layer->Tick((float)substepDelta);
                     }
-                    accumulator -= tickTime;
-                    tickCount++;
                 }
             }
-
-            // For interpolation
-            float alpha = (float)((double)accumulator / (double)tickTime);
 
             {
                 PYRE_PROFILE_SCOPE("Draw Loop");
                 for (auto& layer : m_LayerStack) {
-                    layer->Draw(alpha);
+                    layer->Draw();
                 }
             }
             {

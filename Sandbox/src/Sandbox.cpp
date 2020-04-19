@@ -20,6 +20,8 @@ Pyre::Application* Pyre::CreateApplication() {
     props.WindowProperties.Width = 1080;
     props.WindowProperties.Height = 720;
     props.WindowProperties.VSync = false;
+    props.MinTickRate = 60;
+    props.MaxSubsteps = 4;
 
     return new Sandbox(props);
 }

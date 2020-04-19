@@ -4,7 +4,7 @@ namespace Pyre {
 
     class Drawable {
     public:
-        virtual void Draw(float alpha) = 0;
+        virtual void Draw() = 0;
     };
 
     class ImGuiDrawable {

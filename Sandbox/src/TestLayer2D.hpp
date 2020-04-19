@@ -8,7 +8,7 @@ public:
     void OnDetach() override;
 
     void Tick(float dt) override;
-    void Draw(float alpha) override;
+    void Draw() override;
     void ImGuiDraw() override;
     void OnEvent(Pyre::Event& e) override;
 

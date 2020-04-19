@@ -11,7 +11,9 @@ namespace Pyre {
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void Tick(float dt) {}
+        virtual void Tick(float dt) = 0;
+        virtual void Draw() override = 0;
+        virtual void ImGuiDraw() override {}
         virtual void OnEvent(Event&) {}
 
         const std::string& GetName() const { return m_Name; }
