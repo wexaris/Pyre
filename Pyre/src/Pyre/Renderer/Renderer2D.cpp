@@ -122,7 +122,7 @@ namespace Pyre {
     void Renderer2D::EndScene() {
         PYRE_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBeg;
+        uint32_t dataSize = (uint32_t)(reinterpret_cast<uintptr_t>(s_Data.QuadVertexBufferPtr) - reinterpret_cast<uintptr_t>(s_Data.QuadVertexBufferBeg));
         s_Data.QuadVB->SetData(s_Data.QuadVertexBufferBeg, dataSize);
 
         Flush();
@@ -143,13 +143,13 @@ namespace Pyre {
     }
 
     // translation * size
-    glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, const glm::vec2& size) {
+    static glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, const glm::vec2& size) {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
         return glm::scale(transform, { size.x, size.y, 1.0f });
     }
 
     // translation * rotation * size
-    glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, float rot, const glm::vec2& size) {
+    static glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, float rot, const glm::vec2& size) {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
         transform = glm::rotate(transform, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
         return glm::scale(transform, { size.x, size.y, 1.0f });

@@ -1,5 +1,8 @@
 #pragma once
 
+
+//////////////////////// PLATFORM ////////////////////////
+
 #ifdef _WIN32
     #ifdef _WIN64
         #define PYRE_PLATFORM_WINDOWS
@@ -29,6 +32,9 @@
    #error Unknown platform!
 #endif
 
+
+//////////////////////// BUILD TYPE ////////////////////////
+
 #ifdef _DEBUG
     #define PYRE_DEBUG
 #else
@@ -57,6 +63,13 @@
 
 #define BIT(x) (1 << x)
 
+
+//////////////////////// SETTINGS ////////////////////////
+
+#define GLFW_INCLUDE_NONE // GLFW won't include its own OpenGL
+
+
+//////////////////////// MEMORY ////////////////////////
 
 #include <memory>
 
