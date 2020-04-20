@@ -21,7 +21,7 @@ namespace Pyre {
         m_WindowData.Title = properties.Title;
         m_WindowData.Width = properties.Width;
         m_WindowData.Height = properties.Height;
-        m_WindowData.VSync = properties.VSync;
+        m_WindowData.VSyncEnabled = properties.VSync;
 
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {
@@ -64,7 +64,7 @@ namespace Pyre {
         // Set window properties
         glfwSetWindowUserPointer(m_Window, &m_WindowData);
         SetWindowMode(properties.Mode, properties.Width, properties.Height);
-        SetVSync(m_WindowData.VSync);
+        SetVSyncEnabled(m_WindowData.VSyncEnabled);
         SetIcon(properties.IconPath);
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -268,12 +268,12 @@ namespace Pyre {
 
         PYRE_CORE_ASSERT(m_Window, "Cannot set window mode before window creation!");
 
-        if (mode == m_WindowData.Mode) {
+        if (mode == m_WindowData.WindowMode) {
             return;
         }
 
         // If currently windowed, save window position and size
-        if (m_WindowData.Mode == WindowMode::Windowed) {
+        if (m_WindowData.WindowMode == WindowMode::Windowed) {
             m_PrevWindowedProps.PosX = m_WindowData.PosX;
             m_PrevWindowedProps.PosY = m_WindowData.PosY;
             m_PrevWindowedProps.Width = m_WindowData.Width;
@@ -309,7 +309,7 @@ namespace Pyre {
             monitor = glfwGetPrimaryMonitor();
         }
 
-        m_WindowData.Mode = mode;
+        m_WindowData.WindowMode = mode;
 
         if (m_WindowData.EventCallback) {
             WindowResizeEvent event(m_WindowData.Width, m_WindowData.Height);
@@ -319,11 +319,11 @@ namespace Pyre {
         glfwSetWindowMonitor(m_Window, monitor, m_WindowData.PosX, m_WindowData.PosY, m_WindowData.Width, m_WindowData.Height, m_VideoMode.refreshRate);
     }
 
-    void WindowsWindow::SetVSync(bool enabled) {
+    void WindowsWindow::SetVSyncEnabled(bool enabled) {
         PYRE_PROFILE_FUNCTION();
 
-        m_WindowData.VSync = enabled;
-        if (m_WindowData.VSync) { glfwSwapInterval(1); }
+        m_WindowData.VSyncEnabled = enabled;
+        if (m_WindowData.VSyncEnabled) { glfwSwapInterval(1); }
         else { glfwSwapInterval(0); }
     }
 

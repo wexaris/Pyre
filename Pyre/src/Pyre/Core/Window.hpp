@@ -41,8 +41,8 @@ namespace Pyre {
         virtual void SetWindowMode(WindowMode mode, unsigned int width = 0, unsigned int height = 0) = 0;
         virtual WindowMode GetWindowMode() const = 0;
 
-        virtual void SetVSync(bool enabled) = 0;
-        virtual bool GetVSync() const = 0;
+        virtual void SetVSyncEnabled(bool enabled) = 0;
+        virtual bool GetVSyncEnabled() const = 0;
 
         virtual void SetIcon(const std::string& path) = 0;
 

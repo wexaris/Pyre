@@ -10,15 +10,15 @@ namespace Pyre {
         std::string Title = "Pyre Engine";
         int PosX = 0, PosY = 0;
         int Width = 0, Height = 0;
-        WindowMode Mode = WindowMode::Windowed;
-        bool VSync = true;
+        WindowMode WindowMode = WindowMode::Windowed;
+        bool VSyncEnabled = true;
 
         Window::EventCallbackFun EventCallback;
     };
 
     struct WindowedModeProperties {
-        int PosX, PosY;
-        int Width, Height;
+        int PosX = 0, PosY = 0;
+        int Width = 1280, Height = 720;
     };
 
     class WindowsWindow : public Window {
@@ -39,10 +39,10 @@ namespace Pyre {
         unsigned int GetHeight() const override { return m_WindowData.Height; }
 
         void SetWindowMode(WindowMode mode, unsigned int width = 0, unsigned int height = 0) override;
-        WindowMode GetWindowMode() const override { return m_WindowData.Mode; }
+        WindowMode GetWindowMode() const override { return m_WindowData.WindowMode; }
 
-        void SetVSync(bool enabled) override;
-        bool GetVSync() const override { return m_WindowData.VSync; }
+        void SetVSyncEnabled(bool enabled) override;
+        bool GetVSyncEnabled() const override { return m_WindowData.VSyncEnabled; }
 
         void SetIcon(const std::string& path) override;
 
