@@ -74,20 +74,20 @@ namespace Pyre {
         }
     }
 
-    void OrthographicCameraController::OnEvent(Event& e) {
-        PYRE_PROFILE_FUNCTION();
-
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnMouseScroll));
-        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnWindowResize));
-    }
-
     void OrthographicCameraController::SetZoom(float zoom) {
         PYRE_CORE_ASSERT(zoom > 0.0f, "Zoom level has to be higher than 0.0f!");
         float diff = zoom / m_Zoom;
         m_MovementSpeed *= diff;
         m_Zoom = zoom;
         UpdateProjectionMatrix();
+    }
+
+    void OrthographicCameraController::OnEvent(Event& e) {
+        PYRE_PROFILE_FUNCTION();
+
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<MouseScrollEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnMouseScroll));
+        dispatcher.Dispatch<WindowResizeEvent>(PYRE_BIND_METHOD(OrthographicCameraController::OnWindowResize));
     }
 
     bool OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e) {

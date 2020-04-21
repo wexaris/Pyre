@@ -19,7 +19,7 @@ namespace Pyre {
         Renderer2D::Shutdown();
     }
 
-    void Renderer::BeginScene(OrthographicCamera& camera) {
+    void Renderer::BeginScene(const OrthographicCamera& camera) {
         PYRE_PROFILE_FUNCTION();
 
         s_SceneData->ViewProjMatrix = camera.GetViewProjectionMatrix();

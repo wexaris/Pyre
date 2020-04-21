@@ -7,13 +7,12 @@ namespace Pyre {
     class OrthographicCamera {
     public:
         OrthographicCamera(float left, float right, float bottom, float top);
-        ~OrthographicCamera() = default;
 
         void SetProjection(float left, float right, float bottom, float top);
         void SetTransform(const glm::vec3& position, float rotation) { RecalcViewMatrix(position, rotation); }
 
-        const glm::mat4& GetProjectionMatrix() const { return m_ProjMatrix; }
-        const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+        const glm::mat4& GetProjectionMatrix() const     { return m_ProjMatrix; }
+        const glm::mat4& GetViewMatrix() const           { return m_ViewMatrix; }
         const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjMatrixCache; }
 
     private:

@@ -12,22 +12,22 @@ namespace Pyre {
         void Tick(float dt);
         void OnEvent(Event& e);
 
-        const glm::vec3& GetPosition() const   { return m_Position; }
         void SetPosition(const glm::vec3& pos) { m_Position = pos; }
-        float GetMovementSpeed() const         { return m_MovementSpeed; }
+        const glm::vec3& GetPosition() const   { return m_Position; }
         void SetMovementSpeed(float speed)     { m_MovementSpeed = speed; }
+        float GetMovementSpeed() const         { return m_MovementSpeed; }
 
-        float GetRotation() const          { return m_Rotation; }
         void SetRotaton(float rot)         { m_Rotation = rot; }
-        float GetRotationSpeed() const     { return m_RotationSpeed; }
+        float GetRotation() const          { return m_Rotation; }
         void SetRotationSpeed(float speed) { m_RotationSpeed = speed; }
+        float GetRotationSpeed() const     { return m_RotationSpeed; }
 
-        float GetZoom() const          { return m_Zoom; }
         void SetZoom(float zoom);
-        float GetZoomSpeed() const     { return m_ZoomSpeed; }
+        float GetZoom() const          { return m_Zoom; }
         void SetZoomSpeed(float speed) { m_ZoomSpeed = speed; }
+        float GetZoomSpeed() const     { return m_ZoomSpeed; }
 
-        OrthographicCamera& GetCamera() { return m_Camera; }
+        OrthographicCamera& GetCamera()             { return m_Camera; }
         const OrthographicCamera& GetCamera() const { return m_Camera; }
 
     private:
