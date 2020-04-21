@@ -8,7 +8,7 @@ namespace Pyre {
     public:
         KeyCode GetKeyCode() const { return m_KeyCode; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Input | Event::Category::Keyboard)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Input | Event::Category::Keyboard);
 
     protected:
         KeyCode m_KeyCode;
@@ -26,7 +26,7 @@ namespace Pyre {
 
         int GetRepeatCount() const { return m_RepeatCount; }
         
-        EVENT_ADD_TYPE(KeyPress)
+        PYRE_GEN_EVENT_TYPE(KeyPress);
         std::string AsString() const override {
             return FMT("KeyPress: {} ({} repeats)", m_KeyCode, m_RepeatCount);
         }
@@ -43,7 +43,7 @@ namespace Pyre {
             Input::ResetKeyRepeatCount(keycode);
         }
 
-        EVENT_ADD_TYPE(KeyRelease)
+        PYRE_GEN_EVENT_TYPE(KeyRelease);
         std::string AsString() const override {
             return FMT("KeyRelease: {}", m_KeyCode);
         }
@@ -55,8 +55,8 @@ namespace Pyre {
             KeyEvent(keycode)
         {}
 
-        EVENT_ADD_TYPE(KeyType)
-            std::string AsString() const override {
+        PYRE_GEN_EVENT_TYPE(KeyType);
+        std::string AsString() const override {
             return FMT("KeyType: {}", m_KeyCode);
         }
     };

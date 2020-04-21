@@ -22,19 +22,19 @@ namespace Pyre {
 
         bool Handled = false;
 
+        bool IsCategory(Category category) { return GetCategoryFlags() & category; }
+        virtual std::string AsString() const { return GetName(); }
+
         virtual Event::Type GetEventType() const = 0;
         virtual const char* GetName() const    = 0;
         virtual int GetCategoryFlags() const   = 0;
-        virtual std::string AsString() const   { return GetName(); }
-
-        bool IsCategory(Category category) { return GetCategoryFlags() & category; }
     };
 
-#define EVENT_ADD_TYPE(type) \
+#define PYRE_GEN_EVENT_TYPE(type) \
     static Event::Type GetStaticType()        { return Event::Type::type; } \
     Event::Type GetEventType() const override { return GetStaticType(); } \
     const char* GetName() const override      { return #type; }
-#define EVENT_ADD_CATEGORY(category) \
+#define PYRE_GEN_EVENT_CATEGORY(category) \
     int GetCategoryFlags() const override     { return category; }
 
     class EventDispatcher {
@@ -43,7 +43,7 @@ namespace Pyre {
             : m_Event(event)
         {}
 
-        template<typename T, typename Fn, typename = typename std::enable_if<std::is_base_of<Event, T>::value>::type>
+        template<typename T, typename Fn, std::enable_if_t<std::is_base_of<Event, T>::value, int> = 0>
         bool Dispatch(const Fn& fn) {
             if (!m_Event.Handled && m_Event.GetEventType() == T::GetStaticType()) {
                 m_Event.Handled = fn(static_cast<T&>(m_Event));

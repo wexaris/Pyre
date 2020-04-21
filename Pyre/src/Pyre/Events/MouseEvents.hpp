@@ -8,7 +8,7 @@ namespace Pyre {
     public:
         MouseCode GetMouseButton() const { return m_MouseButton; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Input | Event::Category::MouseButton)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Input | Event::Category::MouseButton);
 
     protected:
         MouseCode m_MouseButton;
@@ -24,7 +24,7 @@ namespace Pyre {
             MouseButtonEvent(keycode)
         {}
 
-        EVENT_ADD_TYPE(MouseButtonPress)
+        PYRE_GEN_EVENT_TYPE(MouseButtonPress);
         std::string AsString() const override {
             return FMT("MouseButtonPress: {}", m_MouseButton);
         }
@@ -36,7 +36,7 @@ namespace Pyre {
             MouseButtonEvent(keycode)
         {}
 
-        EVENT_ADD_TYPE(MouseButtonRelease)
+        PYRE_GEN_EVENT_TYPE(MouseButtonRelease);
         std::string AsString() const override {
             return FMT("MouseButtonRelease: {}", m_MouseButton);
         }
@@ -51,8 +51,8 @@ namespace Pyre {
         float GetX() const { return m_MouseX; }
         float GetY() const { return m_MouseY; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Input | Event::Category::Mouse)
-        EVENT_ADD_TYPE(MouseMove)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Input | Event::Category::Mouse);
+        PYRE_GEN_EVENT_TYPE(MouseMove);
         std::string AsString() const override {
             return FMT("MouseMove: {}, {}", m_MouseX, m_MouseY);
         }
@@ -71,8 +71,8 @@ namespace Pyre {
         float GetXOffset() const { return m_XOffset; }
         float GetYOffset() const { return m_YOffset; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Input | Event::Category::Mouse)
-        EVENT_ADD_TYPE(MouseScroll)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Input | Event::Category::Mouse);
+        PYRE_GEN_EVENT_TYPE(MouseScroll);
         std::string AsString() const override {
             return FMT("MouseScroll: {}, {}", m_XOffset, m_YOffset);
         }

@@ -7,8 +7,8 @@ namespace Pyre {
     public:
         WindowCloseEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowClose)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowClose);
     };
 
     class WindowMoveEvent : public Event {
@@ -20,8 +20,8 @@ namespace Pyre {
         int GetPosX() const { return m_PosX; }
         int GetPosY() const { return m_PosY; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowMove)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowMove);
         std::string AsString() const override {
             return FMT("WindowMove: {}, {}", m_PosX, m_PosY);
         }
@@ -40,8 +40,8 @@ namespace Pyre {
         int GetWidth() const { return m_Width; }
         int GetHeight() const { return m_Height; }
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowResize)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowResize);
         std::string AsString() const override {
             return FMT("WindowResize: {}, {}", m_Width, m_Height);
         }
@@ -55,40 +55,40 @@ namespace Pyre {
     public:
         WindowFocusEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowFocus)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowFocus);
     };
 
     class WindowLoseFocusEvent : public Event {
     public:
         WindowLoseFocusEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowLoseFocus)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowLoseFocus);
     };
 
     class WindowMaximizeEvent : public Event {
     public:
         WindowMaximizeEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowMaximize)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowMaximize);
     };
 
     class WindowMinimizeEvent : public Event {
     public:
         WindowMinimizeEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowMinimize)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowMinimize);
     };
 
     class WindowRestoreEvent : public Event {
     public:
         WindowRestoreEvent() = default;
 
-        EVENT_ADD_CATEGORY(Event::Category::Window)
-        EVENT_ADD_TYPE(WindowRestore)
+        PYRE_GEN_EVENT_CATEGORY(Event::Category::Window);
+        PYRE_GEN_EVENT_TYPE(WindowRestore);
     };
 
 }
