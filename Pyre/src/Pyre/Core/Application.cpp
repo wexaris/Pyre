@@ -111,6 +111,9 @@ namespace Pyre {
         dispatcher.Dispatch<WindowRestoreEvent>(PYRE_BIND_METHOD(Application::OnWindowRestore));
 
         for (auto iter = m_LayerStack.rbegin(); !e.Handled && iter != m_LayerStack.rend(); iter++) {
+            if (e.Handled) {
+                break;
+            }
             (*iter)->OnEvent(e);
         }
     }
