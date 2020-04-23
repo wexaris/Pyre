@@ -23,6 +23,10 @@ static float s_Rotation = 0.0f;
 void TestLayer2D::Tick(float dt) {
     PYRE_PROFILE_FUNCTION();
 
+    if (Pyre::Input::IsKeyPressed(Pyre::Key::Escape)) {
+        Pyre::Application::Get().Stop();
+    }
+
     m_CameraController.Tick(dt);
     s_Rotation += 45.0f * dt;
 }
@@ -40,10 +44,10 @@ void TestLayer2D::Draw() {
     Pyre::Renderer2D::EndScene();
     
     Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
-    for (float y = -5.0f; y <= 5.0f; y += 1.0f) {
-        for (float x = -5.0f; x <= 5.0f; x += 1.0f) {
+    for (float y = -5.0f; y <= 5.0f; y += 0.5f) {
+        for (float x = -5.0f; x <= 5.0f; x += 0.5f) {
             glm::vec4 col = { (x + 5.0f) / 10.0f, 0.5f, (y + 5.0f) / 10.0f, 0.95f };
-            Pyre::Renderer2D::DrawQuad({ x,  y }, { 1.0f, 1.0f }, col);
+            Pyre::Renderer2D::DrawQuad({ x,  y }, { 0.5f, 0.5f }, col);
         }
     }
     Pyre::Renderer2D::EndScene();

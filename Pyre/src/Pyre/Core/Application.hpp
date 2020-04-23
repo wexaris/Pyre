@@ -24,6 +24,8 @@ namespace Pyre {
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
 
+        void Stop() { m_Running = false; }
+
         std::string CorrectFilePath(const std::string& path);
 
         static Application& Get() { return *s_Instance; }
