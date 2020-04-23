@@ -42,7 +42,7 @@ namespace Pyre {
         bool m_Running = true;
 
         Scope<Window> m_Window;
-        ImGuiLayer* m_ImGuiLayer;
+        ImGuiLayer* m_ImGuiLayer = nullptr;
         LayerStack m_LayerStack;
         Time m_LastFrameTime;
         double m_DeltaTime;

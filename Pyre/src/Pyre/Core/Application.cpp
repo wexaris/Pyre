@@ -4,7 +4,6 @@
 #include "Pyre/Input/Input.hpp"
 
 #include <filesystem>
-#include <thread>
 
 namespace Pyre {
 
@@ -25,8 +24,10 @@ namespace Pyre {
 
         Renderer::Init();
 
+#ifdef PYRE_ENABLE_IMGUI
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
+#endif
     }
 
     Application::~Application() {
@@ -73,12 +74,14 @@ namespace Pyre {
                 }
             }
             {
+#ifdef PYRE_ENABLE_IMGUI
                 PYRE_PROFILE_SCOPE("ImGuiDraw Loop");
                 m_ImGuiLayer->Begin();
                 for (auto& layer : m_LayerStack) {
                     layer->ImGuiDraw();
                 }
                 m_ImGuiLayer->End();
+#endif
             }
 
             m_Window->Update();

@@ -32,8 +32,11 @@ namespace Pyre {
     void OrthographicCameraController::Tick(float dt) {
         PYRE_PROFILE_FUNCTION();
 
+        // TODO: remove ImGui dependence
+#ifdef PYRE_ENABLE_IMGUI
         ImGuiIO& io = ImGui::GetIO();
         if (!io.WantCaptureKeyboard) {
+#endif
 
             if (Input::IsInputPressed(CameraInput::MoveLeft)) {
                 m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
@@ -71,7 +74,9 @@ namespace Pyre {
             }
 
             m_Camera.SetTransform(m_Position, m_Rotation);
+#ifndef PYRE_ENABLE_IMGUI
         }
+#endif
     }
 
     void OrthographicCameraController::SetZoom(float zoom) {

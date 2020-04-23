@@ -1,6 +1,5 @@
 #pragma once
 
-
 //////////////////////// PLATFORM ////////////////////////
 
 #ifdef _WIN32
@@ -34,12 +33,22 @@
 
 
 //////////////////////// BUILD TYPE ////////////////////////
+// PYRE_DEBUG
+// PYRE_RELEASE
+// PYRE_DISTRIB
 
-#ifdef _DEBUG
-    #define PYRE_DEBUG
-#else
-    #define PYRE_RELEASE
+#ifndef PYRE_DISTRIB
+    #ifdef _DEBUG
+        #define PYRE_DEBUG
+    #else
+        #define PYRE_RELEASE
+    #endif
 #endif
+
+
+//////////////////////// SETTINGS ////////////////////////
+
+#define GLFW_INCLUDE_NONE // GLFW won't include its own OpenGL
 
 #ifdef PYRE_DEBUG
     #define PYRE_ENABLE_ASSERTS
@@ -53,6 +62,10 @@
     #endif
 #endif
 
+#ifndef PYRE_DISTRIB
+    #define PYRE_ENABLE_IMGUI
+#endif
+
 #ifdef PYRE_ENABLE_ASSERTS
     #define PYRE_CORE_ASSERT(x, ...) { if (!(x)) { PYRE_CORE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }
     #define PYRE_ASSERT(x, ...) { if (!(x)) { PYRE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }
@@ -61,15 +74,10 @@
     #define PYRE_ASSERT(x, ...)
 #endif
 
+
+//////////////////////// APPLICATION ////////////////////////
+
 #define BIT(x) (1 << x)
-
-
-//////////////////////// SETTINGS ////////////////////////
-
-#define GLFW_INCLUDE_NONE // GLFW won't include its own OpenGL
-
-
-//////////////////////// MEMORY ////////////////////////
 
 #include <memory>
 
@@ -89,6 +97,21 @@ namespace Pyre {
     template<typename T, typename... Args>
     constexpr auto MakeRef(const Args&... args) {
         return std::make_shared<T>(args...);
+    }
+
+
+    // FNV-1a 32bit hashing algorithm
+    constexpr uint32_t Const_FNV1a_32 = 0x811c9dc5;
+    constexpr uint32_t Prime_FNV1a_32 = 0x1000193;
+    inline constexpr uint32_t Hash32_FNV1a(const char* const str, const uint32_t value = Const_FNV1a_32) noexcept {
+        return (str[0] == '\0') ? value : Hash32_FNV1a(&str[1], (value ^ uint32_t(str[0])) * Prime_FNV1a_32);
+    }
+
+    // FNV-1a 64bit hashing algorithm
+    constexpr uint64_t Const_FNV1a_64 = 0xcbf29ce484222325;
+    constexpr uint64_t Prime_FNV1a_64 = 0x100000001b3;
+    inline constexpr uint64_t Hash64_FNV1a(const char* const str, const uint64_t value = Const_FNV1a_64) noexcept {
+        return (str[0] == '\0') ? value : Hash64_FNV1a(&str[1], (value ^ uint64_t(str[0])) * Prime_FNV1a_64);
     }
 
 }

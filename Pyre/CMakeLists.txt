@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(pyre) 
 
+option(PYRE_DISTRIBUTION "Pyre distribution build" OFF)
+
 # Build external dependencies
 add_subdirectory(external)
 
@@ -46,7 +48,7 @@ target_link_libraries(pyre
 )
 target_compile_definitions(pyre PRIVATE
     $<$<BOOL:${PYRE_DISTRIBUTION}>:
-        -DPYRE_DISTRIBUTION>
+        -DPYRE_DISTRIB>
 )
 target_include_directories(pyre PUBLIC src)
 

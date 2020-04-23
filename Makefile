@@ -4,6 +4,7 @@ ROOT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
 BUILD_TYPE ?= Debug
 BUILD_DIR := $(shell echo $(BUILD_TYPE) | tr A-Z a-z)
+ADDITIONAL_ARGS ?= 
 
 THREAD_NUM ?= 4
 
@@ -14,7 +15,7 @@ all: debug
 .ONESHELL:
 build:
 	mkdir -p build/$(BUILD_DIR) && cd build/$(BUILD_DIR)
-	cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(ROOT_DIR)
+	cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(ADDITIONAL_ARGS) $(ROOT_DIR)
 	cmake --build . --config $(BUILD_TYPE) -- -j$(THREAD_NUM)
 
 debug:
@@ -24,9 +25,7 @@ release:
 	$(MAKE) build BUILD_TYPE=Release
 
 dist:
-	mkdir -p build/dist && cd build/dist
-	cmake -DCMAKE_BUILD_TYPE=Release -DPYRE_DISTRIBUTION $(ROOT_DIR)
-	cmake --build . --config $(BUILD_TYPE) -- -j$(THREAD_NUM)
+	$(MAKE) build BUILD_DIR=dist BUILD_TYPE=Release ADDITIONAL_ARGS=-DPYRE_DISTRIBUTION:BOOL=ON
 
 clean:
 	rm -rf build/debug bin/debug
