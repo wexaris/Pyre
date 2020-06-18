@@ -1,8 +1,6 @@
 #include "pyrepch.hpp"
 #include "Platform/OpenGL/OpenGLShader.hpp"
 
-#include <glm/gtc/type_ptr.hpp>
-
 #include <fstream>
 
 namespace Pyre {
@@ -56,7 +54,7 @@ namespace Pyre {
         std::ifstream file(path, std::ios::in | std::ios::binary);
         if (file) {
             file.seekg(0, std::ios::end);
-            size_t size = file.tellg();
+            auto size = file.tellg();
             if (size != -1) {
                 content.resize(file.tellg());
                 file.seekg(0, std::ios::beg);

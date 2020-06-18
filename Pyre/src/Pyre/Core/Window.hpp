@@ -1,5 +1,5 @@
 #pragma once
-#include "Pyre/Events/Event.hpp"
+#include "Pyre/Input/Event.hpp"
 
 namespace Pyre {
 

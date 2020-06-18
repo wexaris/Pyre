@@ -62,10 +62,6 @@
     #endif
 #endif
 
-#ifndef PYRE_DISTRIB
-    #define PYRE_ENABLE_IMGUI
-#endif
-
 #ifdef PYRE_ENABLE_ASSERTS
     #define PYRE_CORE_ASSERT(x, ...) { if (!(x)) { PYRE_CORE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }
     #define PYRE_ASSERT(x, ...) { if (!(x)) { PYRE_ERROR("Assertion Failed: {}", __VA_ARGS__); PYRE_DEBUGBREAK(); } }

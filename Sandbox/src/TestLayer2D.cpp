@@ -11,7 +11,17 @@ TestLayer2D::TestLayer2D() :
 void TestLayer2D::OnAttach() {
     PYRE_PROFILE_FUNCTION();
 
-    m_Texture = Pyre::Texture2D::Create("assets/textures/test.png");
+    m_CheckerboardTexture = Pyre::Texture2D::Create("assets/textures/checkerboard.png");
+    m_SpriteSheet = Pyre::Texture2D::Create("assets/textures/sheet_grass.png");
+    m_Sprite = Pyre::SubTexture2D::Create(m_SpriteSheet, { 70, 70 }, { 1, 1 }, { 1, 2 });
+
+    m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+    m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+    m_Particle.SizeBegin = 0.5f, m_Particle.SizeVariation = 0.3f, m_Particle.SizeEnd = 0.0f;
+    m_Particle.LifeTime = 1.0f;
+    m_Particle.Velocity = { 0.0f, 0.0f };
+    m_Particle.VelocityVariation = { 3.0f, 1.0f };
+    m_Particle.Position = { 0.0f, 0.0f };
 }
 
 void TestLayer2D::OnDetach() {
@@ -24,23 +34,40 @@ void TestLayer2D::Tick(float dt) {
     PYRE_PROFILE_FUNCTION();
 
     if (Pyre::Input::IsKeyPressed(Pyre::Key::Escape)) {
-        Pyre::Application::Get().Stop();
+        Pyre::Application::Get().Close();
     }
 
     m_CameraController.Tick(dt);
     s_Rotation += 45.0f * dt;
+
+    if (Pyre::Input::IsMouseButtonPressed(Pyre::Mouse::ButtonLeft)) {
+        auto [x, y] = Pyre::Input::GetMousePos();
+        auto width = Pyre::Application::Get().GetWindow().GetWidth();
+        auto height = Pyre::Application::Get().GetWindow().GetHeight();
+
+        auto bounds = m_CameraController.GetBounds();
+        auto pos = m_CameraController.GetPosition();
+        x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
+        y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
+        m_Particle.Position = { x + pos.x, y + pos.y };
+        for (int i = 0; i < 5; i++)
+            m_ParticleSystem.Emit(m_Particle);
+    }
+
+    m_ParticleSystem.Tick(dt);
 }
 
 void TestLayer2D::Draw() {
     PYRE_PROFILE_FUNCTION();
 
     Pyre::Renderer2D::ResetStats();
+
     Pyre::RenderCommand::Clear({ 0.1, 0.1, 0.1, 1 });
 
     Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
-    Pyre::Renderer2D::DrawQuad({ 0.0,  0.0, -0.5 }, { 10, 10 }, m_Texture, 10);
-    Pyre::Renderer2D::DrawRotatedQuad({ 1.0,  0.0,  0.2 }, s_Rotation, { 1, 1 }, m_SquareColor);
-    Pyre::Renderer2D::DrawRotatedQuad({ -1.0,  0.0,  0.2 }, s_Rotation, { 1, 1 }, m_Texture, m_SquareColor);
+    Pyre::Renderer2D::DrawQuad({ 0.0,  0.0, -0.5 }, { 10, 10 }, m_CheckerboardTexture, 10);
+    Pyre::Renderer2D::DrawRotatedQuad({ 1.0,  0.0,  0.2 }, glm::radians(s_Rotation), { 1, 1 }, m_SquareColor);
+    Pyre::Renderer2D::DrawRotatedQuad({ -1.0,  0.0,  0.2 }, glm::radians(s_Rotation), { 1, 1 }, m_CheckerboardTexture, m_SquareColor);
     Pyre::Renderer2D::EndScene();
     
     Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
@@ -51,20 +78,26 @@ void TestLayer2D::Draw() {
         }
     }
     Pyre::Renderer2D::EndScene();
+
+    Pyre::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    Pyre::Renderer2D::DrawQuad({ 0.0,  0.0, 0.9 }, { 5, 5 }, m_Sprite);
+    Pyre::Renderer2D::EndScene();
+
+    m_ParticleSystem.Draw(m_CameraController.GetCamera());
 }
 
 void TestLayer2D::ImGuiDraw() {
     PYRE_PROFILE_FUNCTION();
 
-    ImGui::Begin("Debug");
-    ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
-    ImGui::End();
-
     ImGui::Begin("Statistics");
+
     auto stats = Pyre::Renderer2D::GetStats();
     ImGui::Text("FPS: %d (%f)", Pyre::Application::Get().GetFPS(), Pyre::Application::Get().GetDeltaTime());
     ImGui::Text("Draw Calls: %d", stats.DrawCalls);
     ImGui::Text("Quads: %d", stats.QuadCount);
+
+    ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+
     ImGui::End();
 }
 

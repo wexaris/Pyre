@@ -1,6 +1,7 @@
 #pragma once
 #include "Pyre/Renderer/Camera.hpp"
 #include "Pyre/Renderer/Texture.hpp"
+#include "Pyre/Renderer/SubTexture2D.hpp"
 
 namespace Pyre {
 
@@ -18,13 +19,22 @@ namespace Pyre {
         static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4(1.0f));
         static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
         static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
 
+        // NOTE: Rotation done in radians
         static void DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const glm::vec4& color);
         static void DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const glm::vec4& color);
         static void DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4(1.0f));
         static void DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4(1.0f));
         static void DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
         static void DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<Texture2D>& texture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
+        static void DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float texScale, const glm::vec4& tint = glm::vec4(1.0f));
 
         struct Statistics {
             uint32_t DrawCalls = 0;

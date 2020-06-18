@@ -21,7 +21,9 @@ set(PYRE_SRC
     src/Pyre/Renderer/RenderCommand.cpp
     src/Pyre/Renderer/RenderAPI.cpp
     src/Pyre/Renderer/GraphicsContext.cpp
+    src/Pyre/Renderer/Framebuffer.cpp
     src/Pyre/Renderer/Texture.cpp
+    src/Pyre/Renderer/SubTexture2D.cpp
     src/Pyre/Renderer/Shader.cpp
     src/Pyre/Renderer/Buffer.cpp
     src/Pyre/Renderer/VertexArray.cpp
@@ -29,13 +31,14 @@ set(PYRE_SRC
     src/Pyre/Renderer/CameraController.cpp
     src/Platform/OpenGL/OpenGLRenderAPI.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
+    src/Platform/OpenGL/OpenGLFramebuffer.cpp
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLShader.cpp
     src/Platform/OpenGL/OpenGLBuffer.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
-)
+    )
 
 set(PYRE_PCH src/pyrepch.hpp)
 
@@ -55,7 +58,7 @@ target_include_directories(pyre PUBLIC src)
 target_compile_options(pyre PUBLIC
     $<$<CONFIG:DEBUG>:   #DEBUG
         $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-            -Wall -Werror -Wextra -pedantic -O0 -g>
+            -Wall -Werror -Wextra -pedantic -O0 -g -Wno-unused-parameter -Wno-unused-function>
         $<$<CXX_COMPILER_ID:MSVC>:
             /W3 /ZI /RTC1 /sdl /Od>>
     $<$<CONFIG:RELEASE>: #RELEASE

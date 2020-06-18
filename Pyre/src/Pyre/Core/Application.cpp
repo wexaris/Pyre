@@ -19,15 +19,13 @@ namespace Pyre {
         PYRE_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        m_Window = Window::Create(properties.WindowProperties);
+        m_Window = Window::Create(properties.Window);
         m_Window->SetEventCallback(PYRE_BIND_METHOD(Application::OnEvent));
 
         Renderer::Init();
 
-#ifdef PYRE_ENABLE_IMGUI
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-#endif
     }
 
     Application::~Application() {
@@ -74,18 +72,20 @@ namespace Pyre {
                 }
             }
             {
-#ifdef PYRE_ENABLE_IMGUI
                 PYRE_PROFILE_SCOPE("ImGuiDraw Loop");
                 m_ImGuiLayer->Begin();
                 for (auto& layer : m_LayerStack) {
                     layer->ImGuiDraw();
                 }
                 m_ImGuiLayer->End();
-#endif
             }
 
             m_Window->Update();
         }
+    }
+
+    void Application::Close() {
+        m_Running = false;
     }
 
     void Application::PushLayer(Layer* layer) {
@@ -123,7 +123,7 @@ namespace Pyre {
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         PYRE_PROFILE_FUNCTION();
-        m_Running = false;
+        Close();
         return false;
     }
 

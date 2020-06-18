@@ -1,9 +1,9 @@
 #pragma once
 #include "Pyre/Core/Window.hpp"
 #include "Pyre/Core/LayerStack.hpp"
-#include "Pyre/Core/Time.hpp"
 #include "Pyre/ImGui/ImGuiLayer.hpp"
-#include "Pyre/Events/WindowEvents.hpp"
+#include "Pyre/Input/WindowEvents.hpp"
+#include "Pyre/Utility/Time.hpp"
 
 int main(int argc, char* argv[]);
 
@@ -11,7 +11,7 @@ namespace Pyre {
 
     struct ApplicationProperties {
         std::string BaseDirectory;
-        WindowProperties WindowProperties;
+        WindowProperties Window;
         unsigned int MinTickRate = 60;
         unsigned int MaxSubsteps = 4;
     };
@@ -21,10 +21,10 @@ namespace Pyre {
         Application(const ApplicationProperties& properties);
         virtual ~Application();
 
+        void Close();
+
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
-
-        void Stop() { m_Running = false; }
 
         std::string CorrectFilePath(const std::string& path);
 

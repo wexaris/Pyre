@@ -4,6 +4,7 @@ project(sandbox)
 set(SOURCE_FILES
     src/Sandbox.cpp
     src/TestLayer2D.cpp
+    src/ParticleSystem.cpp
 )
 
 add_executable(sandbox WIN32 ${SOURCE_FILES})

@@ -17,11 +17,13 @@ namespace Pyre {
         uint32_t GetWidth() const override { return m_Width; }
         uint32_t GetHeight() const override { return m_Height; }
 
+        uint32_t GetRendererID() const override { return m_RendererID; }
+
         bool operator==(const Texture& other) const override { return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID; }
         bool operator!=(const Texture& other) const override { return m_RendererID != ((OpenGLTexture2D&)other).m_RendererID; }
 
     private:
-        uint32_t m_RendererID;
+        uint32_t m_RendererID = 0;
 
         std::string path;
         uint32_t m_Width = 0;

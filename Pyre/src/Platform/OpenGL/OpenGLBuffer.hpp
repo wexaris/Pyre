@@ -22,7 +22,7 @@ namespace Pyre {
     protected:
         friend class OpenGLVertexArray;
 
-        uint32_t m_RendererID;
+        uint32_t m_RendererID = 0;
         BufferLayout m_Layout;
     };
 
@@ -42,7 +42,7 @@ namespace Pyre {
     protected:
         friend class OpenGLVertexArray;
 
-        uint32_t m_RendererID;
+        uint32_t m_RendererID = 0;
         uint32_t m_Count;
     };
 

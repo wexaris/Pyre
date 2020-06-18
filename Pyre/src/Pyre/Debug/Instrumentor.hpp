@@ -53,6 +53,33 @@ namespace Pyre {
         bool m_Stopped = false;
     };
 
+
+    namespace InstrumentorUtils {
+
+        template<size_t N>
+        struct ResultString {
+            char Data[N];
+        };
+
+        template<size_t N, size_t K>
+        constexpr ResultString<N> CleanSignature(const char(&string)[N], const char(&remove)[K]) {
+            ResultString<N> result = {};
+
+            size_t srcIndex = 0;
+            size_t dstIndex = 0;
+            while (srcIndex < N) {
+                size_t matchIndex = 0;
+                while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && string[srcIndex + matchIndex] == remove[matchIndex])
+                    matchIndex++;
+                if (matchIndex == K - 1)
+                    srcIndex += matchIndex;
+                result.Data[dstIndex++] = string[srcIndex] == '"' ? '\'' : string[srcIndex];
+                srcIndex++;
+            }
+            return result;
+        }
+
+    }
 }
 
 #ifdef PYRE_ENABLE_PROFILE
@@ -60,7 +87,7 @@ namespace Pyre {
         #define PYRE_FUNCSIG __PRETTY_FUNCTION__
     #elif defined(__DMC__) && (__DMC__ >= 0x810)
         #define PYRE_FUNCSIG __PRETTY_FUNCTION__
-    #elif defined(__FUNCSIG__)
+    #elif defined(__FUNCSIG__) || (_MSC_VER)
         #define PYRE_FUNCSIG __FUNCSIG__
     #elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
         #define PYRE_FUNCSIG __FUNCTION__
@@ -76,7 +103,8 @@ namespace Pyre {
 
     #define PYRE_PROFILE_BEGIN(name, path) ::Pyre::Instrumentor::Get().BeginSession(name, path)
     #define PYRE_PROFILE_END()             ::Pyre::Instrumentor::Get().EndSession()
-    #define PYRE_PROFILE_SCOPE(name)       ::Pyre::InstrumentationTimer timer##__LINE__(name)
+    #define PYRE_PROFILE_SCOPE(name)       constexpr auto funcSig = ::Pyre::InstrumentorUtils::CleanSignature(name, "__cdecl ");\
+                                           ::Pyre::InstrumentationTimer timer##__LINE__(funcSig.Data)
     #define PYRE_PROFILE_FUNCTION()        PYRE_PROFILE_SCOPE(PYRE_FUNCSIG)
 #else
     #define PYRE_PROFILE_BEGIN(name, path)

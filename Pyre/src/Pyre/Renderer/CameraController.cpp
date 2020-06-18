@@ -17,9 +17,10 @@ namespace Pyre {
     };
 
     OrthographicCameraController::OrthographicCameraController(bool enableRotation) :
-        m_AspectRatio((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight()),
         m_EnableRotation(enableRotation),
-        m_Camera(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom)
+        m_AspectRatio((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight()),
+        m_Bounds({ -m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom }),
+        m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top)
     {
         Input::Remap(CameraInput::MoveLeft, Key::A);
         Input::Remap(CameraInput::MoveRight, Key::D);
@@ -32,51 +33,63 @@ namespace Pyre {
     void OrthographicCameraController::Tick(float dt) {
         PYRE_PROFILE_FUNCTION();
 
-        // TODO: remove ImGui dependence
-#ifdef PYRE_ENABLE_IMGUI
-        ImGuiIO& io = ImGui::GetIO();
-        if (!io.WantCaptureKeyboard) {
-#endif
-
-            if (Input::IsInputPressed(CameraInput::MoveLeft)) {
-                m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-                m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-            }
-            else if (Input::IsInputPressed(CameraInput::MoveRight)) {
-                m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-                m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-            }
-
-            if (Input::IsInputPressed(CameraInput::MoveUp)) {
-                m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-                m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-            }
-            else if (Input::IsInputPressed(CameraInput::MoveDown)) {
-                m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-                m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
-            }
-
-            if (m_EnableRotation) {
-                if (Input::IsInputPressed(CameraInput::RotateClockwise)) {
-                    m_Rotation += m_RotationSpeed * dt;
-                }
-                else if (Input::IsInputPressed(CameraInput::RotateCounterClockwise)) {
-                    m_Rotation -= m_RotationSpeed * dt;
-                }
-
-                if (m_Rotation > 180.0f) {
-                    m_Rotation -= 360.0f;
-                }
-                else if (m_Rotation <= -180.0f) {
-                    m_Rotation += 360.0f;
-                }
-
-            }
-
-            m_Camera.SetTransform(m_Position, m_Rotation);
-#ifndef PYRE_ENABLE_IMGUI
+        if (Input::IsInputPressed(CameraInput::MoveLeft)) {
+            m_Position.x -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+            m_Position.y -= sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
         }
-#endif
+        else if (Input::IsInputPressed(CameraInput::MoveRight)) {
+            m_Position.x += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+            m_Position.y += sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+        }
+
+        if (Input::IsInputPressed(CameraInput::MoveUp)) {
+            m_Position.x += -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+            m_Position.y += cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+        }
+        else if (Input::IsInputPressed(CameraInput::MoveDown)) {
+            m_Position.x -= -sin(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+            m_Position.y -= cos(glm::radians(m_Rotation)) * m_MovementSpeed * dt;
+        }
+
+        if (m_EnableRotation) {
+            if (Input::IsInputPressed(CameraInput::RotateClockwise)) {
+                m_Rotation += m_RotationSpeed * dt;
+            }
+            else if (Input::IsInputPressed(CameraInput::RotateCounterClockwise)) {
+                m_Rotation -= m_RotationSpeed * dt;
+            }
+
+            if (m_Rotation > 180.0f) {
+                m_Rotation -= 360.0f;
+            }
+            else if (m_Rotation <= -180.0f) {
+                m_Rotation += 360.0f;
+            }
+
+        }
+
+        m_Camera.SetTransform(m_Position, m_Rotation);
+    }
+
+    void OrthographicCameraController::Resize(uint32_t width, uint32_t height) {
+        m_AspectRatio = (float)width / (float)height;
+        UpdateProjectionMatrix();
+    }
+
+    void OrthographicCameraController::SetTransform(const glm::vec3& pos, float rot) {
+        m_Position = pos;
+        m_Rotation = rot;
+        m_Camera.SetTransform(m_Position, m_Rotation);
+    }
+
+    void OrthographicCameraController::SetPosition(const glm::vec3& pos) {
+        m_Position = pos;
+        m_Camera.SetTransform(m_Position, m_Rotation);
+    }
+
+    void OrthographicCameraController::SetRotaton(float rot) {
+        m_Rotation = rot;
+        m_Camera.SetTransform(m_Position, m_Rotation);
     }
 
     void OrthographicCameraController::SetZoom(float zoom) {
@@ -85,6 +98,11 @@ namespace Pyre {
         m_MovementSpeed *= diff;
         m_Zoom = zoom;
         UpdateProjectionMatrix();
+    }
+
+    void OrthographicCameraController::UpdateProjectionMatrix() {
+        m_Bounds = { -m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom };
+        m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
     }
 
     void OrthographicCameraController::OnEvent(Event& e) {
@@ -107,8 +125,7 @@ namespace Pyre {
     bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e) {
         PYRE_PROFILE_FUNCTION();
 
-        m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-        UpdateProjectionMatrix();
+        Resize(e.GetWidth() , e.GetHeight());
         return false;
     }
 

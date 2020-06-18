@@ -6,7 +6,7 @@ if(WIN32)
   set(suffix ".lib")
 else()
   set(prefix "lib")
-  set(suffix ".so")
+  set(suffix ".a")
 endif()
 
 include(spdlog.cmake)

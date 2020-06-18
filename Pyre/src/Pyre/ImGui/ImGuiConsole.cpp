@@ -68,12 +68,11 @@ namespace Pyre {
 
     void ImGuiConsole::Clear() {
         m_MessageBuffer.clear();
-        m_MessageBuffer.reserve(m_MessageBufferMaxSize);
     }
 
     void ImGuiConsole::ImGuiDraw() {
         ImGui::SetNextWindowSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
-        ImGui::Begin("Console", &m_Enabled);
+        ImGui::Begin("Console");
         DrawHeader();
         ImGui::Separator();
         DrawMessages();
@@ -95,21 +94,13 @@ namespace Pyre {
         ImGuiStyle& style = ImGui::GetStyle();
         const float spacing = style.ItemInnerSpacing.x;
 
-        // Text change level
-        //ImGui::AlignFirstTextHeightToWidgets();
+        // Level change text
         ImGui::AlignTextToFramePadding();
-        ImGui::Text("Display");
+        ImGui::Text("Level");
 
         ImGui::SameLine(0.0f, 2.0f * spacing);
 
-        // Buttons to quickly change level left
-        if (ImGui::ArrowButton("##MessageRenderFilter_L", ImGuiDir_Left)) {
-            m_Filter = LowerLevel(m_Filter);
-        }
-
-        ImGui::SameLine(0.0f, spacing);
-
-        // Dropdown with levels
+        // Level dropdown
         ImGui::PushItemWidth(ImGui::CalcTextSize("Critical").x * 1.36f);
         if (ImGui::BeginCombo("##MessageRenderFilter", LevelName(m_Filter).data(), ImGuiComboFlags_NoArrowButton)) {
             for (auto level = Message::Level::Trace; level <= Message::Level::Off; level = static_cast<Message::Level>((int)level + 1)) {
@@ -127,14 +118,7 @@ namespace Pyre {
 
         ImGui::SameLine(0.0f, spacing);
 
-        // Buttons to quickly change level right
-        if (ImGui::ArrowButton("##MessageRenderFilter_R", ImGuiDir_Right)) {
-            m_Filter = HigherLevel(m_Filter);
-        }
-
-        ImGui::SameLine(0.0f, spacing);
-
-        // Button for advanced settings
+        // Settings
         ImGui::SameLine(0.0f, ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Settings").x - style.WindowPadding.x / 2.0f);
         if (ImGui::Button("Settings")) {
             ImGui::OpenPopup("SettingsPopup");
@@ -177,7 +161,7 @@ namespace Pyre {
         {
             ImGui::SetWindowFontScale(m_DisplayScale);
 
-            for (auto& buffer = m_MessageBuffer.begin(); buffer != m_MessageBuffer.end(); buffer++) {
+            for (auto buffer = m_MessageBuffer.begin(); buffer != m_MessageBuffer.end(); buffer++) {
                 if (!*buffer) {
                     break;
                 }

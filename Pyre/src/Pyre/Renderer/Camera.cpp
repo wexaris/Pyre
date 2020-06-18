@@ -1,8 +1,6 @@
 #include "pyrepch.hpp"
 #include "Pyre/Renderer/Camera.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace Pyre {
 
     OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top) :
@@ -19,7 +17,7 @@ namespace Pyre {
         m_ViewProjMatrixCache = m_ProjMatrix * m_ViewMatrix;
     }
 
-    void OrthographicCamera::RecalcViewMatrix(glm::vec3 position, float rotation) {
+    void OrthographicCamera::RecalcViewMatrix(const glm::vec3& position, float rotation) {
         PYRE_PROFILE_FUNCTION();
 
         glm::mat4 transform;

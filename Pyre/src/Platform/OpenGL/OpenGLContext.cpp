@@ -14,8 +14,7 @@ namespace Pyre {
         PYRE_CORE_ASSERT(m_Window, "Cannot create a graphics context before window creation!")
 
         glfwMakeContextCurrent(m_Window);
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        PYRE_CORE_ASSERT(status, "Failed to initialize Glad!");
+        PYRE_CORE_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to initialize Glad!");
 
         PYRE_CORE_INFO("OpenGL Information", glGetString(GL_VENDOR));
         PYRE_CORE_INFO("  Vendor: {}", glGetString(GL_VENDOR));

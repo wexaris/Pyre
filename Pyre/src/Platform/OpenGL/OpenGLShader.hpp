@@ -30,7 +30,7 @@ namespace Pyre {
         void SetMat4(const std::string& name, const glm::mat4& matrix) override;
 
     private:
-        uint32_t m_RendererID;
+        uint32_t m_RendererID = 0;
         std::string m_Name;
 
         std::string ReadFile(const std::string& path);

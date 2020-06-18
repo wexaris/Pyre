@@ -52,7 +52,6 @@ namespace Pyre {
         Message::Level m_Filter = Message::Level::Trace;
         bool m_AllowAutoscroll = true;
         bool m_ShouldAutoscroll = false;
-        bool m_Enabled = true;
 
         ImGuiConsole();
         ~ImGuiConsole() = default;

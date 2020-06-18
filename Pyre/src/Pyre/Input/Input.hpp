@@ -19,7 +19,7 @@ namespace Pyre {
 
         template<typename T>
         static bool IsInputPressed(T input) {
-            auto& item = s_Instance->m_InputMap.find(static_cast<uint16_t>(input));
+            auto item = s_Instance->m_InputMap.find(static_cast<uint16_t>(input));
             if (item != s_Instance->m_InputMap.end()) {
                 return IsInputPressed(item->second);
             }

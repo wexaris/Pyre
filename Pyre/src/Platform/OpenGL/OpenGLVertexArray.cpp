@@ -57,21 +57,59 @@ namespace Pyre {
         PYRE_PROFILE_FUNCTION();
 
         PYRE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer missing layout!");
+        
+        /*glBindVertexArray(m_RendererID);
+        vertexBuffer->Bind();*/
 
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& e : layout) {
-            glEnableVertexArrayAttrib(m_RendererID, m_VertexBufferIndex);
-            glVertexArrayVertexBuffer(m_RendererID, m_VertexBufferIndex,
-                std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer)->m_RendererID,
-                e.Offset, layout.GetStride());
-            glVertexArrayAttribFormat(m_RendererID, m_VertexBufferIndex,
-                e.GetItemCount(),
-                ShaderDataTypeOpenGLType(e.Type),
-                e.Normalized ? GL_TRUE : GL_FALSE,
-                0);
+            if (e.Type == ShaderDataType::Mat3 || e.Type == ShaderDataType::Mat4) {
+                uint32_t itemCount = e.GetItemCount();
+                for (uint32_t i = 0; i < itemCount; i++) {
+                    /*glEnableVertexAttribArray(m_VertexBufferIndex);
+                    glVertexAttribPointer(m_VertexBufferIndex,
+                                          itemCount,
+                                          ShaderDataTypeOpenGLType(e.Type),
+                                          e.Normalized ? GL_TRUE : GL_FALSE,
+                                          layout.GetStride(),
+                                          (const void*)(sizeof(float) * itemCount * i));
+                    glVertexAttribDivisor(m_VertexBufferIndex, 1);*/
+                    glEnableVertexArrayAttrib(m_RendererID, m_VertexBufferIndex);
+                    glVertexArrayVertexBuffer(m_RendererID, m_VertexBufferIndex,
+                                              std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer)->m_RendererID,
+                                              sizeof(float) * itemCount * i, layout.GetStride());
+                    glVertexArrayAttribFormat(m_RendererID, m_VertexBufferIndex,
+                                              itemCount,
+                                              ShaderDataTypeOpenGLType(e.Type),
+                                              e.Normalized ? GL_TRUE : GL_FALSE,
+                                              0);
 
-            glVertexArrayAttribBinding(m_RendererID, m_VertexBufferIndex, m_VertexBufferIndex);
-            m_VertexBufferIndex++;
+                    glVertexAttribDivisor(m_VertexBufferIndex, 1);
+                    glVertexArrayAttribBinding(m_RendererID, m_VertexBufferIndex, m_VertexBufferIndex);
+                }
+                m_VertexBufferIndex++;
+            }
+            else {
+                /*glEnableVertexAttribArray(m_VertexBufferIndex);
+                glVertexAttribPointer(m_VertexBufferIndex,
+                                      e.GetItemCount(),
+                                      ShaderDataTypeOpenGLType(e.Type),
+                                      e.Normalized ? GL_TRUE : GL_FALSE,
+                                      layout.GetStride(),
+                                      (const void*)e.Offset);*/
+                glEnableVertexArrayAttrib(m_RendererID, m_VertexBufferIndex);
+                glVertexArrayVertexBuffer(m_RendererID, m_VertexBufferIndex,
+                                          std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer)->m_RendererID,
+                                          e.Offset, layout.GetStride());
+                glVertexArrayAttribFormat(m_RendererID, m_VertexBufferIndex,
+                                          e.GetItemCount(),
+                                          ShaderDataTypeOpenGLType(e.Type),
+                                          e.Normalized ? GL_TRUE : GL_FALSE,
+                                          0);
+
+                glVertexArrayAttribBinding(m_RendererID, m_VertexBufferIndex, m_VertexBufferIndex);
+                m_VertexBufferIndex++;
+            }
         }
 
         m_VertexBuffers.push_back(vertexBuffer);

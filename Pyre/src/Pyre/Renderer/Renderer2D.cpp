@@ -4,7 +4,6 @@
 #include "Pyre/Renderer/VertexArray.hpp"
 #include "Pyre/Renderer/Shader.hpp"
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Pyre {
@@ -21,7 +20,7 @@ namespace Pyre {
         static const uint32_t MaxQuads = 20000;
         static const uint32_t MaxVerts = MaxQuads * 4;
         static const uint32_t MaxIndices = MaxQuads * 6;
-        static const uint32_t MaxTextureSlots = 16;
+        static const uint32_t MaxTextureSlots = 32;
 
         Ref<VertexArray> QuadVA;
         Ref<VertexBuffer> QuadVB;
@@ -83,7 +82,7 @@ namespace Pyre {
         s_Data.WhiteTexture->SetData(&white, sizeof(uint32_t));
 
         int samplers[s_Data.MaxTextureSlots];
-        for (int i = 0; i < s_Data.MaxTextureSlots; i++) {
+        for (unsigned int i = 0; i < s_Data.MaxTextureSlots; i++) {
             samplers[i] = i;
         }
 
@@ -101,6 +100,8 @@ namespace Pyre {
 
     void Renderer2D::Shutdown() {
         PYRE_PROFILE_FUNCTION();
+
+        delete[] s_Data.QuadVertexBufferBeg;
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera& camera) {
@@ -122,7 +123,7 @@ namespace Pyre {
     void Renderer2D::EndScene() {
         PYRE_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint32_t)(reinterpret_cast<uintptr_t>(s_Data.QuadVertexBufferPtr) - reinterpret_cast<uintptr_t>(s_Data.QuadVertexBufferBeg));
+        uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBeg);
         s_Data.QuadVB->SetData(s_Data.QuadVertexBufferBeg, dataSize);
 
         Flush();
@@ -131,11 +132,15 @@ namespace Pyre {
     void Renderer2D::Flush() {
         PYRE_PROFILE_FUNCTION();
 
-        // Bind textures
+        // Scene is empty
+        if (s_Data.QuadIndexCount == 0) {
+            return;
+        }
+
+        // Draw
         for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
             s_Data.TextureSlots[i]->Bind(i);
         }
-
         s_Data.QuadVA->Bind();
         RenderCommand::DrawElement(s_Data.QuadVA, s_Data.QuadIndexCount);
 
@@ -148,10 +153,10 @@ namespace Pyre {
         return glm::scale(transform, { size.x, size.y, 1.0f });
     }
 
-    // translation * rotation * size
+    // translation * rotation(radians) * size
     static glm::mat4 MakeTransformationMatrix(const glm::vec3& pos, float rot, const glm::vec2& size) {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
-        transform = glm::rotate(transform, glm::radians(rot), glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::rotate(transform, rot, glm::vec3(0.0f, 0.0f, 1.0f));
         return glm::scale(transform, { size.x, size.y, 1.0f });
     }
 
@@ -216,11 +221,11 @@ namespace Pyre {
         }
 
         constexpr int vertex_count = 4;
-        constexpr float tex_coords[] = {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 1.0f
+        constexpr glm::vec2 tex_coords[] = {
+            { 0.0f, 0.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 1.0f },
         };
 
         // Handle textures
@@ -248,7 +253,7 @@ namespace Pyre {
         for (int i = 0; i < vertex_count; i++) {
             s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
             s_Data.QuadVertexBufferPtr->Color = tint;
-            s_Data.QuadVertexBufferPtr->TexCoord = { tex_coords[i * 2], tex_coords[i * 2 + 1] };
+            s_Data.QuadVertexBufferPtr->TexCoord = tex_coords[i];
             s_Data.QuadVertexBufferPtr->TexID = textureIndex;
             s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
             s_Data.QuadVertexBufferPtr++;
@@ -257,6 +262,66 @@ namespace Pyre {
 
         s_Stats.QuadCount++;
     }
+
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, size, subTexture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint) {
+        DrawQuad(pos, size, subTexture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tint) {
+        DrawQuad({ pos.x, pos.y, 0.0f }, size, subTexture, tilingFactor, tint);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tint) {
+        PYRE_PROFILE_FUNCTION();
+
+        // Make sure we have space in the batch
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
+
+        constexpr int vertex_count = 4;
+        const glm::vec2* tex_coords = subTexture->GetTexCoords();
+
+        // Handle textures
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+            if (s_Data.TextureSlots[i] == subTexture->GetTexture()) {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+        if (textureIndex == 0) {
+            // Make sure we have a free texture slot
+            if (s_Data.TextureSlotIndex >= RenderData::MaxTextureSlots) {
+                EndScene();
+                StartBatch();
+            }
+
+            textureIndex = (float)s_Data.TextureSlotIndex;
+            s_Data.TextureSlots[s_Data.TextureSlotIndex++] = subTexture->GetTexture();
+        }
+
+        // Handle transformations
+        glm::mat4 transform = MakeTransformationMatrix(pos, size);
+
+        for (int i = 0; i < vertex_count; i++) {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = tint;
+            s_Data.QuadVertexBufferPtr->TexCoord = tex_coords[i];
+            s_Data.QuadVertexBufferPtr->TexID = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+            s_Data.QuadVertexBufferPtr++;
+        }
+        s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
+    }
+
 
     void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const glm::vec4& color) {
         DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, color);
@@ -319,11 +384,11 @@ namespace Pyre {
         }
 
         constexpr int vertex_count = 4;
-        constexpr float tex_coords[] = {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 1.0f
+        constexpr glm::vec2 tex_coords[] = {
+            { 0.0f, 0.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 1.0f },
         };
 
         // Handle textures
@@ -351,7 +416,66 @@ namespace Pyre {
         for (int i = 0; i < vertex_count; i++) {
             s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
             s_Data.QuadVertexBufferPtr->Color = tint;
-            s_Data.QuadVertexBufferPtr->TexCoord = { tex_coords[i * 2], tex_coords[i * 2 + 1] };
+            s_Data.QuadVertexBufferPtr->TexCoord = tex_coords[i];
+            s_Data.QuadVertexBufferPtr->TexID = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+            s_Data.QuadVertexBufferPtr++;
+        }
+        s_Data.QuadIndexCount += 6;
+
+        s_Stats.QuadCount++;
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint) {
+        DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, subTexture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint) {
+        DrawRotatedQuad(pos, rot, size, subTexture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tint) {
+        DrawRotatedQuad({ pos.x, pos.y, 0.0f }, rot, size, subTexture, tilingFactor, tint);
+    }
+
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, float rot, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tint) {
+        PYRE_PROFILE_FUNCTION();
+
+        // Make sure we have space in the batch
+        if (s_Data.QuadIndexCount >= RenderData::MaxIndices) {
+            EndScene();
+            StartBatch();
+        }
+
+        constexpr int vertex_count = 4;
+        const glm::vec2* tex_coords = subTexture->GetTexCoords();
+
+        // Handle textures
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+            if (s_Data.TextureSlots[i] == subTexture->GetTexture()) {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+        if (textureIndex == 0) {
+            // Make sure we have a free texture slot
+            if (s_Data.TextureSlotIndex >= RenderData::MaxTextureSlots) {
+                EndScene();
+                StartBatch();
+            }
+
+            textureIndex = (float)s_Data.TextureSlotIndex;
+            s_Data.TextureSlots[s_Data.TextureSlotIndex++] = subTexture->GetTexture();
+        }
+
+        // Handle transformations
+        glm::mat4 transform = MakeTransformationMatrix(pos, rot, size);
+
+        for (int i = 0; i < vertex_count; i++) {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = tint;
+            s_Data.QuadVertexBufferPtr->TexCoord = tex_coords[i];
             s_Data.QuadVertexBufferPtr->TexID = textureIndex;
             s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
             s_Data.QuadVertexBufferPtr++;
@@ -366,6 +490,6 @@ namespace Pyre {
     }
 
     void Renderer2D::ResetStats() {
-        memset(&s_Stats, 0, sizeof(Renderer2D::Statistics));
+        s_Stats = Renderer2D::Statistics();
     }
 }

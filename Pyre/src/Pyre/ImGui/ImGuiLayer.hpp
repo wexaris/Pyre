@@ -10,7 +10,7 @@ namespace Pyre {
 
         void OnAttach() override;
         void OnDetach() override;
-        void Tick(float dt) override {}
+        void Tick(float) override {}
         void Draw() override {}
         void ImGuiDraw() override;
         void OnEvent(Event& event) override;

@@ -1,9 +1,9 @@
 #include "pyrepch.hpp"
 #include "Platform/Windows/WindowsWindow.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
-#include "Pyre/Events/MouseEvents.hpp"
-#include "Pyre/Events/KeyEvents.hpp"
-#include "Pyre/Events/WindowEvents.hpp"
+#include "Pyre/Input/MouseEvents.hpp"
+#include "Pyre/Input/KeyEvents.hpp"
+#include "Pyre/Input/WindowEvents.hpp"
 
 #include <stb_image/stb_image.h>
 
@@ -26,8 +26,7 @@ namespace Pyre {
         // Initialize GLFW
         if (s_GLFWWindowCount == 0) {
             PYRE_PROFILE_SCOPE("glfwInit()");
-            int good = glfwInit();
-            PYRE_CORE_ASSERT(good, "Failed to initialize GLFW!");
+            PYRE_CORE_ASSERT(glfwInit(), "Failed to initialize GLFW!");
             glfwSetErrorCallback(GLFWError);
         }
 
@@ -268,12 +267,12 @@ namespace Pyre {
 
         PYRE_CORE_ASSERT(m_Window, "Cannot set window mode before window creation!");
 
-        if (mode == m_WindowData.WindowMode) {
+        if (mode == m_WindowData.Mode) {
             return;
         }
 
         // If currently windowed, save window position and size
-        if (m_WindowData.WindowMode == WindowMode::Windowed) {
+        if (m_WindowData.Mode == WindowMode::Windowed) {
             m_PrevWindowedProps.PosX = m_WindowData.PosX;
             m_PrevWindowedProps.PosY = m_WindowData.PosY;
             m_PrevWindowedProps.Width = m_WindowData.Width;
@@ -309,7 +308,7 @@ namespace Pyre {
             monitor = glfwGetPrimaryMonitor();
         }
 
-        m_WindowData.WindowMode = mode;
+        m_WindowData.Mode = mode;
 
         if (m_WindowData.EventCallback) {
             WindowResizeEvent event(m_WindowData.Width, m_WindowData.Height);

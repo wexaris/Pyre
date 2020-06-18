@@ -4,7 +4,10 @@
 namespace Pyre {
 
     Instrumentor::~Instrumentor() {
-        EndSession();
+        if (m_Session) {
+            PYRE_CORE_ERROR("Instrumetor session '{}' unterminated", *m_Session);
+            EndSession();
+        }
     }
 
     void Instrumentor::BeginSession(const std::string& name, const std::string& path) {
@@ -22,10 +25,8 @@ namespace Pyre {
             m_Session = new std::string(name);
             WriteHeader();
         }
-        else {
-            if (Log::GetCoreLogger()) { // In case profiling before Log initialization
-                PYRE_CORE_ERROR("Instrumentor failed to open results file: ", path);
-            }
+        else if (Log::GetCoreLogger()) { // In case profiling before Log initialization
+            PYRE_CORE_ERROR("Instrumentor failed to open results file: ", path);
         }
     }
 
@@ -41,6 +42,9 @@ namespace Pyre {
             delete m_Session;
             m_Session = nullptr;
         }
+        else if (Log::GetCoreLogger()) {
+            PYRE_CORE_ERROR("Failed to end session; profiling not in session!");
+        }
     }
 
     void Instrumentor::WriteHeader() {
@@ -49,12 +53,7 @@ namespace Pyre {
     }
 
     void Instrumentor::WriteProfile(const ProfileResult& result) {
-        std::string res;
-
-        std::string name = result.Name;
-        std::replace(name.begin(), name.end(), '"', '\'');
-
-        res += fmt::format(
+        std::string prof = FMT(
             ",{{"
             "\"cat\":\"function\","
             "\"dur\":{0},"
@@ -65,16 +64,18 @@ namespace Pyre {
             "\"ts\":{3}"
             "}}",
             result.Elapsed.count(),
-            name,
+            result.Name,
             result.ThreadID,
             result.Start.count()
         );
 
         std::lock_guard<std::mutex> lock(m_Lock);
         if (m_Session) {
-            m_Output << res;
+            m_Output << prof;
             m_Output.flush();
         }
+        // NOTE: We're not throwing errors for non-session profiling because of static
+        // lifetime objects being destroyed outside any instrumentation scope.
     }
 
     void Instrumentor::WriteFooter() {

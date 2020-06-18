@@ -20,7 +20,7 @@ namespace Pyre {
         glm::mat4 m_ViewMatrix;
         glm::mat4 m_ViewProjMatrixCache;
 
-        void RecalcViewMatrix(glm::vec3 position, float rotation);
+        void RecalcViewMatrix(const glm::vec3& position, float rotation);
     };
 
 }

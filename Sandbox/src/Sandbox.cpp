@@ -1,5 +1,5 @@
-#include <Pyre.hpp>
-#include <EntryPoint.hpp>
+#include <Pyre/Pyre.hpp>
+#include <Pyre/EntryPoint.hpp>
 #include "TestLayer2D.hpp"
 
 class Sandbox : public Pyre::Application {
@@ -16,10 +16,10 @@ Pyre::Application* Pyre::CreateApplication() {
 
     Pyre::ApplicationProperties props;
     props.BaseDirectory = "Sandbox";
-    props.WindowProperties.Title = "Sandbox";
-    props.WindowProperties.Width = 1080;
-    props.WindowProperties.Height = 720;
-    props.WindowProperties.VSync = false;
+    props.Window.Title = "Sandbox";
+    props.Window.Width = 1280;
+    props.Window.Height = 720;
+    props.Window.VSync = false;
     props.MinTickRate = 60;
     props.MaxSubsteps = 4;
 
