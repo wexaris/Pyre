@@ -25,6 +25,7 @@ namespace Pyre {
 
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
+        ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
         std::string CorrectFilePath(const std::string& path);
 

@@ -28,6 +28,7 @@ namespace Pyre {
     void EditorLayer::Tick(float dt) {
         PYRE_PROFILE_FUNCTION();
 
+        // Update framebuffer and camera size if resized
         const FramebufferProperties& fb = m_Framebuffer->GetProperties();
         if (m_ViewportSize.x != 0 && m_ViewportSize.y != 0 &&
             (m_ViewportSize.x != fb.Width || m_ViewportSize.y != fb.Height))
@@ -36,7 +37,10 @@ namespace Pyre {
             m_CameraController.Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
-        m_CameraController.Tick(dt);
+        // Tick
+        if (m_ViewportFocused) {
+            m_CameraController.Tick(dt);
+        }
     }
 
     void EditorLayer::Draw() {
@@ -131,8 +135,14 @@ namespace Pyre {
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("Viewport");
+        // Handle viewport focus
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        m_ViewportHovered = ImGui::IsWindowHovered();
+        Application::Get().GetImGuiLayer()->AllowEvents(m_ViewportFocused && m_ViewportHovered);
+        // Handle sizing
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportSize.x, viewportSize.y };
+        // Set viewport image
         uintptr_t texID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image((void*)texID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();

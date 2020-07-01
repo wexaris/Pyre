@@ -18,7 +18,10 @@ namespace Pyre {
         void Begin();
         void End();
 
+        void AllowEvents(bool allow) { m_AllowEvents = allow; }
+
     private:
+        bool m_AllowEvents = true;
         bool m_ShowConsole;
     };
 
