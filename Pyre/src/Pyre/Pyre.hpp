@@ -4,6 +4,7 @@
 #include "Pyre/Core/Base.hpp"
 #include "Pyre/Core/Log.hpp"
 #include "Pyre/Core/Application.hpp"
+#include "Pyre/Core/Input.hpp"
 #include "Pyre/Core/Layer.hpp"
 
 #include "Pyre/ImGui/ImGuiLayer.hpp"
@@ -29,10 +30,9 @@
 #include "Pyre/Renderer/Camera.hpp"
 #include "Pyre/Renderer/CameraController.hpp"
 
-// ----- Input ----------------------------------
-#include "Pyre/Input/Input.hpp"
-#include "Pyre/Input/KeyCodes.hpp"
-#include "Pyre/Input/MouseCodes.hpp"
-#include "Pyre/Input/KeyEvents.hpp"
-#include "Pyre/Input/MouseEvents.hpp"
-#include "Pyre/Input/WindowEvents.hpp"
+// ----- Events ---------------------------------
+#include "Pyre/Events/KeyCodes.hpp"
+#include "Pyre/Events/MouseCodes.hpp"
+#include "Pyre/Events/KeyEvents.hpp"
+#include "Pyre/Events/MouseEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"

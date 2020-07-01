@@ -1,7 +1,7 @@
 #include "pyrepch.hpp"
 #include "Pyre/Core/Application.hpp"
+#include "Pyre/Core/Input.hpp"
 #include "Pyre/Renderer/CameraController.hpp"
-#include "Pyre/Input/Input.hpp"
 
 #include <imgui.h>
 

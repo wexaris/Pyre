@@ -20,6 +20,8 @@ namespace Pyre {
             Window      = BIT(5)
         };
 
+        virtual ~Event() = default;
+
         bool Handled = false;
 
         bool IsCategory(Category category) { return GetCategoryFlags() & category; }

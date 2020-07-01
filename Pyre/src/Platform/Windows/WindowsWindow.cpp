@@ -1,9 +1,9 @@
 #include "pyrepch.hpp"
 #include "Platform/Windows/WindowsWindow.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
-#include "Pyre/Input/MouseEvents.hpp"
-#include "Pyre/Input/KeyEvents.hpp"
-#include "Pyre/Input/WindowEvents.hpp"
+#include "Pyre/Events/MouseEvents.hpp"
+#include "Pyre/Events/KeyEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
 
 #include <stb_image/stb_image.h>
 

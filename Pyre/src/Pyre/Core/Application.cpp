@@ -1,7 +1,7 @@
 #include "pyrepch.hpp"
 #include "Pyre/Core/Application.hpp"
+#include "Pyre/Core/Input.hpp"
 #include "Pyre/Renderer/Renderer.hpp"
-#include "Pyre/Input/Input.hpp"
 
 #include <filesystem>
 

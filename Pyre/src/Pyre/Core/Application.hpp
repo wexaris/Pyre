@@ -2,7 +2,7 @@
 #include "Pyre/Core/Window.hpp"
 #include "Pyre/Core/LayerStack.hpp"
 #include "Pyre/ImGui/ImGuiLayer.hpp"
-#include "Pyre/Input/WindowEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
 #include "Pyre/Utility/Time.hpp"
 
 int main(int argc, char* argv[]);

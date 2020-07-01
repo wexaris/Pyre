@@ -1,6 +1,6 @@
 #pragma once
 #include "Pyre/Core/Drawable.hpp"
-#include "Pyre/Input/Event.hpp"
+#include "Pyre/Events/Event.hpp"
 
 namespace Pyre {
 

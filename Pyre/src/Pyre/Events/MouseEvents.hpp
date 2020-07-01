@@ -1,6 +1,6 @@
 #pragma once
-#include "Pyre/Input/Input.hpp"
-#include "Pyre/Input/Event.hpp"
+#include "Pyre/Core/Input.hpp"
+#include "Pyre/Events/Event.hpp"
 
 namespace Pyre {
 

@@ -9,10 +9,10 @@ add_subdirectory(external)
 set(PYRE_SRC
     src/Pyre/Core/Application.cpp
     src/Pyre/Core/Window.cpp
+    src/Pyre/Core/Input.cpp
     src/Pyre/Core/Layer.cpp
     src/Pyre/Core/LayerStack.cpp
     src/Pyre/Core/Log.cpp
-    src/Pyre/Input/Input.cpp
     src/Pyre/ImGui/ImGuiLayer.cpp
     src/Pyre/ImGui/ImGuiConsole.cpp
     src/Pyre/Debug/Instrumentor.cpp

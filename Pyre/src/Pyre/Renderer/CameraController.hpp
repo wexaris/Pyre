@@ -1,7 +1,7 @@
 #pragma once 
 #include "Pyre/Renderer/Camera.hpp"
-#include "Pyre/Input/MouseEvents.hpp"
-#include "Pyre/Input/WindowEvents.hpp"
+#include "Pyre/Events/MouseEvents.hpp"
+#include "Pyre/Events/WindowEvents.hpp"
 
 namespace Pyre {
 
