@@ -30,7 +30,7 @@ namespace Pyre {
 
         // Update framebuffer and camera size if resized
         const FramebufferProperties& fb = m_Framebuffer->GetProperties();
-        if (m_ViewportSize.x != 0 && m_ViewportSize.y != 0 &&
+        if (m_ViewportSize.x > 0 && m_ViewportSize.y > 0 &&
             (m_ViewportSize.x != fb.Width || m_ViewportSize.y != fb.Height))
         {
             m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -138,7 +138,7 @@ namespace Pyre {
         // Handle viewport focus
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
-        Application::Get().GetImGuiLayer()->AllowEvents(m_ViewportFocused && m_ViewportHovered);
+        Application::Get().GetImGuiLayer()->HandleEvents(!m_ViewportFocused || !m_ViewportHovered);
         // Handle sizing
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportSize.x, viewportSize.y };
