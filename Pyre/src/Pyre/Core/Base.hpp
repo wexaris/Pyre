@@ -54,11 +54,13 @@
     #define PYRE_ENABLE_ASSERTS
     #define PYRE_ENABLE_PROFILE
 
-    #if defined PYRE_PLATFORM_WINDOWS
+    #if defined(PYRE_PLATFORM_WINDOWS)
         #define PYRE_DEBUGBREAK() __debugbreak()
-    #elif defined PYRE_PLATFORM_LINUX
+    #elif defined(PYRE_PLATFORM_LINUX)
         #include <signal.h>
         #define PYRE_DEBUGBREAK() raise(SIGTRAP)
+    #else
+        #error "Platform missing debugbreak!"
     #endif
 #endif
 
@@ -93,21 +95,6 @@ namespace Pyre {
     template<typename T, typename... Args>
     constexpr auto MakeRef(const Args&... args) {
         return std::make_shared<T>(args...);
-    }
-
-
-    // FNV-1a 32bit hashing algorithm
-    constexpr uint32_t Const_FNV1a_32 = 0x811c9dc5;
-    constexpr uint32_t Prime_FNV1a_32 = 0x1000193;
-    inline constexpr uint32_t Hash32_FNV1a(const char* const str, const uint32_t value = Const_FNV1a_32) noexcept {
-        return (str[0] == '\0') ? value : Hash32_FNV1a(&str[1], (value ^ uint32_t(str[0])) * Prime_FNV1a_32);
-    }
-
-    // FNV-1a 64bit hashing algorithm
-    constexpr uint64_t Const_FNV1a_64 = 0xcbf29ce484222325;
-    constexpr uint64_t Prime_FNV1a_64 = 0x100000001b3;
-    inline constexpr uint64_t Hash64_FNV1a(const char* const str, const uint64_t value = Const_FNV1a_64) noexcept {
-        return (str[0] == '\0') ? value : Hash64_FNV1a(&str[1], (value ^ uint64_t(str[0])) * Prime_FNV1a_64);
     }
 
 }
